@@ -12,7 +12,8 @@ def build(
         autocompletion=complete_function_dir,
     )
 ):
-    # Build the image given a docker file (TODO: look into - `buildctl` )
+    # Build the image given a docker file
+    # TODO: look into - `buildctl` )
     # Scan for vulnerabilities unless flag is specified (store output or notify)
     # Push the built image into a repository
     print('Build')

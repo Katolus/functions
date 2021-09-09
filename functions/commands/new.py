@@ -41,7 +41,11 @@ def pubsub(
     function_dir = os.path.join(dir, function_name)
     make_dir(function_dir)
     # Create a confing setup
-    add_file(function_dir, filename="config.json", content=json.dumps(defaults.default_config))
+    add_file(
+        function_dir,
+        filename="config.json",
+        content=json.dumps(defaults.default_config(function_name)),
+    )
 
     # Create a default entry point
     add_file(function_dir, filename="main.py", content=defaults.default_pubsub_entry)

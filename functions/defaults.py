@@ -1,14 +1,16 @@
-default_config = {
-    "run_variables": {
-        "source": "main.py",
-        "entry_point": "hello_pubsub",
-        "signature_type": "event",
-        "name": "new-function",
-        "port": 8080,
-    },
-    "env_variables": {},
-    "deploy_variables": {"provider": "gcp", "service": "cloud_function"},
-}
+
+def default_config(function_name: str) -> dict:
+    return {
+        "run_variables": {
+            "source": "main.py",
+            "entry_point": "hello_pubsub",
+            "signature_type": "event",
+            "name": function_name,
+            "port": 8080,
+        },
+        "env_variables": {},
+        "deploy_variables": {"provider": "gcp", "service": "cloud_function"},
+    }
 
 
 default_pubsub_entry = """
@@ -52,15 +54,15 @@ default_docker_file = """
 # https://hub.docker.com/_/python
 FROM python:3.9-slim    
 
-LABEL package.functions.marker="Ventress"
-LABEL com.example.label-with-value="foo"
-LABEL version="1.0"
-LABEL description="This text illustrates \
-that label-values can span multiple lines."
-
+ARG CONFIG_PATH
+ARG FUNC_TAG
 ARG TARGET="hello_pubsub"
 ARG SOURCE="main.py"
 ARG SIGNATURE_TYPE="event"
+
+LABEL package.functions.config_path=${CONFIG_PATH}
+LABEL package.functions.organisation="Ventress"
+LABEL package.functions.tag=${FUNC_TAG}
 
 # Copy local code to the container image.
 ENV FUNC_TARGET ${TARGET}
@@ -82,8 +84,8 @@ RUN pip install -r requirements.txt
 #   CMD curl -f http://localhost/ || exit 1
 
 # Run the web service on container startup.
-CMD exec functions-framework --source=${FUNC_SOURCE} \
-    --target=${FUNC_TARGET} \
+CMD exec functions-framework --source=${FUNC_SOURCE}\
+    --target=${FUNC_TARGET}\
     --signature-type=${FUNC_SIGNATURE_TYPE}
 """
 

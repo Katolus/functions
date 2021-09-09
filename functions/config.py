@@ -3,7 +3,6 @@ import fnmatch
 import os
 from typing import Optional, Union
 
-import typer
 from pydantic import DirectoryPath
 from pydantic import FilePath
 from pydantic import validate_arguments
