@@ -9,3 +9,8 @@ def complete_function_dir(incomplete: str):
     for name in valid_function_dirs().keys():
         if name.startswith(incomplete):
             yield name
+
+
+def autocomplete_function_names(incomplete: str):
+    # for name 
+    ...

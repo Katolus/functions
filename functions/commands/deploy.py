@@ -1,3 +1,4 @@
+"""Deploy a function to cloud"""
 from typing import Optional
 
 import typer

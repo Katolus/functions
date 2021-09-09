@@ -1,0 +1,3 @@
+class FunctionsError(Exception):
+    ...
+

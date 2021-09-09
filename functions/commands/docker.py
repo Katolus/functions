@@ -1,65 +1,17 @@
-import os
-import subprocess
-from pathlib import Path
-from typing import Iterable, List
-
 import typer
-from pydantic import ValidationError
+
+from functions.autocomplete import autocomplete_function_names, complete_function_dir
+from functions.config import load_config
+from functions.docker import (
+    DockerLabel,
+    docker_client,
+    get_config_from_image,
+)  # TODO: Find a better way of doing this (global variables)
+from functions.system import construct_config_path, get_full_path
+from functions.validation import validate_dir
+
 
 app = typer.Typer(help="Run a function using docker")
-
-from functions.autocomplete import complete_function_dir
-from functions.config import load_config
-from functions.processes import run_cmd
-from functions.validation import validate_dir
-from functions.hints import DockerImage
-
-
-def get_full_path(function_path: str) -> Path:
-    """Returns a full path of a function"""
-    return Path(os.path.abspath(os.path.join(os.getcwd(), function_path)))
-
-
-def get_functions():
-    output = run_cmd(
-        [
-            "docker",
-            "images",
-            "--format",
-            "{{.ID}}:{{.Repository}}:{{.Tag}}:{{.CreatedSince}}:{{.Size}}",
-            "--filter",
-            "label=package.functions.marker=Ventress",
-        ],
-        capture_output=True,
-    )
-    cmd_output = output.stdout.decode("utf-8").strip()
-    if cmd_output:
-        functions: List[str] = cmd_output.split("\n")
-        images: List[DockerImage] = []
-
-        for function in functions:
-            # Remove multiple whitespaces and split on delimeter
-            # Format: 92ec30fd5d23:<none>:<none>:21 hours ago:135MB
-            function_vars = function.strip().split(":")
-            images.append(DockerImage(*function_vars))
-
-        return images
-    else:
-        raise ValueError("No function created")
-
-
-def filter_function(
-    function_name: str, images: List[DockerImage]
-) -> Iterable[DockerImage]:
-    """Returns an iterable of images matching a function name"""
-    matching_images = filter(lambda x: function_name in x.repository, images)
-
-    if first_image := next(matching_images, 0):
-        yield first_image
-        for image in matching_images:
-            yield image
-    else:
-        raise ValueError(f"No images matching '{function_name}'")
 
 
 @app.command()
@@ -77,47 +29,60 @@ def build(
     validate_dir(full_path)
 
     # Load configuration
-    config = load_config(os.path.join(full_path, config_name))
+    config_path = construct_config_path(full_path, config_name)
+    config = load_config(config_path)
 
     # TODO: Check if an existing -t exists and ask if overwrite
-    
-    # docker build -t new-function ./new_function/
-    run_cmd(
-        [
-            "docker",
-            "build",
-            "-t",
-            f"functions-{config.run_variables.name}",
-            f"{full_path}",
-        ]
+
+    # Formulate a function tag
+    function_name = config.run_variables.name
+
+    image, logs = docker_client.images.build(
+        path=str(full_path),
+        tag=function_name,
+        # buildargs={"CONFIG_PATH": config_path, "FUNC_TAG": function_name},
+        labels={
+            DockerLabel.CONFIG: str(config_path),
+            DockerLabel.ORGANISATION: "Ventress",
+            DockerLabel.TAG: function_name,
+        },
     )
+
+    # TODO: Add color
+    typer.echo(f"Successfully build a function's image of {function_name}")
 
 
 @app.command()
 def start(
-    function_path: str = typer.Option(
-        None,
+    function_name: str = typer.Argument(
+        ...,
         help="Name of the function you are running.",
-        autocompletion=complete_function_dir,
+        autocompletion=autocomplete_function_names,
     ),
 ):
-    # Find the function directory
-    # Extract the function name unless specified
-    # docker run -ip 8080:8080 --rm --name new-function new-function
-    ...
+    """Start a container for a given function"""
+    docker_image = docker_client.images.get(function_name)
+    config = get_config_from_image(docker_image)
+
+    container = docker_client.containers.run(
+        docker_image,
+        ports={config.run_variables.port: "8080"},
+        remove=True,
+        name=function_name,
+        detach=True,
+    )
 
 
 @app.command()
 def stop(
-    function_name: str = typer.Option(
-        None,
-        help="Stop a running function",
-        autocompletion=complete_function_dir,
+    function_name: str = typer.Argument(
+        ...,
+        help="Name of the functions to stop",
     ),
 ):
-    # docker stop name
-    # Respond not found if no matching function
-    ...
+    # TODO: Add a catch for when the name does not match
+    container = docker_client.containers.get(function_name)
+    container.stop()
 
 
 @app.command()
@@ -139,14 +104,4 @@ def list(
         help="List existing functions",
     ),
 ):
-    try:
-        # Load all functions
-        images = get_functions()
-
-        # Print the functions matching the name
-        for image in filter_function(function_name, images):
-            typer.echo(f"Here are the matching images:")
-            typer.echo(image)
-    except (ValidationError, ValueError) as error:
-        typer.echo(error)
-        typer.Exit(code=1)
+    ...

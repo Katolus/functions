@@ -60,10 +60,6 @@ ARG TARGET="hello_pubsub"
 ARG SOURCE="main.py"
 ARG SIGNATURE_TYPE="event"
 
-LABEL package.functions.config_path=${CONFIG_PATH}
-LABEL package.functions.organisation="Ventress"
-LABEL package.functions.tag=${FUNC_TAG}
-
 # Copy local code to the container image.
 ENV FUNC_TARGET ${TARGET}
 ENV FUNC_SOURCE ${SOURCE}
