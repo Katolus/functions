@@ -1,13 +1,14 @@
 import typer
 
+from functions.autocomplete import autocomplete_running_function_names
 from functions.autocomplete import autocomplete_function_names, complete_function_dir
-from functions.config import load_config
 from functions.docker import (
     DockerLabel,
     docker_client,
     get_config_from_image,
 )  # TODO: Find a better way of doing this (global variables)
 from functions.system import construct_config_path, get_full_path
+from functions.system import load_config
 from functions.validation import validate_dir
 
 
@@ -41,6 +42,7 @@ def build(
         path=str(full_path),
         tag=function_name,
         # buildargs={"CONFIG_PATH": config_path, "FUNC_TAG": function_name},
+        # TODO: Store a configuration path as a label
         labels={
             DockerLabel.CONFIG: str(config_path),
             DockerLabel.ORGANISATION: "Ventress",
@@ -78,8 +80,10 @@ def stop(
     function_name: str = typer.Argument(
         ...,
         help="Name of the functions to stop",
+        autocompletion=autocomplete_running_function_names,
     ),
 ):
+    # TODO: Add an option to stop them all
     # TODO: Add a catch for when the name does not match
     container = docker_client.containers.get(function_name)
     container.stop()

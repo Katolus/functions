@@ -18,6 +18,7 @@ docker = "^5.0.2"
 pytest = "^5.2"
 mypy = "^0.910"
 black = {version = "^21.8b0", allow-prereleases = true}
+bpython = "^0.21"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"

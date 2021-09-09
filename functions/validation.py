@@ -4,7 +4,8 @@ from typing import Dict
 from pydantic import DirectoryPath
 from pydantic import validate_arguments
 
-from functions.config import get_config_path
+from functions.system import get_config_path
+from functions.docker import DockerImage
 
 
 @validate_arguments
@@ -15,6 +16,10 @@ def validate_dir(function_dir: DirectoryPath):
     if not config_path:
         raise ValueError(f"No config file found at {function_dir}")
 
+
+def validate_image(image: DockerImage):
+    # TODO: Validate an image being suitable for use, consider pydantic for the job
+    ...
 
 def valid_function_dirs() -> Dict[str, str]:
     """Returns a List of valid function directories."""
