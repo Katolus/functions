@@ -18,13 +18,14 @@ def update():
     """Update required libraries"""
     pass
 
+
 @app.command()
 def deploy(
     function_name: str = typer.Argument(
         ...,
         # It would be great if it supported both image name and path
         help="Name of the function you wish to deploy",
-        autocompletion=autocomplete_deploy_functions
+        autocompletion=autocomplete_deploy_functions,
     ),
     service: str = typer.Option(
         GCPService.FUNCTION,
