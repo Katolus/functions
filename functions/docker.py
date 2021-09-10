@@ -68,3 +68,9 @@ def all_running_functions() -> List[str]:
         if function_tag:
             functions.append(function_tag)
     return functions
+
+def build_image(image_name: str) -> DockerImage:
+    ...
+
+def remove_image(image_name: str):
+    docker_client.images.remove(image_name)

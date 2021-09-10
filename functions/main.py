@@ -4,7 +4,7 @@ from functions.autocomplete import autocomplete_function_names
 from functions.autocomplete import autocomplete_running_function_names
 from functions.autocomplete import complete_function_dir
 from functions.commands import new
-from functions.docker import all_functions
+from functions.docker import all_functions, remove_image
 from functions.docker import docker_client
 from functions.docker import DockerLabel
 from functions.docker import get_config_from_image
@@ -27,6 +27,8 @@ def build(
         ...,
         help="Path to the functions you want to build",
     ),
+    # TODO: Add an option to show the logs
+    show_logs: bool = False,
     config_name: str = typer.Option("config.json", help="Name of a config file"),
 ):
     # Get the absolute path
@@ -61,7 +63,7 @@ def build(
 
 
 @app.command()
-def start(
+def run(
     function_name: str = typer.Argument(
         ...,
         help="Name of the function you are running.",
@@ -110,6 +112,8 @@ def status(
 @app.command()
 def list():
     """List existing functions"""
+    # TODO: Add a nice format to this list
+    # Status
     functions = all_functions()
     if functions:
         for function in functions:
@@ -119,14 +123,27 @@ def list():
 
 
 @app.command()
-def remove():
-    # TODO: Implement
-    ...
+def remove(
+    function_name: str = typer.Argument(
+        ...,
+        help="Name of the function you want to remove",
+        autocompletion=autocomplete_function_names,
+    )
+):
+    remove_image(function_name)
+    typer.echo(f"Function ({function_name}) has been removed")
 
 
 @app.command()
-def rebuild():
+def rebuild(
+    function_name: str = typer.Argument(
+        ...,
+        help="Name of the function you wanting to rebuild.",
+        autocompletion=autocomplete_function_names,
+    ),
+):
     # TODO: Implement
+    
     ...
 
 

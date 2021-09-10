@@ -18,7 +18,6 @@ def run_process(cmd_exec: List[str], **kwargs) -> subprocess.Popen:
 
 
 def run_locally(cwd=None, *, source: str, target: str, port: int) -> subprocess.Popen:
-    breakpoint()
     process = subprocess.Popen(
         [
             "functions-framework",

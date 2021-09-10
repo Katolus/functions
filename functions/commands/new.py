@@ -31,6 +31,7 @@ def link_common(function_dir: str):
 
 @app.command()
 def pubsub(
+    # TODO Add validatation to make sure this is not a path
     function_name: str,
     dir: str = typer.Option(
         ".", help="Directory that will be used as a root of the new function"
@@ -69,6 +70,7 @@ def pubsub(
 
     # Links common folder
     # link_common(function_dir)
+    # TODO: Print path
 
 
 if __name__ == "__main__":
