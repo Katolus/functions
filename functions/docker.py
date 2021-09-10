@@ -10,6 +10,7 @@ from functions.system import load_config
 from functions.errors import FunctionsError
 
 
+# TODO: Find a better way of doing this
 docker_client: docker.client = None
 if not docker_client:
     docker_client = docker.from_env()
