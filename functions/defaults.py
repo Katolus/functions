@@ -1,10 +1,10 @@
-# TODO: Add a validator that checks for correct name 
-def default_config(function_name: str) -> dict:
+# TODO: Add a validator that checks for correct name
+def default_config(function_name: str, signature_type: str) -> dict:
     return {
         "run_variables": {
             "source": "main.py",
             "entry_point": "main",
-            "signature_type": "event",
+            "signature_type": signature_type,
             "name": function_name,
             "port": 8080,
         },
