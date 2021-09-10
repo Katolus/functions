@@ -5,6 +5,7 @@ import typer
 from functions.autocomplete import autocomplete_function_names
 from functions.autocomplete import autocomplete_running_function_names
 from functions.autocomplete import complete_function_dir
+from functions.commands import gcp
 from functions.commands import new
 from functions.docker import all_functions, remove_image
 from functions.docker import docker_client
@@ -20,6 +21,7 @@ app = typer.Typer(
     help="Run script to executing, testing and deploying included functions."
 )
 
+app.add_typer(gcp.app, name="gcp")
 app.add_typer(new.app, name="new")
 
 
