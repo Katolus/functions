@@ -1,3 +1,5 @@
+import itertools
+
 import typer
 
 from functions.autocomplete import autocomplete_function_names
@@ -23,6 +25,7 @@ app.add_typer(new.app, name="new")
 
 @app.command()
 def build(
+    # TODO: Change to build existing ones first and if not present request a path
     function_path: str = typer.Argument(
         ...,
         help="Path to the functions you want to build",
@@ -45,18 +48,35 @@ def build(
 
     # Formulate a function tag
     function_name = config.run_variables.name
-
-    image, logs = docker_client.images.build(
-        path=str(full_path),
-        tag=function_name,
-        # buildargs={"CONFIG_PATH": config_path, "FUNC_TAG": function_name},
+    build_kwargs = {
+        "path": str(full_path),
+        "tag": function_name,
+        "buildargs": {
+            "TARGET": config.run_variables.entry_point,
+            "SOURCE": config.run_variables.source,
+            "SIGNATURE_TYPE": config.run_variables.signature_type,
+        },
         # TODO: Store a configuration path as a label
-        labels={
+        "labels": {
             DockerLabel.CONFIG: str(config_path),
             DockerLabel.ORGANISATION: "Ventress",
             DockerLabel.TAG: function_name,
         },
-    )
+    }
+
+    # TODO: Check if the port is in use
+
+    # TODO: Add BuildError from docker
+    # TODO: Move to docker.py
+    if show_logs:
+        from docker.utils.json_stream import json_stream
+
+        resp = docker_client.api.build(**build_kwargs)
+        result_stream, internal_stream = itertools.tee(json_stream(resp))
+        for result in result_stream:
+            print(result)
+    else:
+        image, logs = docker_client.images.build(**build_kwargs)
 
     # TODO: Add color
     typer.echo(f"Successfully build a function's image of {function_name}")
@@ -76,7 +96,7 @@ def run(
 
     container = docker_client.containers.run(
         docker_image,
-        ports={config.run_variables.port: "8080"},
+        ports={"8080": config.run_variables.port},
         remove=True,
         name=function_name,
         detach=True,
@@ -143,7 +163,7 @@ def rebuild(
     ),
 ):
     # TODO: Implement
-    
+
     ...
 
 
