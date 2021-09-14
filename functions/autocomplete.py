@@ -34,4 +34,5 @@ def autocomplete_running_function_names(incomplete: str):
 
 def autocomplete_deploy_functions():
     """Specify the functions that are to be deployed"""
-    return ["Need to specify a functions to deploy"]
+    deployable_functions = []
+    return deployable_functions

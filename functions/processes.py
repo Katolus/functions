@@ -9,6 +9,7 @@ from pydantic import validate_arguments
 def run_cmd(
     cmd_exec: List[str], capture_output: bool = False
 ) -> subprocess.CompletedProcess:
+    # TODO: Add logging...
     return subprocess.run(cmd_exec, capture_output=capture_output)
 
 

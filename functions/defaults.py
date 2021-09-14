@@ -9,7 +9,11 @@ def default_config(function_name: str, signature_type: str) -> dict:
             "port": 8080,
         },
         "env_variables": {},
-        "deploy_variables": {"provider": "gcp", "service": "cloud_function"},
+        "deploy_variables": {
+            "provider": "gcp",
+            "service": "cloud_function",
+            "allow_unauthenticated": False,  # Consider taking a prompt 
+        },
     }
 
 
