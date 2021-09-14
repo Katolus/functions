@@ -4,21 +4,18 @@ from functions.callbacks import (
     running_functions_autocomplete_callback,
 )
 from pathlib import Path
-from functions.settings import CONFIG_NAME
 import itertools
 
 import typer
 
 from functions.autocomplete import autocomplete_function_names
 from functions.autocomplete import autocomplete_running_function_names
-from functions.autocomplete import complete_function_dir
 from functions.commands import gcp
 from functions.commands import new
 from functions.docker import all_functions, remove_image
 from functions.docker import docker_client
 from functions.docker import DockerLabel
 from functions.docker import get_config_from_image
-from functions.system import construct_config_path
 from functions.system import get_full_path
 from functions.system import load_config
 from functions.validation import validate_dir
@@ -49,8 +46,7 @@ def build(
     validate_dir(full_path)
 
     # Load configuration
-    config_path = construct_config_path(full_path, CONFIG_NAME)
-    config = load_config(config_path)
+    config = load_config(full_path)
 
     # TODO: Check if an existing -t exists and ask if overwrite
 

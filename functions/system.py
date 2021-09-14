@@ -6,18 +6,18 @@ from typing import Optional
 from typing import Union
 
 from pydantic import DirectoryPath
-from pydantic import FilePath
 from pydantic import validate_arguments
 
 from functions import defaults
-from functions.types import FunctionConfig
+from functions.constants import ConfigName
+from functions.types import FunctionConfig, LocalFunctionDir
 
 
 @validate_arguments
-def load_config(config_path: FilePath) -> FunctionConfig:
+def load_config(config_dir: LocalFunctionDir) -> FunctionConfig:
     """Load a configuration file into a Python object."""
     config = None
-    with open(config_path, "r") as file:
+    with open(construct_config_path(config_dir, ConfigName.base), "r") as file:
         config = json.load(file)
 
     return FunctionConfig(**config)
