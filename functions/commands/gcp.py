@@ -1,7 +1,9 @@
-from functions.autocomplete import autocomplete_deploy_functions
 import typer
 
+from functions.autocomplete import autocomplete_deploy_functions
 from functions.gcp import GCPService, deploy_c_function, deploy_c_run
+from functions.system import get_config_path, load_config
+from functions.types import LocalFunctionDir
 
 
 app = typer.Typer(help="Deploy functions in GCP")
@@ -10,18 +12,18 @@ app = typer.Typer(help="Deploy functions in GCP")
 @app.command()
 def install():
     """Install required libraries"""
-    pass
+    raise NotImplementedError()
 
 
 @app.command()
 def update():
     """Update required libraries"""
-    pass
+    raise NotImplementedError()
 
 
 @app.command()
 def deploy(
-    function_name: str = typer.Argument(
+    function_dir: str = typer.Argument(
         ...,
         # It would be great if it supported both image name and path
         help="Name of the function you wish to deploy",
@@ -34,13 +36,27 @@ def deploy(
     ),
 ):
     """Deploy a functions to GCP"""
-    # Check if function is a path ? look for the directory and deploy that one
-    # If the functions is an image try to deploy a
+    local_dir: LocalFunctionDir = function_dir
+    config_path = get_config_path(local_dir)
+    config = load_config(config_path)
+    service = service or config.deploy_variables.service
     if service == GCPService.FUNCTION:
-        deploy_c_function(function_name)
+        deploy_c_function(config, local_dir)
     elif service == GCPService.RUN:
         deploy_c_run(function_name)
     else:
         # Throw an error
         ...
     ...
+
+
+@app.command()
+def delete():
+    """Deletes a functions deployed to GCP"""
+    raise NotImplementedError()
+
+
+@app.command()
+def logs():
+    """Reads log from a deployed function"""
+    raise NotImplementedError()
