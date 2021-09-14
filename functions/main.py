@@ -1,3 +1,10 @@
+from functions.callbacks import (
+    function_name_autocomplete_callback,
+    remove_function_name_callback,
+    running_functions_autocomplete_callback,
+)
+from pathlib import Path
+from functions.settings import CONFIG_NAME
 import itertools
 
 import typer
@@ -28,13 +35,12 @@ app.add_typer(new.app, name="new")
 @app.command()
 def build(
     # TODO: Change to build existing ones first and if not present request a path
-    function_path: str = typer.Argument(
+    function_path: Path = typer.Argument(
         ...,
         help="Path to the functions you want to build",
     ),
     # TODO: Add an option to show the logs
-    show_logs: bool = False,
-    config_name: str = typer.Option("config.json", help="Name of a config file"),
+    show_logs: bool = typer.Option(False, "--force"),
 ):
     # Get the absolute path
     full_path = get_full_path(function_path)
@@ -43,7 +49,7 @@ def build(
     validate_dir(full_path)
 
     # Load configuration
-    config_path = construct_config_path(full_path, config_name)
+    config_path = construct_config_path(full_path, CONFIG_NAME)
     config = load_config(config_path)
 
     # TODO: Check if an existing -t exists and ask if overwrite
@@ -88,8 +94,9 @@ def build(
 def run(
     function_name: str = typer.Argument(
         ...,
-        help="Name of the function you are running.",
+        help="Name of the function you want to run",
         autocompletion=autocomplete_function_names,
+        callback=function_name_autocomplete_callback,
     ),
 ):
     """Start a container for a given function"""
@@ -109,8 +116,9 @@ def run(
 def stop(
     function_name: str = typer.Argument(
         ...,
-        help="Name of the functions to stop",
+        help="Name of the function you want to stop",
         autocompletion=autocomplete_running_function_names,
+        callback=running_functions_autocomplete_callback,
     ),
 ):
     # TODO: Add an option to stop them all
@@ -118,17 +126,7 @@ def stop(
     container = docker_client.containers.get(function_name)
     container.stop()
 
-
-@app.command()
-def status(
-    function_name: str = typer.Option(
-        None,
-        help="Give status of a function",
-        autocompletion=complete_function_dir,
-    ),
-):
-
-    ...
+    typer.echo(f"Function ({function_name}) has been stopped.")
 
 
 @app.command()
@@ -150,23 +148,11 @@ def remove(
         ...,
         help="Name of the function you want to remove",
         autocompletion=autocomplete_function_names,
+        callback=remove_function_name_callback,
     )
 ):
     remove_image(function_name)
     typer.echo(f"Function ({function_name}) has been removed")
-
-
-@app.command()
-def rebuild(
-    function_name: str = typer.Argument(
-        ...,
-        help="Name of the function you wanting to rebuild.",
-        autocompletion=autocomplete_function_names,
-    ),
-):
-    # TODO: Implement
-
-    ...
 
 
 if __name__ == "__main__":

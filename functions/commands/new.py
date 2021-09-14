@@ -1,62 +1,29 @@
 import os
-import json
+from pathlib import Path
 
 import typer
 
 from functions import defaults
-from functions.system import add_file
-from functions.system import make_dir
+from functions.arguments import FunctionNameArgument
+from functions.callbacks import function_dir_callback
+from functions.system import add_required_files
 
 app = typer.Typer(help="Factory method for creating new functions")
 
 
-def add_required(
-    function_name: str, function_dir: str, *, main_content: str, signature_type: str
-):
-    """Add required files into the function directory"""
-    # Make a new directory
-    make_dir(function_dir)
-    # Create a confing setup
-    add_file(
-        function_dir,
-        filename="config.json",
-        content=json.dumps(defaults.default_config(function_name, signature_type)),
-    )
-
-    # Create a Docker file
-    add_file(function_dir, filename="Dockerfile", content=defaults.default_docker_file)
-
-    # Create a docker ignore file
-    add_file(
-        function_dir,
-        filename=".dockerignore",
-        content=defaults.default_docker_ignore_file,
-    )
-
-    # Create a docker ignore file
-    add_file(
-        function_dir,
-        filename="requirements.txt",
-        content=defaults.default_requirements_file,
-    )
-
-    # Create a default entry point
-    add_file(function_dir, filename="main.py", content=main_content)
-
-
 @app.command()
 def pubsub(
-    # TODO Add validatation to make sure this is not a path
-    function_name: str,
+    function_name: str = FunctionNameArgument(...),
     dir: str = typer.Option(
-        ".",
+        None,
+        callback=function_dir_callback,
         help="Directory that will be used as a root of the new function",
     ),
 ):
     """Creates a new pubsub directory"""
     function_dir = os.path.join(dir, function_name)
 
-    add_required(
+    add_required_files(
         function_name,
         function_dir,
         main_content=defaults.default_entry_hello_pubsub,
@@ -68,16 +35,17 @@ def pubsub(
 
 @app.command()
 def http(
-    function_name: str,
-    dir: str = typer.Option(
-        ".",
+    function_name: str = FunctionNameArgument(...),
+    dir: Path = typer.Option(
+        None,
+        callback=function_dir_callback,
         help="Directory that will be used as a root of the new function",
     ),
 ):
     """Creates a new http directory"""
     function_dir = os.path.join(dir, function_name)
 
-    add_required(
+    add_required_files(
         function_name,
         function_dir,
         main_content=defaults.default_entry_hello_http,
@@ -85,7 +53,3 @@ def http(
     )
 
     typer.echo(f"Added a new http function to -> {function_dir}")
-
-
-if __name__ == "__main__":
-    app()

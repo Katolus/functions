@@ -9,6 +9,7 @@ from pydantic import DirectoryPath
 from pydantic import FilePath
 from pydantic import validate_arguments
 
+from functions import defaults
 from functions.types import FunctionConfig
 
 
@@ -57,3 +58,37 @@ def link_common(function_dir: str):
     src_path = os.path.abspath(common_folder_name)
     dst_path = os.path.abspath(os.path.join(function_dir, common_folder_name))
     os.symlink(src_path, dst_path, target_is_directory=False)
+
+
+def add_required_files(
+    function_name: str, function_dir: str, *, main_content: str, signature_type: str
+):
+    """Add required files into the function directory"""
+    # Make a new directory
+    make_dir(function_dir)
+    # Create a confing setup
+    add_file(
+        function_dir,
+        filename="config.json",
+        content=json.dumps(defaults.default_config(function_name, signature_type)),
+    )
+
+    # Create a Docker file
+    add_file(function_dir, filename="Dockerfile", content=defaults.default_docker_file)
+
+    # Create a docker ignore file
+    add_file(
+        function_dir,
+        filename=".dockerignore",
+        content=defaults.default_docker_ignore_file,
+    )
+
+    # Create a docker ignore file
+    add_file(
+        function_dir,
+        filename="requirements.txt",
+        content=defaults.default_requirements_file,
+    )
+
+    # Create a default entry point
+    add_file(function_dir, filename="main.py", content=main_content)

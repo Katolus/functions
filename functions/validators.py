@@ -19,3 +19,9 @@ def path_has_config_validator(v: Any) -> Path:
         raise ConfigNotFoundError(path=v)
 
     return v
+
+
+def str_is_alpha_validator(v: str) -> str:
+    if not v.isalpha():
+        raise ValueError("Not an alphabetic string")
+    return v
