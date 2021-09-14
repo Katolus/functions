@@ -9,17 +9,17 @@ from pydantic import DirectoryPath
 from pydantic import FilePath
 from pydantic import validate_arguments
 
-from functions.hints import Config
+from functions.types import FunctionConfig
 
 
 @validate_arguments
-def load_config(config_path: FilePath) -> Config:
+def load_config(config_path: FilePath) -> FunctionConfig:
     """Load a configuration file into a Python object."""
     config = None
     with open(config_path, "r") as file:
         config = json.load(file)
 
-    return Config(**config)
+    return FunctionConfig(**config)
 
 
 def get_config_path(dir_path: Union[os.DirEntry, DirectoryPath]) -> Optional[str]:
