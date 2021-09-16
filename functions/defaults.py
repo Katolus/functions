@@ -1,20 +1,24 @@
-
-def default_config(function_name: str) -> dict:
+# TODO: Add a validator that checks for correct name
+def default_config(function_name: str, signature_type: str) -> dict:
     return {
         "run_variables": {
             "source": "main.py",
-            "entry_point": "hello_pubsub",
-            "signature_type": "event",
+            "entry_point": "main",
+            "signature_type": signature_type,
             "name": function_name,
             "port": 8080,
         },
         "env_variables": {},
-        "deploy_variables": {"provider": "gcp", "service": "cloud_function"},
+        "deploy_variables": {
+            "provider": "gcp",
+            "service": "cloud_function",
+            "allow_unauthenticated": False,  # Consider taking a prompt 
+        },
     }
 
 
-default_pubsub_entry = """
-def hello_pubsub(event, context):
+default_entry_hello_pubsub = """
+def main(event, context):
     \"""Background Cloud Function to be triggered by Pub/Sub.
     Args:
          event (dict):  The dictionary with data specific to this type of
@@ -48,15 +52,36 @@ def hello_pubsub(event, context):
     return "Made it!"
 """
 
+default_entry_hello_http = """
+def main(request):
+    \"""HTTP Cloud Function.
+    Args:
+        request (flask.Request): The request object.
+        <https://flask.palletsprojects.com/en/1.1.x/api/#incoming-request-data>
+    Returns:
+        The response text, or any set of values that can be turned into a
+        Response object using `make_response`
+        <https://flask.palletsprojects.com/en/1.1.x/api/#flask.make_response>.
+    \"""
+    request_json = request.get_json(silent=True)
+    request_args = request.args
+
+    if request_json and 'name' in request_json:
+        name = request_json['name']
+    elif request_args and 'name' in request_args:
+        name = request_args['name']
+    else:
+        name = 'World'
+    return 'Hello {}!'.format(name)
+"""
+
 default_docker_file = """
 
 # Use the official Python image.
 # https://hub.docker.com/_/python
 FROM python:3.9-slim    
 
-ARG CONFIG_PATH
-ARG FUNC_TAG
-ARG TARGET="hello_pubsub"
+ARG TARGET="main"
 ARG SOURCE="main.py"
 ARG SIGNATURE_TYPE="event"
 

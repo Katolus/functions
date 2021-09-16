@@ -9,6 +9,7 @@ from pydantic import validate_arguments
 def run_cmd(
     cmd_exec: List[str], capture_output: bool = False
 ) -> subprocess.CompletedProcess:
+    # TODO: Add logging...
     return subprocess.run(cmd_exec, capture_output=capture_output)
 
 
@@ -18,7 +19,6 @@ def run_process(cmd_exec: List[str], **kwargs) -> subprocess.Popen:
 
 
 def run_locally(cwd=None, *, source: str, target: str, port: int) -> subprocess.Popen:
-    breakpoint()
     process = subprocess.Popen(
         [
             "functions-framework",

@@ -1,14 +1,21 @@
+from functions.callbacks import (
+    function_name_autocomplete_callback,
+    remove_function_name_callback,
+    running_functions_autocomplete_callback,
+)
+from pathlib import Path
+import itertools
+
 import typer
 
 from functions.autocomplete import autocomplete_function_names
 from functions.autocomplete import autocomplete_running_function_names
-from functions.autocomplete import complete_function_dir
+from functions.commands import gcp
 from functions.commands import new
-from functions.docker import all_functions
+from functions.docker import all_functions, remove_image
 from functions.docker import docker_client
 from functions.docker import DockerLabel
 from functions.docker import get_config_from_image
-from functions.system import construct_config_path
 from functions.system import get_full_path
 from functions.system import load_config
 from functions.validation import validate_dir
@@ -18,16 +25,19 @@ app = typer.Typer(
     help="Run script to executing, testing and deploying included functions."
 )
 
+app.add_typer(gcp.app, name="gcp")
 app.add_typer(new.app, name="new")
 
 
 @app.command()
 def build(
-    function_path: str = typer.Argument(
+    # TODO: Change to build existing ones first and if not present request a path
+    function_path: Path = typer.Argument(
         ...,
         help="Path to the functions you want to build",
     ),
-    config_name: str = typer.Option("config.json", help="Name of a config file"),
+    # TODO: Add an option to show the logs
+    show_logs: bool = typer.Option(False, "--force"),
 ):
     # Get the absolute path
     full_path = get_full_path(function_path)
@@ -36,36 +46,53 @@ def build(
     validate_dir(full_path)
 
     # Load configuration
-    config_path = construct_config_path(full_path, config_name)
-    config = load_config(config_path)
+    config = load_config(full_path)
 
     # TODO: Check if an existing -t exists and ask if overwrite
 
     # Formulate a function tag
     function_name = config.run_variables.name
-
-    image, logs = docker_client.images.build(
-        path=str(full_path),
-        tag=function_name,
-        # buildargs={"CONFIG_PATH": config_path, "FUNC_TAG": function_name},
+    build_kwargs = {
+        "path": str(full_path),
+        "tag": function_name,
+        "buildargs": {
+            "TARGET": config.run_variables.entry_point,
+            "SOURCE": config.run_variables.source,
+            "SIGNATURE_TYPE": config.run_variables.signature_type,
+        },
         # TODO: Store a configuration path as a label
-        labels={
+        "labels": {
             DockerLabel.CONFIG: str(config_path),
             DockerLabel.ORGANISATION: "Ventress",
             DockerLabel.TAG: function_name,
         },
-    )
+    }
+
+    # TODO: Check if the port is in use
+
+    # TODO: Add BuildError from docker
+    # TODO: Move to docker.py
+    if show_logs:
+        from docker.utils.json_stream import json_stream
+
+        resp = docker_client.api.build(**build_kwargs)
+        result_stream, internal_stream = itertools.tee(json_stream(resp))
+        for result in result_stream:
+            print(result)
+    else:
+        image, logs = docker_client.images.build(**build_kwargs)
 
     # TODO: Add color
     typer.echo(f"Successfully build a function's image of {function_name}")
 
 
 @app.command()
-def start(
+def run(
     function_name: str = typer.Argument(
         ...,
-        help="Name of the function you are running.",
+        help="Name of the function you want to run",
         autocompletion=autocomplete_function_names,
+        callback=function_name_autocomplete_callback,
     ),
 ):
     """Start a container for a given function"""
@@ -74,7 +101,7 @@ def start(
 
     container = docker_client.containers.run(
         docker_image,
-        ports={config.run_variables.port: "8080"},
+        ports={"8080": config.run_variables.port},
         remove=True,
         name=function_name,
         detach=True,
@@ -85,8 +112,9 @@ def start(
 def stop(
     function_name: str = typer.Argument(
         ...,
-        help="Name of the functions to stop",
+        help="Name of the function you want to stop",
         autocompletion=autocomplete_running_function_names,
+        callback=running_functions_autocomplete_callback,
     ),
 ):
     # TODO: Add an option to stop them all
@@ -94,22 +122,14 @@ def stop(
     container = docker_client.containers.get(function_name)
     container.stop()
 
-
-@app.command()
-def status(
-    function_name: str = typer.Option(
-        None,
-        help="Give status of a function",
-        autocompletion=complete_function_dir,
-    ),
-):
-
-    ...
+    typer.echo(f"Function ({function_name}) has been stopped.")
 
 
 @app.command()
 def list():
     """List existing functions"""
+    # TODO: Add a nice format to this list
+    # Status
     functions = all_functions()
     if functions:
         for function in functions:
@@ -119,15 +139,16 @@ def list():
 
 
 @app.command()
-def remove():
-    # TODO: Implement
-    ...
-
-
-@app.command()
-def rebuild():
-    # TODO: Implement
-    ...
+def remove(
+    function_name: str = typer.Argument(
+        ...,
+        help="Name of the function you want to remove",
+        autocompletion=autocomplete_function_names,
+        callback=remove_function_name_callback,
+    )
+):
+    remove_image(function_name)
+    typer.echo(f"Function ({function_name}) has been removed")
 
 
 if __name__ == "__main__":

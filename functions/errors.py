@@ -1,20 +1,22 @@
-from typing import Any
+from pathlib import Path
 
-
-# TODO: Add this base class 
-class FunctionsErrorMixin:
-    code: str
-    msg_template: str
-
-    def __init__(self, **ctx: Any) -> None:
-        self.__dict__ = ctx
-
-    def __str__(self) -> str:
-        return self.msg_template.format(**self.__dict__)
-
-    # def __reduce__(self) -> Tuple[Callable[..., 'PydanticErrorMixin'], Tuple[Type['PydanticErrorMixin'], 'DictStrAny']]:
-    #     return cls_kwargs, (self.__class__, self.__dict__)
+from pydantic import PydanticValueError
 
 
 class FunctionsError(Exception):
     ...
+
+
+class _PathValueError(PydanticValueError):
+    def __init__(self, *, path: Path) -> None:
+        super().__init__(path=str(path))
+
+
+class ItIsNotAValidDirectory(_PathValueError, FunctionsError):
+    code = "path.invalid_directory"
+    msg_template = "path '{path}' is not a valid function directory"
+
+
+class ConfigNotFoundError(_PathValueError, FunctionsError):
+    code = "code.config_not_found"
+    msg_template = "path '{path}' does not include a valid config file"

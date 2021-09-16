@@ -5,7 +5,7 @@ from docker.models.images import Image as DockerImage
 from docker.models.containers import Container as DockerContainer
 from pydantic import ValidationError
 
-from functions.hints import Config
+from functions.types import FunctionConfig
 from functions.system import load_config
 from functions.errors import FunctionsError
 
@@ -22,7 +22,8 @@ class DockerLabel:
     TAG: str = "package.functions.tag"
 
 
-def get_config_from_image(image: DockerImage) -> Config:
+def get_config_from_image(image: DockerImage) -> FunctionConfig:
+    # TODO: Change to function dir
     config_path = image.labels.get(DockerLabel.CONFIG)
     try:
         return load_config(config_path)
@@ -68,3 +69,11 @@ def all_running_functions() -> List[str]:
         if function_tag:
             functions.append(function_tag)
     return functions
+
+def build_image(image_name: str) -> DockerImage:
+    # TODO: Export inline code
+    ...
+
+
+def remove_image(image_name: str):
+    docker_client.images.remove(image_name)

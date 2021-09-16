@@ -30,3 +30,9 @@ def autocomplete_running_function_names(incomplete: str):
     for function in functions:
         if function.startswith(incomplete):
             yield function
+
+
+def autocomplete_deploy_functions():
+    """Specify the functions that are to be deployed"""
+    deployable_functions = []
+    return deployable_functions
