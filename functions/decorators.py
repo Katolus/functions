@@ -1,21 +1,36 @@
-from functools import wraps
+import functools
 from typing import Any, Callable, Optional
+
+import typer
+
 
 AnyCallableT = Callable[..., Any]
 
 
-def handle_command(func: Optional['AnyCallableT'] = None) -> Any:
+def handle_error(
+    func: Optional["AnyCallableT"] = None,
+    *,
+    error_class: BaseException,
+    message_tmp: str = "Something has happened {function_path}"
+):
     """
-    Decorator to try a command and handle exceptions gracefull.
+    Decorator that gracefully handles errors.
     """
-    # TODO: Update this logic
-    def handle(_func: 'AnyCallable') -> 'AnyCallable':
 
-        @wraps(_func)
-        def wrapper_function(*args: Any, **kwargs: Any) -> Any:
-            return _func.call(*args, **kwargs)
+    def handle(_func: "AnyCallableT"):
+        @functools.wraps(_func)
+        def command(*args: Any, **kwargs: Any) -> Any:
+            try:
+                return _func(*args, **kwargs)
+            except error_class as err:
+                message = message_tmp.format(error=err, **kwargs)
+                raise typer.BadParameter(message)
 
-        return wrapper_function
+        return command
+
+    # Handles a case where function is called as a function as well as a decorator
+    # handle_error()(app.command(build))
+    # handle_error(app.command(build))
 
     if func:
         return handle(func)

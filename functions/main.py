@@ -1,8 +1,3 @@
-from functions.callbacks import (
-    function_name_autocomplete_callback,
-    remove_function_name_callback,
-    running_functions_autocomplete_callback,
-)
 from pathlib import Path
 import itertools
 
@@ -10,8 +5,12 @@ import typer
 
 from functions.autocomplete import autocomplete_function_names
 from functions.autocomplete import autocomplete_running_function_names
+from functions.callbacks import function_name_autocomplete_callback
+from functions.callbacks import remove_function_name_callback
+from functions.callbacks import running_functions_autocomplete_callback
 from functions.commands import gcp
 from functions.commands import new
+from functions.decorators import handle_error
 from functions.docker import all_functions, remove_image
 from functions.docker import docker_client
 from functions.docker import DockerLabel
@@ -30,6 +29,7 @@ app.add_typer(new.app, name="new")
 
 
 @app.command()
+@handle_error(error_class=ValueError)
 def build(
     # TODO: Change to build existing ones first and if not present request a path
     function_path: Path = typer.Argument(

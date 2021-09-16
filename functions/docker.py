@@ -7,7 +7,7 @@ from pydantic import ValidationError
 
 from functions.types import FunctionConfig
 from functions.system import load_config
-from functions.errors import FunctionsError
+from functions.errors import FunctionValueError
 
 
 # TODO: Find a better way of doing this
@@ -28,7 +28,7 @@ def get_config_from_image(image: DockerImage) -> FunctionConfig:
     try:
         return load_config(config_path)
     except ValidationError as error:
-        raise FunctionsError(
+        raise FunctionValueError(
             "Could not load image configuration. Missing config file. Try rebuilding an image"
         )
 
