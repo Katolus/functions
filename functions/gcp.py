@@ -4,9 +4,11 @@ from typing import List, Optional
 from pydantic import validate_arguments
 
 from functions.processes import run_cmd
-from functions.types import FunctionConfig, NotEmptyStr
+from functions.types import FunctionConfig, LocalFunctionPath, NotEmptyStr
 
 # TODO: Add check to make sure that the library installed and if not throw an error
+
+GCP_REGION = "australia-southeast1"
 
 GCP_ENV_VARIABLES = {
     "ENTRY_POINT": {"description": "Reserved: The function to be executed."},
@@ -104,7 +106,7 @@ def add_ignore_file_arguments(files: Optional[List[str]] = None) -> List[str]:
 
 
 def add_region_argument() -> List[str]:
-    return ["--region", "australia-southeast1"]
+    return ["--region", GCP_REGION]
 
 
 # TODO: Ensure that the gcloud library is installed first
@@ -114,8 +116,25 @@ def current_project() -> str:
     return output.stdout.strip()
 
 
+def deploy_function():
+    ...
+
+
+def delete_function(function_name: str):
+    """Runs a gcloud command to remove a function matching a given name"""
+    run_cmd(
+        [
+            "gcloud",
+            "functions",
+            "delete",
+            function_name,
+        ]
+        + add_region_argument()
+    )
+
+
 @validate_arguments
-def deploy_c_function(config: FunctionConfig, function_dir: str):
+def deploy_c_function(config: FunctionConfig, function_dir: LocalFunctionPath):
     """Uses gcloud to deploy a cloud function"""
     cloud_function_name = config.run_variables.name
     run_cmd(
@@ -126,7 +145,7 @@ def deploy_c_function(config: FunctionConfig, function_dir: str):
             cloud_function_name,
         ]
         + GCPCloudFunction.add_runtime_arguments()
-        + GCPCloudFunction.add_source_arguments(function_dir)
+        + GCPCloudFunction.add_source_arguments(str(function_dir))
         + add_entry_point_arguments(config.run_variables.entry_point)
         + add_ignore_file_arguments()
         + add_region_argument()

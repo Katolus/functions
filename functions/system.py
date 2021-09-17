@@ -1,5 +1,4 @@
 import json
-import fnmatch
 import os
 from pathlib import Path
 from typing import Optional
@@ -10,35 +9,29 @@ from pydantic import validate_arguments
 
 from functions import defaults
 from functions.constants import ConfigName
-from functions.types import FunctionConfig, LocalFunctionDir
+from functions.types import FunctionConfig, LocalFunctionPath
 
 
 @validate_arguments
-def load_config(config_dir: LocalFunctionDir) -> FunctionConfig:
+def load_config(config_dir: LocalFunctionPath) -> FunctionConfig:
     """Load a configuration file into a Python object."""
     config = None
-    with open(construct_config_path(config_dir, ConfigName.base), "r") as file:
+    with open(construct_config_path(config_dir, ConfigName.BASE), "r") as file:
         config = json.load(file)
 
     return FunctionConfig(**config)
 
 
-def get_config_path(dir_path: Union[os.DirEntry, DirectoryPath]) -> Optional[str]:
-    """Returns a config path if present."""
-    for filename in os.listdir(dir_path):
-        if fnmatch.fnmatch(filename, "config.json"):
-            return os.path.join(dir_path, filename)
-    return None
-
-
-def get_full_path(function_path: str) -> Path:
+def get_full_path(function_path: Union[Path, str]) -> LocalFunctionPath:
     """Returns a full path of a function"""
-    return Path(os.path.abspath(os.path.join(os.getcwd(), function_path)))
+    return LocalFunctionPath(os.path.abspath(os.path.join(os.getcwd(), function_path)))
 
 
-def construct_config_path(full_path: Path, config_name: str) -> Path:
+def construct_config_path(
+    full_path: Path, config_name: str = ConfigName.BASE
+) -> LocalFunctionPath:
     """Returns a configuration file path"""
-    return Path(os.path.join(full_path, config_name))
+    return LocalFunctionPath(os.path.join(full_path, config_name))
 
 
 def make_dir(function_dir: str):

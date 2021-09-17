@@ -1,3 +1,4 @@
+import json
 from pydantic import ValidationError
 from pathlib import Path
 import itertools
@@ -11,12 +12,13 @@ from functions.callbacks import remove_function_name_callback
 from functions.callbacks import running_functions_autocomplete_callback
 from functions.commands import gcp
 from functions.commands import new
+from functions.constants import ConfigName
 from functions.decorators import handle_error
 from functions.docker import all_functions, remove_image
 from functions.docker import docker_client
 from functions.docker import DockerLabel
 from functions.docker import get_config_from_image
-from functions.system import get_full_path
+from functions.system import construct_config_path, get_full_path
 from functions.system import load_config
 
 
@@ -29,7 +31,7 @@ app.add_typer(new.app, name="new")
 
 
 @app.command()
-@handle_error(error_class=(ValidationError, ))
+@handle_error(error_class=(ValidationError,))
 def build(
     # TODO: Change to build existing ones first and if not present request a path
     function_path: Path = typer.Argument(
@@ -45,7 +47,7 @@ def build(
     # Load configuration
     config = load_config(full_path)
 
-    # TODO: Check if an existing -t exists and ask if overwrite
+    # TODO: Check if an existing function image already exist and ask if to overwrite
 
     # Formulate a function tag
     function_name = config.run_variables.name
@@ -59,9 +61,11 @@ def build(
         },
         # TODO: Store a configuration path as a label
         "labels": {
-            DockerLabel.CONFIG: str(config_path),
+            DockerLabel.FUNCTION_NAME: function_name,
+            DockerLabel.FUNCTION_PATH: str(full_path),
+            DockerLabel.CONFIG_PATH: str(construct_config_path(full_path)),
+            DockerLabel.CONFIG: json.dumps(config.json()),
             DockerLabel.ORGANISATION: "Ventress",
-            DockerLabel.TAG: function_name,
         },
     }
 
@@ -80,7 +84,9 @@ def build(
         image, logs = docker_client.images.build(**build_kwargs)
 
     # TODO: Add color
-    typer.echo(f"Successfully build a function's image of {function_name}")
+    typer.echo(
+        f"Successfully build a function's image. The name of the functions is -> {function_name}"
+    )
 
 
 @app.command()
@@ -103,6 +109,8 @@ def run(
         name=function_name,
         detach=True,
     )
+
+    typer.echo(f"Function ({container.name}) has started.")
 
 
 @app.command()

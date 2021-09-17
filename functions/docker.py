@@ -1,3 +1,5 @@
+from pydantic.main import BaseModel
+from functions.constants import DockerLabel
 from typing import List, Optional
 
 import docker
@@ -16,25 +18,22 @@ if not docker_client:
     docker_client = docker.from_env()
 
 
-class DockerLabel:
-    CONFIG: str = "package.functions.config_path"
-    ORGANISATION: str = "package.functions.organisation"
-    TAG: str = "package.functions.tag"
+# TODO: Add a docker lables class
 
 
 def get_config_from_image(image: DockerImage) -> FunctionConfig:
     # TODO: Change to function dir
-    config_path = image.labels.get(DockerLabel.CONFIG)
+    config_path = image.labels.get(DockerLabel.FUNCTION_PATH)
     try:
         return load_config(config_path)
-    except ValidationError as error:
-        raise FunctionValueError(
+    except ValidationError:
+        raise ValueError(
             "Could not load image configuration. Missing config file. Try rebuilding an image"
         )
 
 
 def get_function_tag_from_labels(labels: dict) -> Optional[str]:
-    return labels.get(DockerLabel.TAG)
+    return labels.get(DockerLabel.FUNCTION_NAME)
 
 
 def all_images() -> List[DockerImage]:
@@ -69,6 +68,7 @@ def all_running_functions() -> List[str]:
         if function_tag:
             functions.append(function_tag)
     return functions
+
 
 def build_image(image_name: str) -> DockerImage:
     # TODO: Export inline code

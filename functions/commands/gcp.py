@@ -3,10 +3,9 @@ from pathlib import Path
 import typer
 
 from functions.autocomplete import autocomplete_deploy_functions
-from functions.gcp import GCPService, deploy_c_function, deploy_c_run
-from functions.system import get_config_path, load_config
-from functions.types import LocalFunctionDir
-from functions.constants import ConfigName
+from functions.input import confirm_abort
+from functions.gcp import GCPService, delete_function, deploy_c_function, deploy_c_run, deploy_function
+from functions.system import load_config
 
 
 app = typer.Typer(help="Deploy functions in GCP")
@@ -41,11 +40,11 @@ def deploy(
         help="Type of service you want this resource to be deploy to",
         autocompletion=GCPService.all,
     ),
-    # TODO: Add autocompletion once the build images have their config setup.
 ):
     """Deploy a functions to GCP"""
     config = load_config(function_dir)
     service = service or config.deploy_variables.service
+
     if service == GCPService.FUNCTION:
         deploy_c_function(config, function_dir)
         pass
@@ -58,9 +57,16 @@ def deploy(
 
 
 @app.command()
-def delete():
+def delete(
+        function_name: str = typer.Argument(
+        ...,
+        help="Name of the function you want to remove",
+    ),
+):
     """Deletes a functions deployed to GCP"""
-    raise NotImplementedError()
+    # TODO: Implement a delete option with a confirmation
+    confirm_abort(f"Are you sure you want to remove '{function_name}'?")
+    delete_function(function_name)
 
 
 @app.command()

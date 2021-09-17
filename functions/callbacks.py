@@ -7,7 +7,7 @@ from typing import Optional
 import typer
 
 from functions.validators import str_is_alpha_validator
-from functions.types import LocalFunctionDir
+from functions.types import LocalFunctionPath
 from functions.input import confirm_abort
 
 
@@ -18,6 +18,7 @@ def function_name_callback(
         return None
 
     try:
+        # TODO: Update this to correctly filter invalid names (regex?)
         str_is_alpha_validator(value)
     except ValueError:
         raise typer.BadParameter(
@@ -32,9 +33,9 @@ def function_name_autocomplete_callback(
     if ctx.resilient_parsing:
         return None
 
-    if (
-        build_functions := list(autocomplete_function_names(""))
-    ) and value not in build_functions:
+    build_functions = list(autocomplete_function_names(""))
+    # TODO: Check if the container is running and abort if it already is running
+    if build_functions and value not in build_functions:
         raise typer.BadParameter(
             f"You can only run build functions {build_functions}. Use autocomplete the pass a valid name."
         )
@@ -88,6 +89,6 @@ def function_dir_callback(
         value = "."
 
     # Find a better way of doing this
-    local_dir: LocalFunctionDir = value
+    local_dir: LocalFunctionPath = value
 
     return str(local_dir)

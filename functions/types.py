@@ -1,5 +1,6 @@
-from functions.validators import path_dir_validator
+import os 
 from pathlib import Path
+from pathlib import _windows_flavour, _posix_flavour
 from typing import Any, Dict
 
 from pydantic import BaseModel
@@ -8,8 +9,8 @@ from pydantic.dataclasses import dataclass
 from pydantic.validators import path_exists_validator
 from pydantic.validators import path_validator
 
+from functions.validators import path_dir_validator
 from functions.validators import path_has_config_validator
-
 
 class NotEmptyStr(ConstrainedStr):
     # Make sure that this works for ' '
@@ -17,8 +18,11 @@ class NotEmptyStr(ConstrainedStr):
     min_length = 1
 
 
-class LocalFunctionDir(Path):
+# TODO: Review if the inheritance from Path is needed
+class LocalFunctionPath(Path):
     """Validates if a past in directory adhere to the rules"""
+    _flavour = _windows_flavour if os.name == 'nt' else _posix_flavour
+    
     @classmethod
     def __modify_schema__(cls, field_schema: Dict[str, Any]) -> None:
         field_schema.update(format="functions-path")
