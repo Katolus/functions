@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from typing import Any
 
+
 from pydantic.errors import PathNotADirectoryError
 
 from functions.errors import ConfigNotFoundError
