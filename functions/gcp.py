@@ -12,6 +12,7 @@ from functions.types import EnvVariables, FunctionConfig, LocalFunctionPath, Not
 GCP_REGION = "australia-southeast1"
 
 
+# Example ENV variables
 # {
 #   "GCF_BLOCK_RUNTIME_go112": "410",
 #   "FUNCTION_TARGET": "main",
@@ -33,7 +34,9 @@ GCP_REGION = "australia-southeast1"
 #   "LC_CTYPE": "C.UTF-8",
 #   "SERVER_SOFTWARE": "gunicorn/20.0.4",
 # }
-GCP_ENV_VARIABLES = {
+
+# Do not use "GOOGLE_*" property names
+GCP_RESERVED_VARIABLES = {
     "ENTRY_POINT": {"description": "Reserved: The function to be executed."},
     "GCP_PROJECT": {"description": "Reserved: The current GCP project ID."},
     "GCLOUD_PROJECT": {
@@ -93,7 +96,14 @@ def add_env_vars_arguments(env_variables: EnvVariables) -> List[str]:
     """Adds environmental variables to the scope of the deployment if any are present"""
     # https://cloud.google.com/sdk/gcloud/reference/functions/deploy#--set-env-vars
     env_list = []
-    for key, value in env_variables:
+    for key, value in env_variables.items():
+        if not value:
+            continue
+
+        if variable := GCP_RESERVED_VARIABLES.get(key):
+            raise ValueError(
+                f"ENV variable '{key}' cannot be set -> {variable['description']}"
+            )
         env_list.append(["--set-env-vars", f"{key}={value}"])
     return list(itertools.chain.from_iterable(env_list))
 

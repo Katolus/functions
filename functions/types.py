@@ -60,11 +60,7 @@ class RunVariables(BaseModel):
     source: str
 
 
-class EnvVariables(BaseModel):
-    # GCP variables 
-    # Do not use "GOOGLE_*" property names
-    GCP_CLOUD_PROJECT: Optional[str] = None
-
+EnvVariables = Dict[str, str]
 
 class DeployVariables(BaseModel):
     allow_unauthenticated: bool = False
