@@ -1,18 +1,11 @@
 import typer
 
-from functions.validation import valid_function_dirs
 from functions.docker import all_functions
 from functions.docker import all_running_functions
 
 
 def complete_services():
     return ["cloud_function", "cloud_run"]
-
-
-def complete_function_dir(incomplete: str):
-    for name in valid_function_dirs().keys():
-        if name.startswith(incomplete):
-            yield name
 
 
 def autocomplete_function_names(incomplete: str):
@@ -35,4 +28,5 @@ def autocomplete_running_function_names(incomplete: str):
 def autocomplete_deploy_functions():
     """Specify the functions that are to be deployed"""
     deployable_functions = []
+    # TODO: Find deployable functions
     return deployable_functions

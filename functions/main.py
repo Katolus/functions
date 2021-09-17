@@ -1,3 +1,4 @@
+from pydantic import ValidationError
 from pathlib import Path
 import itertools
 
@@ -17,7 +18,6 @@ from functions.docker import DockerLabel
 from functions.docker import get_config_from_image
 from functions.system import get_full_path
 from functions.system import load_config
-from functions.validation import validate_dir
 
 
 app = typer.Typer(
@@ -29,7 +29,7 @@ app.add_typer(new.app, name="new")
 
 
 @app.command()
-@handle_error(error_class=ValueError)
+@handle_error(error_class=(ValidationError, ))
 def build(
     # TODO: Change to build existing ones first and if not present request a path
     function_path: Path = typer.Argument(
@@ -41,9 +41,6 @@ def build(
 ):
     # Get the absolute path
     full_path = get_full_path(function_path)
-
-    # Validate that it is a valid path (throw an error if not)
-    validate_dir(full_path)
 
     # Load configuration
     config = load_config(full_path)

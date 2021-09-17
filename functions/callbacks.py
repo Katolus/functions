@@ -58,6 +58,8 @@ def running_functions_autocomplete_callback(
     return value
 
 
+
+
 # TODO: Add a decorator for the resilient_parsing
 def remove_function_name_callback(
     ctx: typer.Context, param: typer.CallbackParam, value: str

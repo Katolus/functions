@@ -1,17 +1,20 @@
 import functools
-from typing import Any, Callable, Optional
+from typing import Any, Callable, List, Optional, Tuple, Union
 
 import typer
+from pydantic import validate_arguments
 
+from functions.errors import FunctionBaseError
 
 AnyCallableT = Callable[..., Any]
 
 
+@validate_arguments
 def handle_error(
     func: Optional["AnyCallableT"] = None,
     *,
-    error_class: BaseException,
-    message_tmp: str = "Something has happened {function_path}"
+    error_class: Tuple[FunctionBaseError, ...],
+    message_tmp: str = "Something has happened {function_path}. Error {error}"
 ):
     """
     Decorator that gracefully handles errors.
@@ -28,11 +31,14 @@ def handle_error(
 
         return command
 
-    # Handles a case where function is called as a function as well as a decorator
-    # handle_error()(app.command(build))
-    # handle_error(app.command(build))
+    # Handles a case where the decorator is used with arguments and without
+    # @handle_error(error_class=FunctionError)
+    # @handle_error
 
     if func:
         return handle(func)
     else:
         return handle
+
+
+# TODO: Add register_handler and a ERROR_REGISTRY
