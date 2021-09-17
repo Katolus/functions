@@ -38,7 +38,8 @@ def deploy(
         resolve_path=True,
     ),
     # TODO: Make service an enum
-    service: Optional[str] = typer.Option(
+    service: Optional[CloudServiceType] = typer.Option(
+        None,
         help="Type of service you want this resource to be deploy to",
         autocompletion=CloudServiceType.all,
     ),
@@ -47,7 +48,7 @@ def deploy(
     config = load_config(function_dir)
     service_type = service or config.deploy_variables.service
 
-    deploy_function(config, service_type)
+    deploy_function(config, CloudServiceType(service_type))
 
     typer.echo(f"{config.run_variables.name} functions has been deployed to GCP!")
 

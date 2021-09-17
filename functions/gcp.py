@@ -5,12 +5,34 @@ from pydantic import validate_arguments
 
 from functions.constants import CloudServiceType
 from functions.processes import run_cmd
-from functions.types import FunctionConfig, LocalFunctionPath, NotEmptyStr
+from functions.types import EnvVariables, FunctionConfig, LocalFunctionPath, NotEmptyStr
 
 # TODO: Add check to make sure that the library installed and if not throw an error
 
 GCP_REGION = "australia-southeast1"
 
+
+# {
+#   "GCF_BLOCK_RUNTIME_go112": "410",
+#   "FUNCTION_TARGET": "main",
+#   "HOME": "/root",
+#   "K_REVISION": "2",
+#   "PYTHONUSERBASE": "/layers/google.python.pip/pip",
+#   "PYTHONDONTWRITEBYTECODE": "1",
+#   "DEBIAN_FRONTEND": "noninteractive",
+#   "FUNCTION_SIGNATURE_TYPE": "http",
+#   "PORT": "8080",
+#   "GCF_BLOCK_RUNTIME_nodejs6": "410",
+#   "PWD": "/workspace",
+#   "GAE_RUNTIME": "python39",
+#   "K_SERVICE": "test-funcion",
+#   "PYTHONUNBUFFERED": "1",
+#   "PATH": "/layers/google.python.pip/pip/bin:/opt/python3.9/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+#   "S2A_ACCESS_TOKEN": "e13755294ada4a6059f3cf3683a7b2f30b0052938e522063e640386830c6bdab",
+#   "LD_LIBRARY_PATH": "/layers/google.python.pip/pip/lib",
+#   "LC_CTYPE": "C.UTF-8",
+#   "SERVER_SOFTWARE": "gunicorn/20.0.4",
+# }
 GCP_ENV_VARIABLES = {
     "ENTRY_POINT": {"description": "Reserved: The function to be executed."},
     "GCP_PROJECT": {"description": "Reserved: The current GCP project ID."},
@@ -67,17 +89,19 @@ class GCPCloudFunction:
         return ["--source", str(function_dir)]
 
 
-def add_env_vars_arguments() -> List[str]:
+def add_env_vars_arguments(env_variables: EnvVariables) -> List[str]:
     """Adds environmental variables to the scope of the deployment if any are present"""
-    # TODO: To Implement
-    return []
+    # https://cloud.google.com/sdk/gcloud/reference/functions/deploy#--set-env-vars
+    env_list = []
+    for key, value in env_variables:
+        env_list.append(["--set-env-vars", f"{key}={value}"])
+    return list(itertools.chain.from_iterable(env_list))
 
 
 @validate_arguments
 def add_entry_point_arguments(entry_point: NotEmptyStr) -> List[str]:
     # TODO: Validate that the entry point has more than just empty string
     """Adds entry point variables to the scope of the deployment"""
-    # https://cloud.google.com/sdk/gcloud/reference/functions/deploy#--set-env-vars
     return ["--entry-point", entry_point]
 
 
@@ -108,7 +132,7 @@ def current_project() -> str:
     return output.stdout.strip()
 
 
-def deploy_function(config: FunctionConfig, service_type: ServiceType):
+def deploy_function(config: FunctionConfig, service_type: CloudServiceType):
     """Deploys a function to a given service"""
     if service_type == CloudServiceType.CLOUD_FUNCTION:
         deploy_c_function(config)
@@ -145,7 +169,7 @@ def deploy_c_function(config: FunctionConfig, function_dir: LocalFunctionPath = 
         + add_entry_point_arguments(config.run_variables.entry_point)
         + add_ignore_file_arguments()
         + add_region_argument()
-        + add_env_vars_arguments()
+        + add_env_vars_arguments(config.env_variables)
         + GCPCloudFunction.add_trigger_arguments()
     )
 

@@ -1,0 +1,1 @@
+"""Holds the information about interaction with remote services"""
