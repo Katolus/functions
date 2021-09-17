@@ -19,7 +19,7 @@ def load_config(config_dir: LocalFunctionPath) -> FunctionConfig:
     with open(construct_config_path(config_dir, ConfigName.BASE), "r") as file:
         config = json.load(file)
 
-    return FunctionConfig(**config)
+    return FunctionConfig(path=str(config_dir), **config)
 
 
 def get_full_path(function_path: Union[Path, str]) -> LocalFunctionPath:

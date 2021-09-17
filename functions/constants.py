@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import List
 
 class ConfigName(str, Enum):
     BASE = "config.json"
@@ -14,3 +15,10 @@ class DockerLabel(str, Enum):
     ORGANISATION: str = "package.functions.organisation"
 
 
+class CloudServiceType(str, Enum):
+    CLOUD_FUNCTION = "cloud_function"
+
+    @classmethod
+    def all(cls) -> List[str]:
+        # TODO: There might be a method that does this better
+        return [cls.CLOUD_FUNCTION]

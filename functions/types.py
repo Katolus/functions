@@ -69,6 +69,7 @@ class DeployVariables(BaseModel):
 
 
 class FunctionConfig(BaseModel):
+    path: str
     run_variables: RunVariables
     env_variables: EnvVariables
     deploy_variables: DeployVariables

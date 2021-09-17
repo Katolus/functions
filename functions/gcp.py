@@ -3,6 +3,7 @@ from typing import List, Optional
 
 from pydantic import validate_arguments
 
+from functions.constants import CloudServiceType
 from functions.processes import run_cmd
 from functions.types import FunctionConfig, LocalFunctionPath, NotEmptyStr
 
@@ -44,15 +45,6 @@ GCP_ENV_VARIABLES = {
     "K_REVISION": {"description": "Reserved: The version identifier of the function."},
     "PORT": {"description": "Reserved: The port over which the function is invoked."},
 }
-
-
-class GCPService:
-    FUNCTION: str = "cloud_function"
-    RUN: str = "cloud_run"
-
-    @classmethod
-    def all(cls) -> List[str]:
-        return [cls.FUNCTION, cls.RUN]
 
 
 class GCPCloudFunction:
@@ -116,8 +108,12 @@ def current_project() -> str:
     return output.stdout.strip()
 
 
-def deploy_function():
-    ...
+def deploy_function(config: FunctionConfig, service_type: ServiceType):
+    """Deploys a function to a given service"""
+    if service_type == CloudServiceType.CLOUD_FUNCTION:
+        deploy_c_function(config)
+    else:
+        raise NotImplementedError()
 
 
 def delete_function(function_name: str):
@@ -134,7 +130,7 @@ def delete_function(function_name: str):
 
 
 @validate_arguments
-def deploy_c_function(config: FunctionConfig, function_dir: LocalFunctionPath):
+def deploy_c_function(config: FunctionConfig, function_dir: LocalFunctionPath = None):
     """Uses gcloud to deploy a cloud function"""
     cloud_function_name = config.run_variables.name
     run_cmd(
@@ -145,7 +141,7 @@ def deploy_c_function(config: FunctionConfig, function_dir: LocalFunctionPath):
             cloud_function_name,
         ]
         + GCPCloudFunction.add_runtime_arguments()
-        + GCPCloudFunction.add_source_arguments(str(function_dir))
+        + GCPCloudFunction.add_source_arguments(str(function_dir or config.path))
         + add_entry_point_arguments(config.run_variables.entry_point)
         + add_ignore_file_arguments()
         + add_region_argument()
@@ -156,5 +152,4 @@ def deploy_c_function(config: FunctionConfig, function_dir: LocalFunctionPath):
 
 def deploy_c_run(function_name: str):
     """Uses gcloud to deploy a cloud run container"""
-    # TODO: To be implemented
     raise NotImplementedError("gcloud run is not implemented yet")
