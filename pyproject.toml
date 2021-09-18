@@ -4,6 +4,10 @@ description = ""
 name = "functions-cli"
 readme = "README.md"
 version = "0.1.0a1"
+packages = [
+    { include = "functions" },
+]
+
 
 [tool.poetry.scripts]
 functions = "functions.main:app"
