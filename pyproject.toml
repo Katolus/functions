@@ -1,7 +1,7 @@
 [tool.poetry]
 authors = ["Katolus <pkatolik@healthshare.com.au>"]
 description = ""
-name = "functions"
+name = "functions-cli"
 readme = "README.md"
 version = "0.1.0a1"
 
