@@ -3,7 +3,7 @@ authors = ["Katolus <pkatolik@healthshare.com.au>"]
 description = ""
 name = "functions"
 readme = "README.md"
-version = "0.1.0"
+version = "0.1.0a1"
 
 [tool.poetry.scripts]
 functions = "functions.main:app"
