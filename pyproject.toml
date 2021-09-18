@@ -4,7 +4,7 @@ description = "CLI tool for managing your FaaS repositories"
 name = "functions-cli"
 license = "MIT"
 readme = "README.md"
-version = "0.1.0a1"
+version = "0.1.0a2"
 packages = [
     { include = "functions" },
 ]
