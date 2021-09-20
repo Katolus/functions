@@ -1,10 +1,15 @@
-# functions-cli: The package that will get you working with FaaS
+# This package that will get you working with FaaS
+
+|   !   | This package is not anywhere near being ready. It hasn't been released in any major or minor versions of it yet as it is constant development. Use it at your own risk and pleasure. |
+| :---: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
 <!-- ![Logo]() -->
 
-`functions-cli` is a python package that is built to help a developer code, test and deploy FaaS (Function as a Service) resources. 
 
-It allows you to build them locally using `docker` and deploy them to a cloud providers using a related software. 
+
+`functions-cli` is a utility package written in Python. It is built to help a developer code, test and deploy FaaS (Function as a Service) resources. 
+
+It is using `docker` to build and orchestrate the functions locally. To deploy them to any of the cloud providers you need to have relevant software installed and appropriate authorization to deploy them. 
 
 ## Compatibility
 
