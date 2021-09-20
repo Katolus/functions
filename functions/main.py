@@ -36,9 +36,17 @@ app.add_typer(new.app, name="new")
 
 @app.callback()
 def main(
-    verbose: bool = False,
+    verbose: bool = typer.Option(
+        False,
+        "--verbose",
+        help="Sets the conext of the command to be verbose",
+    ),
     version: Optional[bool] = typer.Option(
-        None, "--version", callback=version_callback, is_eager=True
+        None,
+        "--version",
+        help="Prints out the version of the package",
+        callback=version_callback,
+        is_eager=True,
     ),
 ):
     """
