@@ -1,13 +1,14 @@
-from typing import Optional
-from functions.constants import CloudServiceType
 from pathlib import Path
+from typing import Optional
 
 import typer
 
 from functions.autocomplete import autocomplete_deploy_functions
+from functions.constants import CloudServiceType
 from functions.input import confirm_abort
-from functions.gcp import delete_function
+from functions.gcp import delete_function, read_logs
 from functions.gcp import deploy_function
+from functions.services import describe_function
 from functions.system import load_config
 
 
@@ -68,12 +69,22 @@ def delete(
 
 
 @app.command()
-def describe():
+def describe(
+        function_name: str = typer.Argument(
+        ...,
+        help="Name of the function you want to describe",
+    ),
+):
     """Returns information about a deployed function"""
-    raise NotImplementedError()
+    describe_function(function_name)
 
 
 @app.command()
-def logs():
+def logs(
+    function_name: str = typer.Argument(
+        ...,
+        help="Name of the function you want to read logs from",
+    ),
+):
     """Reads log from a deployed function"""
-    raise NotImplementedError()
+    read_logs(function_name)
