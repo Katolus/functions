@@ -1,4 +1,5 @@
 import json
+from typing import Optional
 from pydantic import ValidationError
 from pathlib import Path
 import itertools
@@ -7,12 +8,11 @@ import typer
 
 from functions.autocomplete import autocomplete_function_names
 from functions.autocomplete import autocomplete_running_function_names
-from functions.callbacks import function_name_autocomplete_callback
+from functions.callbacks import function_name_autocomplete_callback, version_callback
 from functions.callbacks import remove_function_name_callback
 from functions.callbacks import running_functions_autocomplete_callback
 from functions.commands import gcp
 from functions.commands import new
-from functions.constants import ConfigName
 from functions.decorators import handle_error
 from functions.docker import all_functions, remove_image
 from functions.docker import docker_client
@@ -23,13 +23,38 @@ from functions.system import load_config
 
 
 app = typer.Typer(
-    help="Run script to executing, testing and deploying included functions."
+    name="functions-cli",
+    help="Run script to executing, testing and deploying included functions.",
 )
+state = {"verbose": False}
 
-# TODO: Add a scope if the package is installed 
+# TODO: Add a scope if the package is installed
 # if gcloud_is_installed
 app.add_typer(gcp.app, name="gcp")
 app.add_typer(new.app, name="new")
+
+
+@app.callback()
+def main(
+    verbose: bool = typer.Option(
+        False,
+        "--verbose",
+        help="Sets the conext of the command to be verbose",
+    ),
+    version: Optional[bool] = typer.Option(
+        None,
+        "--version",
+        help="Prints out the version of the package",
+        callback=version_callback,
+        is_eager=True,
+    ),
+):
+    """
+    Manage users in the awesome CLI app.
+    """
+    if verbose:
+        # typer.echo("Will write verbose output") ## log
+        state["verbose"] = True
 
 
 @app.command()
@@ -138,6 +163,8 @@ def list():
     # TODO: Add a nice format to this list
     # Status
     functions = all_functions()
+    if state["verbose"]:
+        typer.echo(f"Will write verbose lists")
     if functions:
         for function in functions:
             typer.echo(function)
@@ -156,7 +183,3 @@ def remove(
 ):
     remove_image(function_name)
     typer.echo(f"Function ({function_name}) has been removed")
-
-
-if __name__ == "__main__":
-    app()
