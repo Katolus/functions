@@ -26,6 +26,8 @@ app = typer.Typer(
     help="Run script to executing, testing and deploying included functions."
 )
 
+# TODO: Add a scope if the package is installed 
+# if gcloud_is_installed
 app.add_typer(gcp.app, name="gcp")
 app.add_typer(new.app, name="new")
 
