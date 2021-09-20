@@ -7,7 +7,7 @@
 
 
 
-`functions-cli` is a utility package written in Python. It is built to help a developer code, test and deploy FaaS (Function as a Service) resources. 
+`functions-cli` is a utility package written in Python. It is built to help the developer code, test and deploy FaaS (Function as a Service) resources. 
 
 It is using `docker` to build and orchestrate the functions locally. To deploy them to any of the cloud providers you need to have relevant software installed and appropriate authorization to deploy them. 
 
