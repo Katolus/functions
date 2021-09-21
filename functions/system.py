@@ -12,6 +12,7 @@ from functions.constants import ConfigName
 from functions.types import FunctionConfig, LocalFunctionPath
 
 
+# TODO: Rename to function config 
 @validate_arguments
 def load_config(config_dir: LocalFunctionPath) -> FunctionConfig:
     """Load a configuration file into a Python object."""
