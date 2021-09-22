@@ -3,6 +3,7 @@ from typing import List, Optional
 
 from pydantic import validate_arguments
 
+from functions.config import app_config
 from functions.constants import CloudServiceType
 from functions.processes import run_cmd
 from functions.types import EnvVariables, FunctionConfig, LocalFunctionPath, NotEmptyStr
@@ -131,8 +132,11 @@ def add_ignore_file_arguments(files: Optional[List[str]] = None) -> List[str]:
     )
 
 
-def add_region_argument() -> List[str]:
-    return ["--region", GCP_REGION]
+def add_region_argument(region: Optional[str] = None) -> List[str]:
+    _region = region or app_config.config.default_region or GCP_REGION
+    app_config.config.default_region = _region
+    app_config.save()
+    return ["--region", _region]
 
 
 # TODO: Ensure that the gcloud library is installed first

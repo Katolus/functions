@@ -1,5 +1,3 @@
-from pydantic.main import BaseModel
-from functions.constants import DockerLabel
 from typing import List, Optional
 
 import docker
@@ -7,9 +5,9 @@ from docker.models.images import Image as DockerImage
 from docker.models.containers import Container as DockerContainer
 from pydantic import ValidationError
 
+from functions.constants import DockerLabel
 from functions.types import FunctionConfig
 from functions.system import load_config
-from functions.errors import FunctionValueError
 
 
 # TODO: Find a better way of doing this

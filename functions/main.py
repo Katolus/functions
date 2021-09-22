@@ -11,7 +11,7 @@ from functions.autocomplete import autocomplete_running_function_names
 from functions.callbacks import function_name_autocomplete_callback, version_callback
 from functions.callbacks import remove_function_name_callback
 from functions.callbacks import running_functions_autocomplete_callback
-from functions.config.config import AppConfigManager
+
 from functions.commands import gcp
 from functions.commands import new
 from functions.decorators import handle_error
@@ -27,7 +27,6 @@ app = typer.Typer(
     name="functions-cli",
     help="Run script to executing, testing and deploying included functions.",
 )
-app_config = AppConfigManager()
 state = {"verbose": False}
 
 # TODO: Add a scope if the package is installed
