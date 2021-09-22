@@ -111,6 +111,8 @@ class AppConfigManager(BaseModel):
             self._config = self.config_class(**self.read())
         else:
             self.create(self.config_path)
+            self._config = self.config_class()
+            self.save()
 
     def validate(self):
         """Validate the configuration file before saving"""
