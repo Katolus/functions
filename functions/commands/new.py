@@ -19,7 +19,7 @@ def pubsub(
         callback=function_dir_callback,
         help="Directory that will be used as a root of the new function",
     ),
-):
+) -> None:
     """Creates a new pubsub directory"""
     function_dir = os.path.join(dir, function_name)
 
@@ -41,7 +41,7 @@ def http(
         callback=function_dir_callback,
         help="Directory that will be used as a root of the new function",
     ),
-):
+) -> None:
     """Creates a new http directory"""
     function_dir = os.path.join(dir, function_name)
 

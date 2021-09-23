@@ -14,8 +14,9 @@ def test(
         help="Run tests for a given function or for all if not specified",
         autocompletion=autocomplete_function_names,
     )
-):
+) -> None:
     raise NotImplementedError()
+
 
 if __name__ == "__main__":
     app()

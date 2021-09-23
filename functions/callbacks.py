@@ -14,7 +14,7 @@ from functions.types import LocalFunctionPath
 from functions.input import confirm_abort
 
 
-def version_callback(value: bool):
+def version_callback(value: bool) -> None:
     """Prints out the version of the package and exists"""
     if value:
         typer.echo(

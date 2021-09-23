@@ -1,20 +1,24 @@
+from functions.config import FunctionConfig
+
 # TODO: Add a validator that checks for correct name
-def default_config(function_name: str, signature_type: str) -> dict:
-    return {
-        "run_variables": {
-            "source": "main.py",
-            "entry_point": "main",
-            "signature_type": signature_type,
-            "name": function_name,
-            "port": 8080,
-        },
-        "env_variables": {},
-        "deploy_variables": {
-            "provider": "gcp",
-            "service": "cloud_function",
-            "allow_unauthenticated": False,  # Consider taking a prompt 
-        },
-    }
+def default_config(function_name: str, signature_type: str) -> FunctionConfig:
+    return FunctionConfig(
+        **{
+            "run_variables": {
+                "source": "main.py",
+                "entry_point": "main",
+                "signature_type": signature_type,
+                "name": function_name,
+                "port": 8080,
+            },
+            "env_variables": {},
+            "deploy_variables": {
+                "provider": "gcp",
+                "service": "cloud_function",
+                "allow_unauthenticated": False,  # Consider taking a prompt
+            },
+        }
+    )
 
 
 default_entry_hello_pubsub = """
