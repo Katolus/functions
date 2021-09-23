@@ -2,6 +2,7 @@ from enum import Enum
 from typing import List
 
 class ConfigName(str, Enum):
+    """Represents various availabel names for a config file"""
     BASE = "config.json"
 
 
@@ -20,5 +21,6 @@ class CloudServiceType(str, Enum):
 
     @classmethod
     def all(cls) -> List[str]:
+        """Returns all the available service types"""
         # TODO: There might be a method that does this better
         return [cls.CLOUD_FUNCTION]

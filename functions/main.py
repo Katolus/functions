@@ -1,9 +1,7 @@
-from functions.styles import blue, red
 import json
-from typing import Optional
-from pydantic import ValidationError
-from pathlib import Path
 import itertools
+from pathlib import Path
+from typing import Optional
 
 import typer
 
@@ -12,18 +10,16 @@ from functions.autocomplete import autocomplete_running_function_names
 from functions.callbacks import function_name_autocomplete_callback, version_callback
 from functions.callbacks import remove_function_name_callback
 from functions.callbacks import running_functions_autocomplete_callback
-
 from functions.commands import gcp
 from functions.commands import new
-from functions.decorators import handle_error
+from functions.constants import DockerLabel
+from functions.docker.client import docker_client
 from functions.docker.helpers import all_functions
 from functions.docker.helpers import get_config_from_image
 from functions.docker.tools import remove_image
-from functions.docker.client import docker_client
-from functions.constants import DockerLabel
+from functions.styles import blue, red
 from functions.system import construct_config_path, get_full_path
 from functions.system import load_config
-
 
 app = typer.Typer(
     name="functions-cli",
@@ -51,7 +47,7 @@ def main(
         callback=version_callback,
         is_eager=True,
     ),
-):
+) -> None:
     """
     Manage users in the awesome CLI app.
     """
@@ -61,15 +57,13 @@ def main(
 
 
 @app.command()
-@handle_error(error_class=(ValidationError, ))
-def test():
+def test() -> None:
     """Test command not to be dispayed"""
     raise ValueError
     typer.echo("End of test command")
 
 
 @app.command()
-@handle_error(error_class=(ValidationError,))
 def build(
     # TODO: Change to build existing ones first and if not present request a path
     function_path: Path = typer.Argument(
@@ -78,7 +72,7 @@ def build(
     ),
     # TODO: Add an option to show the logs
     show_logs: bool = typer.Option(False, "--force"),
-):
+) -> None:
     """Builds an image of a given function"""
     # Get the absolute path
     full_path = get_full_path(function_path)
@@ -136,11 +130,12 @@ def run(
         autocompletion=autocomplete_function_names,
         callback=function_name_autocomplete_callback,
     ),
-):
+) -> None:
     """Start a container for a given function"""
     docker_image = docker_client.images.get(function_name)
     config = get_config_from_image(docker_image)
 
+    # TODO: Move to docker tools
     container = docker_client.containers.run(
         docker_image,
         ports={"8080": config.run_variables.port},
@@ -160,7 +155,7 @@ def stop(
         autocompletion=autocomplete_running_function_names,
         callback=running_functions_autocomplete_callback,
     ),
-):
+) -> None:
     """Stops a running function"""
     # TODO: Add an option to stop them all
     # TODO: Add a catch for when the name does not match
@@ -171,10 +166,8 @@ def stop(
 
 
 @app.command()
-def list():
+def list() -> None:
     """List existing functions"""
-    # TODO: Add a nice format to this list
-    # Status
     functions = all_functions()
     if state["verbose"]:
         typer.echo(f"Will write verbose lists")
@@ -196,7 +189,7 @@ def remove(
         autocompletion=autocomplete_function_names,
         callback=remove_function_name_callback,
     )
-):
+) -> None:
     """Removes an image of a functions from the local registry"""
     remove_image(function_name)
     typer.echo(f"Function ({function_name}) has been removed")
