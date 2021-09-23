@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Optional, TypeVar, Union
 
 import docker
 from docker.models.images import Image
@@ -7,6 +7,8 @@ from pydantic import BaseModel
 
 
 # TODO: Find a way to make them a pydantic class
+
+DockerImageType = TypeVar('DockerImageType', bound=Image)
 class DockerImage(Image):
     ...
 

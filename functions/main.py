@@ -193,3 +193,6 @@ def remove(
     """Removes an image of a functions from the local registry"""
     remove_image(function_name)
     typer.echo(f"Function ({function_name}) has been removed")
+
+
+# TODO: Add config command if useful

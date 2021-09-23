@@ -16,13 +16,13 @@ app = typer.Typer(help="Deploy functions in GCP")
 
 
 @app.command()
-def install():
+def install() -> None:
     """Install required libraries"""
     raise NotImplementedError()
 
 
 @app.command()
-def update():
+def update() -> None:
     """Update required libraries"""
     raise NotImplementedError()
 
@@ -44,7 +44,7 @@ def deploy(
         help="Type of service you want this resource to be deploy to",
         autocompletion=CloudServiceType.all,
     ),
-):
+) -> None:
     """Deploy a functions to GCP"""
     config = load_config(function_dir)
     service_type = service or config.deploy_variables.service
@@ -60,7 +60,7 @@ def delete(
         ...,
         help="Name of the function you want to remove",
     ),
-):
+) -> None:
     """Deletes a functions deployed to GCP"""
     # Check if the functions is really deployed. Add to confirmation.
     # TODO: Implement a delete option with a confirmation
@@ -74,7 +74,7 @@ def describe(
         ...,
         help="Name of the function you want to describe",
     ),
-):
+) -> None:
     """Returns information about a deployed function"""
     describe_function(function_name)
 
@@ -85,6 +85,6 @@ def logs(
         ...,
         help="Name of the function you want to read logs from",
     ),
-):
+) -> None:
     """Reads log from a deployed function"""
     read_logs(function_name)

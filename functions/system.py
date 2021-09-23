@@ -1,18 +1,17 @@
 import json
 import os
 from pathlib import Path
-from typing import Optional
 from typing import Union
 
-from pydantic import DirectoryPath
 from pydantic import validate_arguments
 
 from functions import defaults
 from functions.constants import ConfigName
-from functions.types import FunctionConfig, LocalFunctionPath
+from functions.types import LocalFunctionPath
+from functions.config import FunctionConfig
 
 
-# TODO: Rename to function config 
+# TODO: Rename to function config
 @validate_arguments
 def load_config(config_dir: LocalFunctionPath) -> FunctionConfig:
     """Load a configuration file into a Python object."""
@@ -64,7 +63,9 @@ def add_required_files(
     add_file(
         function_dir,
         filename="config.json",
-        content=json.dumps(defaults.default_config(function_name, signature_type)),
+        content=json.dumps(
+            defaults.default_config(function_name, signature_type).dict()
+        ),
     )
 
     # Create a Docker file

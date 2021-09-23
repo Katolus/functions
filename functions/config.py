@@ -7,7 +7,7 @@ from typing import Dict
 from typing import List
 from typing import Type
 
-import toml
+import toml # type: ignore
 from pydantic import BaseModel
 
 from functions.types import CallableGenerator, StrBytes

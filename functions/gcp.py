@@ -4,9 +4,12 @@ from typing import List, Optional
 from pydantic import validate_arguments
 
 from functions.config import app_config
+from functions.config import EnvVariables 
+from functions.config import FunctionConfig 
 from functions.constants import CloudServiceType
 from functions.processes import run_cmd
-from functions.types import EnvVariables, FunctionConfig, LocalFunctionPath, NotEmptyStr
+from functions.types import LocalFunctionPath 
+from functions.types import NotEmptyStr
 
 # TODO: Add check to make sure that the library installed and if not throw an error
 

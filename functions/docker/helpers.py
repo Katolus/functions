@@ -5,7 +5,7 @@ from typing import List
 from pydantic import ValidationError
 
 from functions.constants import DockerLabel
-from functions.types import FunctionConfig
+from functions.config import FunctionConfig
 from functions.system import load_config
 from functions.docker.client import docker_client
 from functions.docker.classes import DockerContainer

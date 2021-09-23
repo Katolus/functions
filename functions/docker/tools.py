@@ -9,5 +9,5 @@ def build_image(image_name: str) -> DockerImage:
     ...
 
 
-def remove_image(image_name: str):
+def remove_image(image_name: str) -> None:
     docker_client.images.remove(image_name)
