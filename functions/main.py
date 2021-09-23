@@ -1,3 +1,4 @@
+from functions.styles import blue, red
 import json
 from typing import Optional
 from pydantic import ValidationError
@@ -167,9 +168,9 @@ def list():
     if state["verbose"]:
         typer.echo(f"Will write verbose lists")
     if functions:
+        typer.echo(f"There are {len(functions)} build and available.\n")
         for function in functions:
-            breakpoint()
-            typer.echo(function.name)
+            typer.echo(f"Function - {red(function.name)} | Status - {blue(function.status)}")
     else:
         typer.echo("No functions found")
 

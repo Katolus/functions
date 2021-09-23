@@ -22,9 +22,15 @@ class DockerFunction(BaseModel):
     image: Optional[Union[DockerImage, Image]] # Temp solution
     container: Optional[Union[DockerContainer, Image]] # Temp solution
 
+    @property
     def status(self) -> str:
         """Returns a status of a docker function."""
-        return "self.image"
+        status = "Unknown"
+        if self.image:
+            status = "Build"
+        if self.container:
+            status = "Running"
+        return status
 
     class Config:
         arbitrary_types_allowed = True
