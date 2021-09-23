@@ -70,6 +70,7 @@ def build(
     # TODO: Add an option to show the logs
     show_logs: bool = typer.Option(False, "--force"),
 ):
+    """Builds an image of a given function"""
     # Get the absolute path
     full_path = get_full_path(function_path)
 
@@ -151,6 +152,7 @@ def stop(
         callback=running_functions_autocomplete_callback,
     ),
 ):
+    """Stops a running function"""
     # TODO: Add an option to stop them all
     # TODO: Add a catch for when the name does not match
     container = docker_client.containers.get(function_name)
@@ -170,7 +172,9 @@ def list():
     if functions:
         typer.echo(f"There are {len(functions)} build and available.\n")
         for function in functions:
-            typer.echo(f"Function - {red(function.name)} | Status - {blue(function.status)}")
+            typer.echo(
+                f"Function - {red(function.name)} | Status - {blue(function.status)}"
+            )
     else:
         typer.echo("No functions found")
 
@@ -184,5 +188,6 @@ def remove(
         callback=remove_function_name_callback,
     )
 ):
+    """Removes an image of a functions from the local registry"""
     remove_image(function_name)
     typer.echo(f"Function ({function_name}) has been removed")
