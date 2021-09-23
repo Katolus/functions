@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 from pathlib import _windows_flavour, _posix_flavour
-from typing import Any, Dict, Optional
+from typing import Any, Callable, Dict, Optional, Type
 
 from pydantic import BaseModel
 from pydantic import ConstrainedStr
@@ -12,6 +12,9 @@ from pydantic.validators import path_validator
 from functions.validators import path_dir_validator
 from functions.validators import path_has_config_validator
 
+
+AnyCallable = Callable[..., Any]
+ExceptionClass = Type[BaseException]
 
 class NotEmptyStr(ConstrainedStr):
     # Make sure that this works for ' '

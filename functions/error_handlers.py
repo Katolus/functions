@@ -1,15 +1,18 @@
 from typing import Callable
 from typing import Dict
+from typing import NoReturn
 
 import typer
 
+from functions.types import AnyCallable, ExceptionClass
 
-ERROR_REGISTRY_TYPE = Dict[BaseException, Callable]
+
+ERROR_REGISTRY_TYPE = Dict[ExceptionClass, Callable]
 
 ERROR_REGISTRY: ERROR_REGISTRY_TYPE = {}
 
 
-def error_handler(*, error):
+def error_handler(*, error: ExceptionClass) -> AnyCallable:
     """
     Registers a callable function as a way handling a given error class
 
@@ -18,7 +21,7 @@ def error_handler(*, error):
         ...
     """
 
-    def handle(_func):
+    def handle(_func) -> AnyCallable:
         if ERROR_REGISTRY.get(error):
             raise ValueError(f"This error - {error} is already registered")
 
@@ -30,6 +33,6 @@ def error_handler(*, error):
 
 
 @error_handler(error=ValueError)
-def print_basic_output_and_exit(error: BaseException):
+def print_basic_output_and_exit(error: BaseException) -> NoReturn:
     typer.echo(f"Handling no image error - {error}")
     raise typer.BadParameter(str(error))
