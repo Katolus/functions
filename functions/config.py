@@ -2,30 +2,34 @@
 from __future__ import annotations
 import os
 from pathlib import Path
-from typing import Any
+from typing import Any, NoReturn
 from typing import Dict
 from typing import List
+from typing import Type
 
 import toml
 from pydantic import BaseModel
 
+from functions.types import CallableGenerator, StrBytes
+
 BASE_DIR_NAME = "ventress-functions"
 
+# TODO: Rewrite this in a way that makes sense
 
 class BaseConfig:
     """Base class for the configuration file to enforce a standard interface"""
 
     @classmethod
-    def __get_validators__(cls):
+    def __get_validators__(cls) -> CallableGenerator:
         yield cls.validate
 
     @classmethod
-    def validate(cls, value):
+    def validate(cls, value: Type[BaseConfig]) -> Type[BaseConfig]:
         if not issubclass(value, cls):
             raise ValueError(f"'{value} must of subclassed from {cls}!")
         return value
 
-    def __call__(self, *args: Any, **kwds: Any) -> AppConfig:
+    def __call__(self) -> BaseConfig:
         return self()
 
     def dict(self) -> Dict[str, Any]:
@@ -33,15 +37,20 @@ class BaseConfig:
 
 
 class AppFiles(BaseModel):
+    """Represents the names of files the relate to this application"""
     history_file: str = "command_history"
     functions_file: str = "functions_registry"
 
 
 class AppFunction(BaseModel):
-    ...
+    """Stores a configuration of a specific funcion"""
+    name: str
+    config: FunctionConfig
+
 
 
 class AppConfig(BaseModel, BaseConfig):
+    """Holds all the variables for the config file"""
     default_region: str = ""
     files: AppFiles = AppFiles()
     functions: List[AppFunction] = []
@@ -53,14 +62,14 @@ class AppConfigManager(BaseModel):
     _base_dir: str = BASE_DIR_NAME
     _config_source: str = "config.toml"
     _config: BaseConfig
-    config_class: BaseConfig
+    config_class: Type[BaseConfig]
 
-    def _make_base_dir(self):
+    def _make_base_dir(self) -> None:
         """Create the base directory for the configurations to be stored"""
         # Only on Posix
         os.makedirs(self.base_dir, exist_ok=True)
 
-    def _write(self, file_path: str, content: str):
+    def _write(self, file_path: str, content: str) -> None:
         with open(file_path, "w") as file:
             file.write(content)
 
@@ -74,7 +83,7 @@ class AppConfigManager(BaseModel):
         """Returns the configuration folder"""
         # TODO: Read this from the env first.
         config_folder = ".config"
-        return os.path.join(Path().home(), config_folder)
+        return os.path.join(str(Path().home()), config_folder)
 
     @property
     def config_path(self) -> str:
@@ -86,12 +95,12 @@ class AppConfigManager(BaseModel):
         return Path(self.config_path).exists()
 
     @property
-    def config(self):
+    def config(self) -> BaseConfig:
         if not hasattr(self, "_config") or not self._config:
             self._config = self.config_class()
         return self._config
 
-    def create(self, file_path: str):
+    def create(self, file_path: str) -> None:
         """Create the configuration file if it does not exist."""
 
         if Path(file_path).exists():
@@ -104,7 +113,7 @@ class AppConfigManager(BaseModel):
         with open(self.config_path, "r") as file:
             return toml.loads(file.read())
 
-    def load_config(self):
+    def load_config(self) -> None:
         """Loads the configuration file into the instance."""
         self._make_base_dir()
         if self.config_exists:
@@ -114,13 +123,13 @@ class AppConfigManager(BaseModel):
             self._config = self.config_class()
             self.save()
 
-    def validate(self):
+    def verify(self) -> None:
         """Validate the configuration file before saving"""
         self._config = self.config_class(**self._config.dict())
 
-    def save(self):
+    def save(self) -> None:
         """Saves the current configuration to file."""
-        self.validate()
+        self.verify()
         config_content: str = toml.dumps(self.config.dict())
         self._write(self.config_path, config_content)
 
@@ -131,3 +140,33 @@ class AppConfigManager(BaseModel):
 
 app_config = AppConfigManager(config_class=AppConfig)
 app_config.load_config()
+
+
+# FunctionConfig
+class RunVariables(BaseModel):
+    """Holds the run time variables"""
+    entry_point: str
+    name: str
+    port: int
+    signature_type: str
+    source: str
+
+
+class EnvVariables(Dict[str, str]):
+    """Holds environmental variables"""
+    ...
+
+
+class DeployVariables(BaseModel):
+    """Holds deploy specific variables"""
+    allow_unauthenticated = False
+    provider: str
+    service: str
+
+
+class FunctionConfig(BaseModel):
+    """Represents a configuration file of a specific function"""
+    path: str
+    run_variables: RunVariables
+    env_variables: EnvVariables
+    deploy_variables: DeployVariables
