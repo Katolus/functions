@@ -1,3 +1,4 @@
+from functions.styles import blue, red
 import json
 from typing import Optional
 from pydantic import ValidationError
@@ -14,10 +15,11 @@ from functions.callbacks import running_functions_autocomplete_callback
 from functions.commands import gcp
 from functions.commands import new
 from functions.decorators import handle_error
-from functions.docker import all_functions, remove_image
-from functions.docker import docker_client
-from functions.docker import DockerLabel
-from functions.docker import get_config_from_image
+from functions.docker.helpers import all_functions
+from functions.docker.helpers import get_config_from_image
+from functions.docker.tools import remove_image
+from functions.docker.client import docker_client
+from functions.constants import DockerLabel
 from functions.system import construct_config_path, get_full_path
 from functions.system import load_config
 
@@ -68,6 +70,7 @@ def build(
     # TODO: Add an option to show the logs
     show_logs: bool = typer.Option(False, "--force"),
 ):
+    """Builds an image of a given function"""
     # Get the absolute path
     full_path = get_full_path(function_path)
 
@@ -149,6 +152,7 @@ def stop(
         callback=running_functions_autocomplete_callback,
     ),
 ):
+    """Stops a running function"""
     # TODO: Add an option to stop them all
     # TODO: Add a catch for when the name does not match
     container = docker_client.containers.get(function_name)
@@ -166,8 +170,11 @@ def list():
     if state["verbose"]:
         typer.echo(f"Will write verbose lists")
     if functions:
+        typer.echo(f"There are {len(functions)} build and available.\n")
         for function in functions:
-            typer.echo(function)
+            typer.echo(
+                f"Function - {red(function.name)} | Status - {blue(function.status)}"
+            )
     else:
         typer.echo("No functions found")
 
@@ -181,5 +188,6 @@ def remove(
         callback=remove_function_name_callback,
     )
 ):
+    """Removes an image of a functions from the local registry"""
     remove_image(function_name)
     typer.echo(f"Function ({function_name}) has been removed")
