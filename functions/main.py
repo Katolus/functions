@@ -60,6 +60,14 @@ def main(
 
 
 @app.command()
+@handle_error(error_class=(ValidationError, ))
+def test():
+    """Test command not to be dispayed"""
+    raise ValueError
+    typer.echo("End of test command")
+
+
+@app.command()
 @handle_error(error_class=(ValidationError,))
 def build(
     # TODO: Change to build existing ones first and if not present request a path

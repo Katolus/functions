@@ -6,6 +6,8 @@ from pydantic import PydanticValueError
 from functions.mixins import FunctionErrorMixin
 
 
+
+
 class FunctionBaseError(FunctionErrorMixin, Exception):
     # Pydantic
     @classmethod
