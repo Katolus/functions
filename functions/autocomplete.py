@@ -11,8 +11,8 @@ def complete_services():
 def autocomplete_function_names(incomplete: str):
     """Autocompletes a list of matching functions"""
     for function in all_functions():
-        if function.startswith(incomplete):
-            yield function
+        if function.name.startswith(incomplete):
+            yield function.name
 
 
 def autocomplete_running_function_names(incomplete: str):
