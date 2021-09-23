@@ -14,10 +14,11 @@ from functions.callbacks import running_functions_autocomplete_callback
 from functions.commands import gcp
 from functions.commands import new
 from functions.decorators import handle_error
-from functions.docker import all_functions, remove_image
-from functions.docker import docker_client
-from functions.docker import DockerLabel
-from functions.docker import get_config_from_image
+from functions.docker.helpers import all_functions
+from functions.docker.helpers import get_config_from_image
+from functions.docker.tools import remove_image
+from functions.docker.client import docker_client
+from functions.constants import DockerLabel
 from functions.system import construct_config_path, get_full_path
 from functions.system import load_config
 
@@ -167,7 +168,8 @@ def list():
         typer.echo(f"Will write verbose lists")
     if functions:
         for function in functions:
-            typer.echo(function)
+            breakpoint()
+            typer.echo(function.name)
     else:
         typer.echo("No functions found")
 

@@ -1,7 +1,7 @@
 import typer
 
-from functions.docker import all_functions
-from functions.docker import all_running_functions
+from functions.docker.helpers import all_functions
+from functions.docker.helpers import all_running_functions
 
 
 def complete_services():
