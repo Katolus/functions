@@ -6,9 +6,21 @@ from typing import Optional
 
 import typer
 
+from functions import __version__
+from functions import __project_name__
+from functions import styles
 from functions.validators import str_is_alpha_validator
 from functions.types import LocalFunctionPath
 from functions.input import confirm_abort
+
+
+def version_callback(value: bool):
+    """Prints out the version of the package and exists"""
+    if value:
+        typer.echo(
+            f"You are using {styles.bold(__version__)} version of the {styles.bold(__project_name__)} package"
+        )
+        raise typer.Exit()
 
 
 def function_name_callback(
@@ -57,8 +69,6 @@ def running_functions_autocomplete_callback(
         )
 
     return value
-
-
 
 
 # TODO: Add a decorator for the resilient_parsing

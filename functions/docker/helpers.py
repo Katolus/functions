@@ -1,24 +1,15 @@
-from pydantic.main import BaseModel
 from functions.constants import DockerLabel
-from typing import List, Optional
+from typing import Optional
+from typing import List
 
-import docker
-from docker.models.images import Image as DockerImage
-from docker.models.containers import Container as DockerContainer
 from pydantic import ValidationError
 
 from functions.types import FunctionConfig
 from functions.system import load_config
-from functions.errors import FunctionValueError
-
-
-# TODO: Find a better way of doing this
-docker_client: docker.client = None
-if not docker_client:
-    docker_client = docker.from_env()
-
-
-# TODO: Add a docker lables class
+from functions.docker.client import docker_client
+from functions.docker.classes import DockerContainer
+from functions.docker.classes import DockerFunction
+from functions.docker.classes import DockerImage
 
 
 def get_config_from_image(image: DockerImage) -> FunctionConfig:
@@ -43,13 +34,14 @@ def all_images() -> List[DockerImage]:
     )
 
 
-def all_functions() -> List[str]:
+def all_functions() -> List[DockerFunction]:
     """Returns the names of functions that are workable"""
     functions = []
     for image in all_images():
         function_tag = get_function_tag_from_labels(image.labels)
         if function_tag:
-            functions.append(function_tag)
+            docker_function = DockerFunction(name=function_tag, image=image)
+            functions.append(docker_function)
     return functions
 
 
@@ -68,12 +60,3 @@ def all_running_functions() -> List[str]:
         if function_tag:
             functions.append(function_tag)
     return functions
-
-
-def build_image(image_name: str) -> DockerImage:
-    # TODO: Export inline code
-    ...
-
-
-def remove_image(image_name: str):
-    docker_client.images.remove(image_name)

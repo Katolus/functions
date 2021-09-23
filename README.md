@@ -1,279 +1,111 @@
-# `functions-cli`
+# This package that will get you working with FaaS
 
-Run script to executing, testing and deploying included functions.
+|   !   | This package is not anywhere near being ready. It hasn't been released in any major or minor versions of it yet as it is constant development. Use it at your own risk and pleasure. |
+| :---: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
-**Usage**:
+<!-- ![Logo]() -->
 
-```console
-$ functions-cli [OPTIONS] COMMAND [ARGS]...
-```
 
-**Options**:
 
-* `--install-completion`: Install completion for the current shell.
-* `--show-completion`: Show completion for the current shell, to copy it or customize the installation.
-* `--help`: Show this message and exit.
+`functions-cli` is a utility package written in Python. It is built to help the developer code, test and deploy FaaS (Function as a Service) resources. 
 
-**Commands**:
+It is using `docker` to build and orchestrate the functions locally. To deploy them to any of the cloud providers you need to have relevant software installed and appropriate authorization to deploy them. 
 
-* `build`
-* `gcp`: Deploy functions in GCP
-* `list`: List existing functions
-* `new`: Factory method for creating new functions
-* `remove`
-* `run`: Start a container for a given function
-* `stop`
+## Compatibility
 
-## `functions-cli build`
+- Currently the project has been developed and tested only on a Linux OS with **Python 3.9** as the deployment environment.  
 
-**Usage**:
+## Requirement
 
-```console
-$ functions-cli build [OPTIONS] FUNCTION_PATH
-```
+The package is a utility one and it requires underlying software for specific function to be available. 
 
-**Arguments**:
+- Python >= 3.9 - for the functioning of the package. 
+- `gcloud` - for deploying to the GCP environment.
+- `docker` - for running any of the functions locally.
+- `poetry` - for running the source code locally. 
 
-* `FUNCTION_PATH`: Path to the functions you want to build  [required]
+## Installation
 
-**Options**:
-
-* `--force`: [default: False]
-* `--help`: Show this message and exit.
-
-## `functions-cli gcp`
-
-Deploy functions in GCP
-
-**Usage**:
+Since it is a regular Python package you can start using it simply by installing the package in your Python environment by running
 
 ```console
-$ functions-cli gcp [OPTIONS] COMMAND [ARGS]...
+pip install functions-cli
 ```
 
-**Options**:
+in your console.
 
-* `--help`: Show this message and exit.
+### Running from source code
 
-**Commands**:
+To operate the package from the source code. 
 
-* `delete`: Deletes a functions deployed to GCP
-* `deploy`: Deploy a functions to GCP
-* `describe`: Returns information about a deployed function
-* `install`: Install required libraries
-* `logs`: Reads log from a deployed function
-* `update`: Update required libraries
+1. Download the repository.
+2. Using `poetry`, install all the dependencies by running `poetry install`. 
+3. Run `poetry shell` to enter the scope of the package.
+4. Execute or invoke the commands like you would normally, by running `functions [OPTIONS] COMMAND [ARGS] ...` in the invoked shell. 
 
-### `functions-cli gcp delete`
+**Additionally** you can install the package from source code by building a wheel and installing it manually in your environment's scope. 
 
-Deletes a functions deployed to GCP
+5. Run `poetry build` and you should see a `dist` folder appear in the root directory of the code (assuming you are running the command from there).
+6. Install the package directly by the while specifying a path to the source - `pip install /home/{your_user}/{project_root_path}/dist/functions_cli-0.1.0a2-py3-none-any.whl`. 
 
-**Usage**:
+Handy tutorial in the scope of the `typer` package, that could help with this -> [here](https://typer.tiangolo.com/tutorial/package/). 
+
+## Usage
+
+Regardless if you installed the package from the online repository or from the source code, you should be able to invoke the `functions` tool from your command line. The tool has many different commands that should help you building your serverless functions (surprise, otherwise it would be useless...). Here I name a few core ones, but for a full and a comprehensive description of the `CLI` please refer to the [cli document](docs/cli.md).
+
+Keep in mind that the package is in development and all of its structure is a subject to change. 
+
+## Creating a new FaaS
+
+The tool allows you to quickly generate a template of a function that you can the modify to quicken your efforts in producing code. 
 
 ```console
-$ functions-cli gcp delete [OPTIONS] FUNCTION_NAME
+functions new http {new_of_the_function}
 ```
 
-**Arguments**:
+will generate you a new http like template for your FaaS function in your current directory.
 
-* `FUNCTION_NAME`: Name of the function you want to remove  [required]
+## Running a function locally
 
-**Options**:
-
-* `--help`: Show this message and exit.
-
-### `functions-cli gcp deploy`
-
-Deploy a functions to GCP
-
-**Usage**:
+A lot of us want to see and feel what we have created working first before we deploy it to the world. Running...
 
 ```console
-$ functions-cli gcp deploy [OPTIONS] FUNCTION_DIR
+functions run {name_of_the_function}
 ```
 
-**Arguments**:
+will start a docker container and expose it to your locally network on a available port. 
 
-* `FUNCTION_DIR`: Path to the functions you want to deploy  [required]
+**Note**: If you haven't run this function before it will ask you to build (the build command) the function first before running. # To be added...
 
-**Options**:
+Please remember that the container will run as long as you leave it for, so make sure to take it down once you have done all your testing. Running...
 
-* `--service [cloud_function]`: Type of service you want this resource to be deploy to
-* `--help`: Show this message and exit.
+```
+functions stop {name_of_the_function}
+```
 
-### `functions-cli gcp describe`
+should do the job.
 
-Returns information about a deployed function
+## Deployment it to the cloud
 
-**Usage**:
+Since we build software to serve us something, we most likely want to deploy it to see it all working and get that developer satisfaction. 
+
+Depending whether you have a configuration set up you will be able to deploy your projects to various platforms (support pending). 
+
+For example to deploy a function quickly to GCP as a cloud function you want to run...
 
 ```console
-$ functions-cli gcp describe [OPTIONS]
+functions gcp deploy {path_to_the_function}
 ```
 
-**Options**:
+With the correct setup and permissions this should allow you to the deploy a function to the GCP directly from the `functions` cli.  
 
-* `--help`: Show this message and exit.
+## Getting help
 
-### `functions-cli gcp install`
-
-Install required libraries
-
-**Usage**:
+The tool is built on brilliant software of others. One of them being `typer`. This allows you to query the CLI for any useful information by adding `--help` to any of your commands (useful tip to all your future work). 
 
 ```console
-$ functions-cli gcp install [OPTIONS]
+functions run --help
 ```
 
-**Options**:
-
-* `--help`: Show this message and exit.
-
-### `functions-cli gcp logs`
-
-Reads log from a deployed function
-
-**Usage**:
-
-```console
-$ functions-cli gcp logs [OPTIONS]
-```
-
-**Options**:
-
-* `--help`: Show this message and exit.
-
-### `functions-cli gcp update`
-
-Update required libraries
-
-**Usage**:
-
-```console
-$ functions-cli gcp update [OPTIONS]
-```
-
-**Options**:
-
-* `--help`: Show this message and exit.
-
-## `functions-cli list`
-
-List existing functions
-
-**Usage**:
-
-```console
-$ functions-cli list [OPTIONS]
-```
-
-**Options**:
-
-* `--help`: Show this message and exit.
-
-## `functions-cli new`
-
-Factory method for creating new functions
-
-**Usage**:
-
-```console
-$ functions-cli new [OPTIONS] COMMAND [ARGS]...
-```
-
-**Options**:
-
-* `--help`: Show this message and exit.
-
-**Commands**:
-
-* `http`: Creates a new http directory
-* `pubsub`: Creates a new pubsub directory
-
-### `functions-cli new http`
-
-Creates a new http directory
-
-**Usage**:
-
-```console
-$ functions-cli new http [OPTIONS] FUNCTION_NAME
-```
-
-**Arguments**:
-
-* `FUNCTION_NAME`: Name of a function in alphabetic constrain [i.e new-function]  [required]
-
-**Options**:
-
-* `--dir PATH`: Directory that will be used as a root of the new function
-* `--help`: Show this message and exit.
-
-### `functions-cli new pubsub`
-
-Creates a new pubsub directory
-
-**Usage**:
-
-```console
-$ functions-cli new pubsub [OPTIONS] FUNCTION_NAME
-```
-
-**Arguments**:
-
-* `FUNCTION_NAME`: Name of a function in alphabetic constrain [i.e new-function]  [required]
-
-**Options**:
-
-* `--dir TEXT`: Directory that will be used as a root of the new function
-* `--help`: Show this message and exit.
-
-## `functions-cli remove`
-
-**Usage**:
-
-```console
-$ functions-cli remove [OPTIONS] FUNCTION_NAME
-```
-
-**Arguments**:
-
-* `FUNCTION_NAME`: Name of the function you want to remove  [required]
-
-**Options**:
-
-* `--help`: Show this message and exit.
-
-## `functions-cli run`
-
-Start a container for a given function
-
-**Usage**:
-
-```console
-$ functions-cli run [OPTIONS] FUNCTION_NAME
-```
-
-**Arguments**:
-
-* `FUNCTION_NAME`: Name of the function you want to run  [required]
-
-**Options**:
-
-* `--help`: Show this message and exit.
-
-## `functions-cli stop`
-
-**Usage**:
-
-```console
-$ functions-cli stop [OPTIONS] FUNCTION_NAME
-```
-
-**Arguments**:
-
-* `FUNCTION_NAME`: Name of the function you want to stop  [required]
-
-**Options**:
-
-* `--help`: Show this message and exit.
+If you stumble in to any major issue that is not described in the documentation, send me a message. I will try to assist when possible.

@@ -163,6 +163,23 @@ def delete_function(function_name: str):
     )
 
 
+def describe_function(function_name: str):
+    run_cmd(["gcloud", "functions", "describe", function_name] + add_region_argument())
+
+
+def read_logs(function_name: str):
+    # The command below does not work as expected.
+    run_cmd(
+        [
+            "gcloud",
+            "functions",
+            "logs",
+            "read",
+        ]
+        + add_region_argument()
+    )
+
+
 @validate_arguments
 def deploy_c_function(config: FunctionConfig, function_dir: LocalFunctionPath = None):
     """Uses gcloud to deploy a cloud function"""
