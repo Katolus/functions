@@ -7,7 +7,7 @@ from typing import Dict
 from typing import List
 from typing import Type
 
-import toml # type: ignore
+import toml  # type: ignore
 from pydantic import BaseModel
 
 from functions.types import CallableGenerator, StrBytes
@@ -15,6 +15,7 @@ from functions.types import CallableGenerator, StrBytes
 BASE_DIR_NAME = "ventress-functions"
 
 # TODO: Rewrite this in a way that makes sense
+
 
 class BaseConfig:
     """Base class for the configuration file to enforce a standard interface"""
@@ -38,22 +39,32 @@ class BaseConfig:
 
 class AppFiles(BaseModel):
     """Represents the names of files the relate to this application"""
+
     history_file: str = "command_history"
     functions_file: str = "functions_registry"
 
 
+class AppLogging(BaseModel):
+    """Represents the logging settings of the application"""
+
+    is_logging: bool = False  # TODO: Look into making the logging
+    logging_file: str = "functions.log"
+
+
 class AppFunction(BaseModel):
     """Stores a configuration of a specific funcion"""
+
     name: str
     config: FunctionConfig
 
 
-
 class AppConfig(BaseModel, BaseConfig):
     """Holds all the variables for the config file"""
+
     default_region: str = ""
     files: AppFiles = AppFiles()
     functions: List[AppFunction] = []
+    logging: AppLogging = AppLogging()
 
 
 class AppConfigManager(BaseModel):
@@ -145,6 +156,7 @@ app_config.load_config()
 # FunctionConfig
 class RunVariables(BaseModel):
     """Holds the run time variables"""
+
     entry_point: str
     name: str
     port: int
@@ -154,11 +166,13 @@ class RunVariables(BaseModel):
 
 class EnvVariables(Dict[str, str]):
     """Holds environmental variables"""
+
     ...
 
 
 class DeployVariables(BaseModel):
     """Holds deploy specific variables"""
+
     allow_unauthenticated = False
     provider: str
     service: str
@@ -166,6 +180,7 @@ class DeployVariables(BaseModel):
 
 class FunctionConfig(BaseModel):
     """Represents a configuration file of a specific function"""
+
     path: str
     run_variables: RunVariables
     env_variables: EnvVariables
