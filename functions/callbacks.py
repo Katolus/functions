@@ -9,7 +9,8 @@ import typer
 from functions import __version__
 from functions import __project_name__
 from functions import styles
-from functions.validators import str_is_alpha_validator
+from functions.decorators import resilient_parsing
+from functions.validators import name_validator
 from functions.types import LocalFunctionPath
 from functions.input import confirm_abort
 
@@ -26,24 +27,20 @@ def version_callback(value: bool) -> None:
 def function_name_callback(
     ctx: typer.Context, param: typer.CallbackParam, value: str
 ) -> Optional[str]:
-    if ctx.resilient_parsing:
-        return None
 
     try:
-        # TODO: Update this to correctly filter invalid names (regex?)
-        str_is_alpha_validator(value)
+        name_validator(value)
     except ValueError:
         raise typer.BadParameter(
-            "Only alphabetic characters are allowed as function names"
+            "Only alphabetic characters with '-' and '_' characters are allowed as function names"
         )
     return value
 
 
+@resilient_parsing
 def function_name_autocomplete_callback(
     ctx: typer.Context, param: typer.CallbackParam, value: str
 ) -> Optional[str]:
-    if ctx.resilient_parsing:
-        return None
 
     build_functions = list(autocomplete_function_names(""))
     # TODO: Check if the container is running and abort if it already is running
