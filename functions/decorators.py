@@ -15,7 +15,7 @@ def handle_error(
     func: Optional["AnyCallableT"] = None,
     *,
     error_class: Optional[Tuple[FunctionBaseError, ...]] = None,
-    message_tmp: str = "Something has happened {function_path}. Error {error}",
+    message_tmp: str = "Something has happened. Error {error}",
 ):
     """
     Decorator that gracefully handles errors.

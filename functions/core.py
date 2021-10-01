@@ -1,5 +1,6 @@
 """Stores the core logic for the tool's ways of working. 
 It is an entry point to the package and all ways lead from here out."""
+import functools
 from typing import Any, Sequence, Tuple
 
 import typer
@@ -32,15 +33,27 @@ class Functions(BaseModel):
         for app, name in self.subcommands:
             self._main.add_typer(app, name=name)
 
-    @handle_error
     def __call__(self, *args: Any, **kwargs: Any) -> Any:
         return self._main.__call__(*args, **kwargs)
 
     def callback(self, *args, **kwargs):
-        return self._main.callback(*args, **kwargs)
+        decorator = self._main.callback(*args, **kwargs)
+
+        @functools.wraps(decorator)
+        def wrapper(f):
+            new_f = handle_error(f)
+            return decorator(new_f)
+        return wrapper
 
     def command(self, *args, **kwargs):
-        return self._main.command(*args, **kwargs)
+        decorator = self._main.command(*args, **kwargs)
+
+        @functools.wraps(decorator)
+        def wrapper(f):
+            new_f = handle_error(f)
+            return decorator(new_f)
+
+        return wrapper
 
     class Config:
         # typer.Typer
