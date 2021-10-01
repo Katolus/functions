@@ -6,7 +6,7 @@ from typing import Union
 from pydantic import validate_arguments
 
 from functions import defaults
-from functions.constants import ConfigName
+from functions.constants import ConfigName, SignatureType
 from functions.types import LocalFunctionPath
 from functions.config import FunctionConfig
 
@@ -54,7 +54,7 @@ def link_common(function_dir: str):
 
 
 def add_required_files(
-    function_name: str, function_dir: str, *, main_content: str, signature_type: str
+    function_name: str, function_dir: str, *, main_content: str, signature_type: SignatureType
 ):
     """Add required files into the function directory"""
     # Make a new directory
