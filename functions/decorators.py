@@ -21,7 +21,7 @@ def handle_error(
     Decorator that gracefully handles errors.
     """
 
-    def handle(_func: "AnyCallableT"):
+    def handle(_func: AnyCallableT):
         @functools.wraps(_func)
         def command(*args: Any, **kwargs: Any) -> Any:
             try:
@@ -52,5 +52,19 @@ def handle_error(
         return handle
 
 
+CallbackCallable = Callable[[typer.Context, typer.CallbackParam, str], Optional[str]]
 
-# TODO: Add a callback decorator to handle resi...something
+
+def resilient_parsing(func) -> CallbackCallable:
+    """Wraps a callback functions to return for resilient parsing [Typer]"""
+
+    @functools.wraps(func)
+    def wrapper(
+        ctx: typer.Context, param: typer.CallbackParam, value: str
+    ) -> Optional[str]:
+        if ctx.resilient_parsing:
+            return None
+
+        return func(ctx, param, value)
+
+    return wrapper
