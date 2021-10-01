@@ -144,6 +144,8 @@ def run(
         detach=True,
     )
 
+    # TODO: Add information about how is it available
+
     typer.echo(f"Function ({container.name}) has started.")
 
 

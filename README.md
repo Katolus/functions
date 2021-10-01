@@ -5,6 +5,9 @@
 
 <!-- ![Logo]() -->
 
+**Outstanding items before the first release**: 
+- Add the ability to deploy functions in languages other than just Python.
+
 
 
 `functions-cli` is a utility package written in Python. It is built to help the developer code, test and deploy FaaS (Function as a Service) resources. 

@@ -15,6 +15,7 @@ def default_config(function_name: str, signature_type: str) -> FunctionConfig:
             "deploy_variables": {
                 "provider": "gcp",
                 "service": "cloud_function",
+                # TODO: Add only if signature_type type allows
                 "allow_unauthenticated": False,  # Consider taking a prompt
             },
         }
