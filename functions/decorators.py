@@ -27,7 +27,7 @@ def handle_error(
             try:
                 return _func(*args, **kwargs)
             except Exception as err:
-                breakpoint()
+                
                 # Check initial params for handlers
                 if error_class and isinstance(err, error_class):
                     message = message_tmp.format(error=err, **kwargs)

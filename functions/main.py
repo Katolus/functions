@@ -13,6 +13,7 @@ from functions.callbacks import running_functions_autocomplete_callback
 from functions.commands import gcp
 from functions.commands import new
 from functions.constants import DockerLabel
+from functions.core import Functions
 from functions.docker.client import docker_client
 from functions.docker.helpers import all_functions
 from functions.docker.helpers import get_config_from_image
@@ -21,16 +22,7 @@ from functions.styles import blue, red
 from functions.system import construct_config_path, get_full_path
 from functions.system import load_config
 
-app = typer.Typer(
-    name="functions-cli",
-    help="Run script to executing, testing and deploying included functions.",
-)
-state = {"verbose": False}
-
-# TODO: Add a scope if the package is installed
-# if gcloud_is_installed
-app.add_typer(gcp.app, name="gcp")
-app.add_typer(new.app, name="new")
+app = Functions(subcommands=[(new.app, "new"), (gcp.app, "gcp")])
 
 
 @app.callback()
@@ -53,7 +45,7 @@ def main(
     """
     if verbose:
         # typer.echo("Will write verbose output") ## log
-        state["verbose"] = True
+        app.state.verbose = True
 
 
 @app.command()
@@ -171,7 +163,7 @@ def stop(
 def list() -> None:
     """List existing functions"""
     functions = all_functions()
-    if state["verbose"]:
+    if app.state.verbose:
         typer.echo(f"Will write verbose lists")
     if functions:
         typer.echo(f"There are {len(functions)} build and available.\n")
