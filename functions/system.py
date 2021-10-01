@@ -11,22 +11,24 @@ from functions.types import LocalFunctionPath
 from functions.config import FunctionConfig
 
 
-# TODO: Rename to function config
 @validate_arguments
 def load_config(config_dir: LocalFunctionPath) -> FunctionConfig:
     """Load a configuration file into a Python object."""
-    config = None
+    config = {}
     with open(construct_config_path(config_dir, ConfigName.BASE), "r") as file:
         config = json.load(file)
 
-    return FunctionConfig(path=str(config_dir), **config)
+    config["path"] = str(config_dir) if config_dir else config.get("path")
+
+    return FunctionConfig(**config)
 
 
-def get_full_path(function_path: Union[Path, str]) -> LocalFunctionPath:
-    """Returns a full path of a function"""
-    return LocalFunctionPath(os.path.abspath(os.path.join(os.getcwd(), function_path)))
+def get_full_path(path: Union[Path, str]) -> LocalFunctionPath:
+    """Returns an absolute path of a path"""
+    return LocalFunctionPath(os.path.abspath(os.path.join(os.getcwd(), path)))
 
 
+# Deprecated
 def construct_config_path(
     full_path: Path, config_name: str = ConfigName.BASE
 ) -> LocalFunctionPath:
@@ -54,7 +56,11 @@ def link_common(function_dir: str):
 
 
 def add_required_files(
-    function_name: str, function_dir: str, *, main_content: str, signature_type: SignatureType
+    function_name: str,
+    function_dir: str,
+    *,
+    main_content: str,
+    signature_type: SignatureType
 ):
     """Add required files into the function directory"""
     # Make a new directory

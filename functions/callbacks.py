@@ -24,6 +24,13 @@ def version_callback(value: bool) -> None:
         raise typer.Exit()
 
 
+def build_function_callack(ctx: typer.Context, param: typer.CallbackParam, value: str):
+    # TODO: Check if an existing function image already exist and ask if to overwrite
+
+    # TODO: Check if the port is in use
+    return value
+
+
 def function_name_callback(
     ctx: typer.Context, param: typer.CallbackParam, value: str
 ) -> Optional[str]:

@@ -40,3 +40,8 @@ class IsNotAValidDirectory(_PathValueError, FunctionBaseError):
 class ConfigNotFoundError(_PathValueError, FunctionBaseError):
     code = "path.config_not_found"
     msg_template = "path '{path}' does not include a valid config file"
+
+
+class FunctionBuildError(FunctionBaseError):
+    code = "build.error"
+    msg_template = "build has failed"

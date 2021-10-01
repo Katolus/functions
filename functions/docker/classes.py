@@ -8,21 +8,23 @@ from pydantic import BaseModel
 
 # TODO: Find a way to make them a pydantic class
 
-DockerImageType = TypeVar('DockerImageType', bound=Image)
+DockerImageType = TypeVar("DockerImageType", bound=Image)
+
+
 class DockerImage(Image):
     ...
 
 
 class DockerContainer(Container):
     ...
-    
+
 
 class DockerFunction(BaseModel):
     """Base class for representing docker functions."""
 
     name: str
-    image: Optional[Union[DockerImage, Image]] # Temp solution
-    container: Optional[Union[DockerContainer, Image]] # Temp solution
+    image: Optional[Union[DockerImage, Image]]  # Temp solution
+    container: Optional[Union[DockerContainer, Image]]  # Temp solution
 
     @property
     def status(self) -> str:
