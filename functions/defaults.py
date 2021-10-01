@@ -1,9 +1,14 @@
 from functions.config import FunctionConfig
+from functions.constants import SignatureType
+from functions.validators import name_validator
 
-# TODO: Add a validator that checks for correct name
-def default_config(function_name: str, signature_type: str) -> FunctionConfig:
-    return FunctionConfig(
+
+def default_config(function_name: str, signature_type: SignatureType) -> FunctionConfig:
+    name_validator(function_name)
+
+    config = FunctionConfig(
         **{
+            "description": f"Generated functions template called '{function_name}' of '{signature_type}' type",
             "run_variables": {
                 "source": "main.py",
                 "entry_point": "main",
@@ -15,10 +20,13 @@ def default_config(function_name: str, signature_type: str) -> FunctionConfig:
             "deploy_variables": {
                 "provider": "gcp",
                 "service": "cloud_function",
-                "allow_unauthenticated": False,  # Consider taking a prompt
             },
         }
     )
+    if signature_type == SignatureType.HTTP:
+        config.deploy_variables.allow_unauthenticated = False
+
+    return config
 
 
 default_entry_hello_pubsub = """
