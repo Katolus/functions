@@ -6,14 +6,24 @@ import typer
 from functions import styles
 from functions.autocomplete import autocomplete_function_names
 from functions.autocomplete import autocomplete_running_function_names
-from functions.callbacks import build_function_callack, function_name_autocomplete_callback, version_callback
+from functions.callbacks import (
+    build_function_callack,
+    function_name_autocomplete_callback,
+    version_callback,
+)
 from functions.callbacks import remove_function_name_callback
 from functions.callbacks import running_functions_autocomplete_callback
 from functions.commands import gcp
 from functions.commands import new
 from functions.core import Functions
-from functions.docker.helpers import all_functions
-from functions.docker.tools import build_image, remove_image, run_container, stop_container
+from functions.docker.helpers import all_functions, get_config_from_image
+from functions.docker.tools import (
+    build_image,
+    get_image,
+    remove_image,
+    run_container,
+    stop_container,
+)
 from functions.styles import blue, red
 from functions.system import get_full_path
 from functions.system import load_config
@@ -86,10 +96,13 @@ def run(
 ) -> None:
     """Start a container for a given function"""
 
-    container = run_container(function_name)
-    # TODO: Add information about how is it available. What port? Open browser here ->
+    function_image = get_image(function_name)
+    config = get_config_from_image(function_image)
+    container = run_container(function_image, config)
 
-    typer.echo(f"Function ({container.name}) has started.")
+    typer.echo(
+        f"Function ({container.name}) has started. Visit -> http://localhost:{config.run_variables.port}"
+    )
 
 
 @app.command()
@@ -137,4 +150,14 @@ def remove(
     typer.echo(f"Function ({function_name}) has been removed")
 
 
-# TODO: Add config command if useful
+@app.command()
+def config() -> None:
+    """Renders function's configuration file into the command line"""
+    ...
+
+@app.command()
+def rebuild() -> None:
+    """Rebuild a function if it is possible"""
+    ...
+
+

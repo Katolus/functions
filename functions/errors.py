@@ -4,14 +4,13 @@ from typing import Any
 from pydantic import PydanticValueError
 
 from functions.mixins import FunctionErrorMixin
-
-
+from functions.types import CallableGenerator
 
 
 class FunctionBaseError(FunctionErrorMixin, Exception):
     # Pydantic
     @classmethod
-    def __get_validators__(cls) -> "CallableGenerator":
+    def __get_validators__(cls) -> CallableGenerator:
         yield cls.validate
 
     @classmethod
@@ -22,9 +21,9 @@ class FunctionBaseError(FunctionErrorMixin, Exception):
         return value
 
 
-
-class FunctionValueError(PydanticValueError, FunctionBaseError):
-    ...
+class _DerivedError(FunctionBaseError):
+    def __init__(self, *, error: Exception) -> None:
+        super().__init__(error=error)
 
 
 class _PathValueError(PydanticValueError):
@@ -42,6 +41,11 @@ class ConfigNotFoundError(_PathValueError, FunctionBaseError):
     msg_template = "path '{path}' does not include a valid config file"
 
 
-class FunctionBuildError(FunctionBaseError):
+class FunctionBuildError(_DerivedError):
     code = "build.error"
-    msg_template = "build has failed"
+    msg_template = "function build has field with the following error -> {error}"
+
+
+class ConfigValidationError(_DerivedError):
+    code = "config.validation"
+    msg_template = "Invalid config format. Validation exited with -> {error}"

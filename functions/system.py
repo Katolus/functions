@@ -4,11 +4,13 @@ from pathlib import Path
 from typing import Union
 
 from pydantic import validate_arguments
+from pydantic import ValidationError
 
 from functions import defaults
-from functions.constants import ConfigName, SignatureType
-from functions.types import LocalFunctionPath
 from functions.config import FunctionConfig
+from functions.constants import ConfigName, SignatureType
+from functions.errors import ConfigValidationError
+from functions.validators import LocalFunctionPath
 
 
 @validate_arguments
@@ -20,7 +22,12 @@ def load_config(config_dir: LocalFunctionPath) -> FunctionConfig:
 
     config["path"] = str(config_dir) if config_dir else config.get("path")
 
-    return FunctionConfig(**config)
+    try:
+        validated_config = FunctionConfig(**config)
+    except ValidationError as error:
+        raise ConfigValidationError(error=error)
+
+    return validated_config
 
 
 def get_full_path(path: Union[Path, str]) -> LocalFunctionPath:

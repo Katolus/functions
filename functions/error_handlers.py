@@ -5,6 +5,7 @@ from typing import NoReturn
 import typer
 
 from functions.types import AnyCallable, ExceptionClass
+from functions.errors import ConfigValidationError
 
 
 ERROR_REGISTRY_TYPE = Dict[ExceptionClass, Callable]
@@ -35,4 +36,10 @@ def error_handler(*, error: ExceptionClass) -> AnyCallable:
 @error_handler(error=ValueError)
 def print_basic_output_and_exit(error: BaseException) -> NoReturn:
     typer.echo(f"Handling no image error - {error}")
+    raise typer.BadParameter(str(error))
+
+
+@error_handler(error=ConfigValidationError)
+def check_config_in_path(error: BaseException) -> NoReturn:
+    # TODO: Print a path where this is saved
     raise typer.BadParameter(str(error))

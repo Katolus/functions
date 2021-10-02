@@ -11,7 +11,7 @@ from functions import __project_name__
 from functions import styles
 from functions.decorators import resilient_parsing
 from functions.validators import name_validator
-from functions.types import LocalFunctionPath
+from functions.validators import LocalFunctionPath
 from functions.input import confirm_abort
 
 
@@ -25,6 +25,7 @@ def version_callback(value: bool) -> None:
 
 
 def build_function_callack(ctx: typer.Context, param: typer.CallbackParam, value: str):
+    # Piotr
     # TODO: Check if an existing function image already exist and ask if to overwrite
 
     # TODO: Check if the port is in use

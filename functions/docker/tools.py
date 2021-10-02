@@ -4,9 +4,9 @@ import re
 from typing import Generator, Optional
 from typing import Dict, Generator, Tuple
 
-import docker # type: ignore
+import docker  # type: ignore
 import typer
-from docker.utils.json_stream import json_stream # type: ignore
+from docker.utils.json_stream import json_stream  # type: ignore
 from pydantic.main import BaseModel
 
 from functions.config import FunctionConfig
@@ -92,7 +92,7 @@ def build_image(config: FunctionConfig, show_logs: bool) -> DockerImage:
     build_variables = construct_build_variables(config)
 
     image = None
-    image_id = None
+    image_id = ""
 
     try:
         build_generator = call_build_api(build_variables)
@@ -108,11 +108,16 @@ def build_image(config: FunctionConfig, show_logs: bool) -> DockerImage:
 
     except docker.errors.BuildError as error:
         # Consider adding the error to the output of an error
-        raise FunctionBuildError
+        raise FunctionBuildError(error=error)
 
-    image = docker_client.images.get(image_id)
+    image = get_image(image_id)
 
     return image
+
+
+def get_image(image_id: str) -> DockerImage:
+    """Returns a docker image object"""
+    return docker_client.images.get(image_id)
 
 
 def remove_image(image_name: str) -> None:
@@ -120,27 +125,31 @@ def remove_image(image_name: str) -> None:
     docker_client.images.remove(image_name)
 
 
-def run_container(function_name: str) -> DockerContainer:
+def run_container(
+    function_image: DockerImage, config: FunctionConfig
+) -> DockerContainer:
     """Runs a container of a function"""
     # TODO: Add the ability to get the config from a `function_name`
-    docker_image = docker_client.images.get(function_name)
-    config = get_config_from_image(docker_image)
-
-    # TODO: Move to docker tools
     container = docker_client.containers.run(
-        docker_image,
+        function_image,
         ports={"8080": config.run_variables.port},
         remove=True,
-        name=function_name,
+        name=config.run_variables.name,
         detach=True,
     )
 
-    # TODO: Update to the correct typer
     return container
 
-def stop_container(function_name: str) -> None:
+
+def stop_container(function_name: str) -> DockerContainer:
     """Stops a docker container"""
-    # TODO: Add an option to stop them all
-    # TODO: Add a catch for when the name does not match
     container = docker_client.containers.get(function_name)
     container.stop()
+    # TODO: Add verbose logging
+    return container
+
+
+def stop_all() -> None:
+    """Stops all the running function containers"""
+    # TODO: Add an option to stop them all
+    ...
