@@ -13,7 +13,6 @@ from functions.config import FunctionConfig
 from functions.constants import DockerLabel
 from functions.docker.classes import DockerContainer, DockerImage
 from functions.docker.client import docker_client
-from functions.docker.helpers import get_config_from_image
 from functions.errors import FunctionBuildError
 
 

@@ -1,6 +1,5 @@
-from typing import Any, Generic, Optional, TypeVar, Union
+from typing import Any, Generic, Optional, TypeVar
 
-import docker
 from docker.models.images import Image
 from docker.models.containers import Container
 from pydantic import BaseModel

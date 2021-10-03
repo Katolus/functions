@@ -1,21 +1,20 @@
-from functions.autocomplete import (
-    autocomplete_function_names,
-    autocomplete_running_function_names,
-)
 from typing import Optional
 
 import typer
 
-from functions import __version__
 from functions import __project_name__
+from functions import __version__
 from functions import styles
-from functions.decorators import handle_error, resilient_parsing
+from functions.autocomplete import autocomplete_function_names
+from functions.autocomplete import autocomplete_running_function_names
+from functions.decorators import handle_error
+from functions.decorators import resilient_parsing
 from functions.docker.helpers import all_functions
 from functions.errors import FunctionNameTaken
-from functions.validators import name_validator
-from functions.validators import LocalFunctionPath
 from functions.input import confirm_abort
 from functions.system import load_config
+from functions.validators import LocalFunctionPath
+from functions.validators import name_validator
 
 
 @handle_error
@@ -41,6 +40,7 @@ def build_function_callack(ctx: typer.Context, param: typer.CallbackParam, value
     return value
 
 
+@resilient_parsing
 def function_name_callback(
     ctx: typer.Context, param: typer.CallbackParam, value: str
 ) -> Optional[str]:
@@ -69,12 +69,10 @@ def function_name_autocomplete_callback(
     return value
 
 
+@resilient_parsing
 def running_functions_autocomplete_callback(
     ctx: typer.Context, param: typer.CallbackParam, value: str
 ) -> Optional[str]:
-    if ctx.resilient_parsing:
-        return None
-
     if (
         running_functions := list(autocomplete_running_function_names(""))
     ) and value not in running_functions:
@@ -85,13 +83,10 @@ def running_functions_autocomplete_callback(
     return value
 
 
-# TODO: Add a decorator for the resilient_parsing
+@resilient_parsing
 def remove_function_name_callback(
     ctx: typer.Context, param: typer.CallbackParam, value: str
 ) -> Optional[str]:
-    if ctx.resilient_parsing:
-        return None
-
     if (
         running_functions := list(autocomplete_running_function_names(""))
     ) and value not in running_functions:
@@ -101,13 +96,10 @@ def remove_function_name_callback(
 
     return value
 
-
+@resilient_parsing
 def function_dir_callback(
     ctx: typer.Context, param: typer.CallbackParam, value: str
 ) -> Optional[str]:
-    if ctx.resilient_parsing:
-        return None
-
     if not value or value == ".":
         confirm_abort("Are you sure you want to use the current directory?")
         value = "."
