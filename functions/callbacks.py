@@ -9,7 +9,7 @@ import typer
 from functions import __version__
 from functions import __project_name__
 from functions import styles
-from functions.decorators import resilient_parsing
+from functions.decorators import handle_error, resilient_parsing
 from functions.docker.helpers import all_functions
 from functions.errors import FunctionNameTaken
 from functions.validators import name_validator
@@ -18,6 +18,7 @@ from functions.input import confirm_abort
 from functions.system import load_config
 
 
+@handle_error
 def version_callback(value: bool) -> None:
     """Prints out the version of the package and exists"""
     if value:
@@ -27,6 +28,7 @@ def version_callback(value: bool) -> None:
         raise typer.Exit()
 
 
+@handle_error
 def build_function_callack(ctx: typer.Context, param: typer.CallbackParam, value: str):
     """Check if a function name is already an existing function image. Throw an error if so"""
     config = load_config(LocalFunctionPath(value))

@@ -6,6 +6,7 @@ from typing import Any, Sequence, Tuple
 import typer
 from pydantic import BaseModel
 from pydantic import PrivateAttr
+from typer.main import get_command
 
 from functions.decorators import handle_error
 
@@ -34,7 +35,8 @@ class Functions(BaseModel):
             self._main.add_typer(app, name=name)
 
     def __call__(self, *args: Any, **kwargs: Any) -> Any:
-        return self._main.__call__(*args, **kwargs)
+        command = handle_error(get_command(self._main))
+        return command(*args, **kwargs)
 
     def callback(self, *args, **kwargs):
         decorator = self._main.callback(*args, **kwargs)

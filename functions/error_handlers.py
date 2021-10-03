@@ -49,6 +49,7 @@ def check_config_in_path(error: ExceptionClass) -> NoReturn:
 def handle_function_name_with_suggestion(error: ExceptionClass) -> NoReturn:
     error_msg = str(error)
     typer.echo(f"Error: {error_msg}", err=True)
+    typer.echo(f"Unable to continue. See the errors", err=True)
     # Verbose - Consider renaming the function or removing the old one
-    raise typer.BadParameter(f"Unable to continue. See the errors")
+    raise typer.Exit()
     
