@@ -155,9 +155,22 @@ def config() -> None:
     """Renders function's configuration file into the command line"""
     ...
 
+
 @app.command()
-def rebuild() -> None:
+def rebuild(
+    function_name: str = typer.Argument(
+        ...,
+        help="Name of the function you want to rebuild",
+        autocompletion=autocomplete_function_names,
+    ),
+    show_logs: bool = typer.Option(False, "--show-logs", help="Show build logs"),
+) -> None:
     """Rebuild a function if it is possible"""
-    ...
+    functions = all_functions()
 
+    for function in functions:
+        if function.name == function_name:
+            build_image(function.config, show_logs)
+            raise typer.Exit()
 
+    typer.echo("No functions found")
