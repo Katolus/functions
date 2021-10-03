@@ -3,12 +3,13 @@ from functions.constants import SignatureType
 from functions.validators import name_validator
 
 
-def default_config(function_name: str, signature_type: SignatureType) -> FunctionConfig:
+def default_config(function_name: str, function_dir: str, signature_type: SignatureType) -> FunctionConfig:
     name_validator(function_name)
 
     config = FunctionConfig(
         **{
             "description": f"Generated functions template called '{function_name}' of '{signature_type}' type",
+            "path": function_dir,
             "run_variables": {
                 "source": "main.py",
                 "entry_point": "main",

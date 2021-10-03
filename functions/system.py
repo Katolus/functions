@@ -70,15 +70,18 @@ def add_required_files(
     signature_type: SignatureType
 ):
     """Add required files into the function directory"""
+    # Get file contents before creating any system objects
+    config_content = json.dumps(
+        defaults.default_config(function_name, function_dir, signature_type).dict()
+    )
+
     # Make a new directory
     make_dir(function_dir)
     # Create a confing setup
     add_file(
         function_dir,
         filename="config.json",
-        content=json.dumps(
-            defaults.default_config(function_name, signature_type).dict()
-        ),
+        content=config_content,
     )
 
     # Create a Docker file

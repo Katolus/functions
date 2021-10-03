@@ -14,7 +14,6 @@ from functions.docker.classes import DockerImage
 
 def get_config_from_image(image: DockerImage) -> FunctionConfig:
     """Returns a function config from a given function image"""
-    # TODO: Change to function dir
     config_path = image.labels.get(DockerLabel.FUNCTION_PATH)
     return load_config(config_path)
 
