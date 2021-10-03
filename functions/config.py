@@ -9,6 +9,7 @@ from typing import Type
 
 import toml  # type: ignore
 from pydantic import BaseModel
+from functions.constants import ConfigName
 
 from functions.types import CallableGenerator
 
@@ -173,8 +174,13 @@ class DeployVariables(BaseModel):
 class FunctionConfig(BaseModel):
     """Represents a configuration file of a specific function"""
 
-    path: Optional[str]
+    path: str
+    config_name: ConfigName = ConfigName.BASE
     description: str
     run_variables: RunVariables
     env_variables: EnvVariables
     deploy_variables: DeployVariables
+
+    @property
+    def config_path(self) -> str:
+        return os.path.join(self.path, self.config_name)
