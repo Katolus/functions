@@ -49,3 +49,11 @@ class FunctionBuildError(_DerivedError):
 class ConfigValidationError(_DerivedError):
     code = "config.validation"
     msg_template = "Invalid config format. Validation exited with -> {error}"
+
+
+class FunctionNameTaken(FunctionBaseError):
+    code = "functions.name_taken"
+    msg_template = "Function with that name ('{name}') already exists"
+
+    def __init__(self, name: str, /) -> None:
+        super().__init__(name=name)

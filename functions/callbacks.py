@@ -10,9 +10,12 @@ from functions import __version__
 from functions import __project_name__
 from functions import styles
 from functions.decorators import resilient_parsing
+from functions.docker.helpers import all_functions
+from functions.errors import FunctionNameTaken
 from functions.validators import name_validator
 from functions.validators import LocalFunctionPath
 from functions.input import confirm_abort
+from functions.system import load_config
 
 
 def version_callback(value: bool) -> None:
@@ -25,8 +28,12 @@ def version_callback(value: bool) -> None:
 
 
 def build_function_callack(ctx: typer.Context, param: typer.CallbackParam, value: str):
-    # Piotr
-    # TODO: Check if an existing function image already exist and ask if to overwrite
+    """Check if a function name is already an existing function image. Throw an error if so"""
+    config = load_config(LocalFunctionPath(value))
+    built_function_names = [function.name for function in all_functions()]
+
+    if config.run_variables.name in built_function_names:
+        raise FunctionNameTaken(config.run_variables.name)
 
     # TODO: Check if the port is in use
     return value

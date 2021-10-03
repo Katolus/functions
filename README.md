@@ -7,6 +7,7 @@
 
 **Outstanding items before the first release**: 
 - Add the ability to deploy functions in languages other than just Python.
+- Ability to run the package with configuration on other OS than Linux
 
 
 
