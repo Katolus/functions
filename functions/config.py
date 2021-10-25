@@ -11,8 +11,8 @@ import toml  # type: ignore
 from pydantic import BaseModel
 from functions.constants import ConfigName
 
+from functions.constants import BASE_DIR_NAME
 from functions.types import CallableGenerator
-
 
 # TODO: Rewrite this in a way that makes sense
 
