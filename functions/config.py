@@ -13,7 +13,6 @@ from functions.constants import ConfigName
 
 from functions.types import CallableGenerator
 
-BASE_DIR_NAME = "ventress-functions"
 
 # TODO: Rewrite this in a way that makes sense
 
