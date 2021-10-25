@@ -26,6 +26,9 @@ mypy = "^0.910"
 black = {version = "^21.8b0", allow-prereleases = true}
 bpython = "^0.21"
 
+[tool.mypy]
+mypy_path = "~/stubs/"
+
 [build-system]
 build-backend = "poetry.core.masonry.api"
 requires = ["poetry-core>=1.0.0"]

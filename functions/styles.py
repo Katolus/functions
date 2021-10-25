@@ -11,3 +11,7 @@ def red(text: str) -> str:
 
 def blue(text: str) -> str:
     return typer.style(text, fg=typer.colors.BLUE)
+
+
+def green(text: str) -> str:
+    return typer.style(text, fg=typer.colors.GREEN)

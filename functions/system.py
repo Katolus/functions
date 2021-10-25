@@ -4,29 +4,38 @@ from pathlib import Path
 from typing import Union
 
 from pydantic import validate_arguments
+from pydantic import ValidationError
 
 from functions import defaults
-from functions.constants import ConfigName
-from functions.types import LocalFunctionPath
 from functions.config import FunctionConfig
+from functions.constants import ConfigName, SignatureType
+from functions.errors import ConfigValidationError
+from functions.validators import LocalFunctionPath
 
 
-# TODO: Rename to function config
 @validate_arguments
 def load_config(config_dir: LocalFunctionPath) -> FunctionConfig:
     """Load a configuration file into a Python object."""
-    config = None
+    config = {}
     with open(construct_config_path(config_dir, ConfigName.BASE), "r") as file:
         config = json.load(file)
 
-    return FunctionConfig(path=str(config_dir), **config)
+    config["path"] = str(config_dir) if config_dir else config.get("path")
+
+    try:
+        validated_config = FunctionConfig(**config)
+    except ValidationError as error:
+        raise ConfigValidationError(error=error)
+
+    return validated_config
 
 
-def get_full_path(function_path: Union[Path, str]) -> LocalFunctionPath:
-    """Returns a full path of a function"""
-    return LocalFunctionPath(os.path.abspath(os.path.join(os.getcwd(), function_path)))
+def get_full_path(path: Union[Path, str]) -> LocalFunctionPath:
+    """Returns an absolute path of a path"""
+    return LocalFunctionPath(os.path.abspath(os.path.join(os.getcwd(), path)))
 
 
+# Deprecated
 def construct_config_path(
     full_path: Path, config_name: str = ConfigName.BASE
 ) -> LocalFunctionPath:
@@ -54,18 +63,25 @@ def link_common(function_dir: str):
 
 
 def add_required_files(
-    function_name: str, function_dir: str, *, main_content: str, signature_type: str
+    function_name: str,
+    function_dir: str,
+    *,
+    main_content: str,
+    signature_type: SignatureType
 ):
     """Add required files into the function directory"""
+    # Get file contents before creating any system objects
+    config_content = json.dumps(
+        defaults.default_config(function_name, function_dir, signature_type).dict()
+    )
+
     # Make a new directory
     make_dir(function_dir)
     # Create a confing setup
     add_file(
         function_dir,
         filename="config.json",
-        content=json.dumps(
-            defaults.default_config(function_name, signature_type).dict()
-        ),
+        content=config_content,
     )
 
     # Create a Docker file

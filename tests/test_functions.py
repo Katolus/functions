@@ -1,5 +1,10 @@
 from functions import __version__
+from functions import __project_name__
 
 
 def test_version():
-    assert __version__ == '0.1.0'
+    assert type(__version__) == str
+
+
+def test_something_else():
+    assert __project_name__ == "functions-cli"

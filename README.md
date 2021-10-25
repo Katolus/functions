@@ -1,9 +1,15 @@
-# This package that will get you working with FaaS
+# `functions-cli`
+
+> This package that will get you working with FaaS.
 
 |   !   | This package is not anywhere near being ready. It hasn't been released in any major or minor versions of it yet as it is constant development. Use it at your own risk and pleasure. |
 | :---: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
 <!-- ![Logo]() -->
+
+**Outstanding items before the first release**: 
+- Add the ability to deploy functions in languages other than just Python.
+- Ability to run the package with configuration on other OS than Linux
 
 
 
@@ -61,7 +67,7 @@ Keep in mind that the package is in development and all of its structure is a su
 The tool allows you to quickly generate a template of a function that you can the modify to quicken your efforts in producing code. 
 
 ```console
-functions new http {new_of_the_function}
+functions new http {name_of_the_function}
 ```
 
 will generate you a new http like template for your FaaS function in your current directory.
@@ -99,6 +105,21 @@ functions gcp deploy {path_to_the_function}
 ```
 
 With the correct setup and permissions this should allow you to the deploy a function to the GCP directly from the `functions` cli.  
+
+
+## Clearing out resources
+
+### Remove a function
+
+```
+functions remove {name_of_the_function}
+```
+
+
+
+## Installing autocompletion
+TBU
+
 
 ## Getting help
 

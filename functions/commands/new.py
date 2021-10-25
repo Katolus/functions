@@ -6,9 +6,13 @@ import typer
 from functions import defaults
 from functions.arguments import FunctionNameArgument
 from functions.callbacks import function_dir_callback
+from functions.constants import SignatureType
 from functions.system import add_required_files
 
 app = typer.Typer(help="Factory method for creating new functions")
+
+
+# TODO: Consider adding a new to the configuration file if decide to do anything with it.
 
 
 @app.command()
@@ -27,7 +31,7 @@ def pubsub(
         function_name,
         function_dir,
         main_content=defaults.default_entry_hello_pubsub,
-        signature_type="event",
+        signature_type=SignatureType.PUBSUB,
     )
 
     typer.echo(f"Added a new pubsub function -> {function_dir}")
@@ -49,7 +53,7 @@ def http(
         function_name,
         function_dir,
         main_content=defaults.default_entry_hello_http,
-        signature_type="http",
+        signature_type=SignatureType.HTTP,
     )
 
     typer.echo(f"Added a new http function to -> {function_dir}")

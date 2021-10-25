@@ -2,15 +2,16 @@
 from __future__ import annotations
 import os
 from pathlib import Path
-from typing import Any, NoReturn
+from typing import Any, Optional
 from typing import Dict
 from typing import List
 from typing import Type
 
 import toml  # type: ignore
 from pydantic import BaseModel
+from functions.constants import ConfigName
 
-from functions.types import CallableGenerator, StrBytes
+from functions.types import CallableGenerator
 
 BASE_DIR_NAME = "ventress-functions"
 
@@ -173,7 +174,7 @@ class EnvVariables(Dict[str, str]):
 class DeployVariables(BaseModel):
     """Holds deploy specific variables"""
 
-    allow_unauthenticated = False
+    allow_unauthenticated: Optional[bool]
     provider: str
     service: str
 
@@ -182,6 +183,12 @@ class FunctionConfig(BaseModel):
     """Represents a configuration file of a specific function"""
 
     path: str
+    config_name: ConfigName = ConfigName.BASE
+    description: str
     run_variables: RunVariables
     env_variables: EnvVariables
     deploy_variables: DeployVariables
+
+    @property
+    def config_path(self) -> str:
+        return os.path.join(self.path, self.config_name)

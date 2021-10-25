@@ -1,36 +1,34 @@
-import json
-import itertools
 from pathlib import Path
 from typing import Optional
 
 import typer
 
+from functions import styles
 from functions.autocomplete import autocomplete_function_names
 from functions.autocomplete import autocomplete_running_function_names
-from functions.callbacks import function_name_autocomplete_callback, version_callback
+from functions.callbacks import (
+    build_function_callack,
+    function_name_autocomplete_callback,
+    version_callback,
+)
 from functions.callbacks import remove_function_name_callback
 from functions.callbacks import running_functions_autocomplete_callback
 from functions.commands import gcp
 from functions.commands import new
-from functions.constants import DockerLabel
-from functions.docker.client import docker_client
-from functions.docker.helpers import all_functions
-from functions.docker.helpers import get_config_from_image
-from functions.docker.tools import remove_image
+from functions.core import Functions
+from functions.docker.helpers import all_functions, get_config_from_image
+from functions.docker.tools import (
+    build_image,
+    get_image,
+    remove_image,
+    run_container,
+    stop_container,
+)
 from functions.styles import blue, red
-from functions.system import construct_config_path, get_full_path
+from functions.system import get_full_path
 from functions.system import load_config
 
-app = typer.Typer(
-    name="functions-cli",
-    help="Run script to executing, testing and deploying included functions.",
-)
-state = {"verbose": False}
-
-# TODO: Add a scope if the package is installed
-# if gcloud_is_installed
-app.add_typer(gcp.app, name="gcp")
-app.add_typer(new.app, name="new")
+app = Functions(subcommands=[(new.app, "new"), (gcp.app, "gcp")])
 
 
 @app.callback()
@@ -53,7 +51,7 @@ def main(
     """
     if verbose:
         # typer.echo("Will write verbose output") ## log
-        state["verbose"] = True
+        app.state.verbose = True
 
 
 @app.command()
@@ -65,13 +63,12 @@ def test() -> None:
 
 @app.command()
 def build(
-    # TODO: Change to build existing ones first and if not present request a path
     function_path: Path = typer.Argument(
         ...,
         help="Path to the functions you want to build",
+        callback=build_function_callack,
     ),
-    # TODO: Add an option to show the logs
-    show_logs: bool = typer.Option(False, "--force"),
+    show_logs: bool = typer.Option(False, "--show-logs", help="Show build logs"),
 ) -> None:
     """Builds an image of a given function"""
     # Get the absolute path
@@ -80,45 +77,11 @@ def build(
     # Load configuration
     config = load_config(full_path)
 
-    # TODO: Check if an existing function image already exist and ask if to overwrite
+    image = build_image(config, show_logs)
+    # TODO: Update the log that prints out the information to the console
 
-    # Formulate a function tag
-    function_name = config.run_variables.name
-    build_kwargs = {
-        "path": str(full_path),
-        "tag": function_name,
-        "buildargs": {
-            "TARGET": config.run_variables.entry_point,
-            "SOURCE": config.run_variables.source,
-            "SIGNATURE_TYPE": config.run_variables.signature_type,
-        },
-        # TODO: Store a configuration path as a label
-        "labels": {
-            DockerLabel.FUNCTION_NAME: function_name,
-            DockerLabel.FUNCTION_PATH: str(full_path),
-            DockerLabel.CONFIG_PATH: str(construct_config_path(full_path)),
-            DockerLabel.CONFIG: json.dumps(config.json()),
-            DockerLabel.ORGANISATION: "Ventress",
-        },
-    }
-
-    # TODO: Check if the port is in use
-
-    # TODO: Add BuildError from docker
-    # TODO: Move to docker.py
-    if show_logs:
-        from docker.utils.json_stream import json_stream
-
-        resp = docker_client.api.build(**build_kwargs)
-        result_stream, internal_stream = itertools.tee(json_stream(resp))
-        for result in result_stream:
-            print(result)
-    else:
-        image, logs = docker_client.images.build(**build_kwargs)
-
-    # TODO: Add color
     typer.echo(
-        f"Successfully build a function's image. The name of the functions is -> {function_name}"
+        f"{styles.green('Successfully')} build a function's image. The name of the functions is -> {config.run_variables.name}"
     )
 
 
@@ -132,19 +95,14 @@ def run(
     ),
 ) -> None:
     """Start a container for a given function"""
-    docker_image = docker_client.images.get(function_name)
-    config = get_config_from_image(docker_image)
 
-    # TODO: Move to docker tools
-    container = docker_client.containers.run(
-        docker_image,
-        ports={"8080": config.run_variables.port},
-        remove=True,
-        name=function_name,
-        detach=True,
+    function_image = get_image(function_name)
+    config = get_config_from_image(function_image)
+    container = run_container(function_image, config)
+
+    typer.echo(
+        f"Function ({container.name}) has started. Visit -> http://localhost:{config.run_variables.port}"
     )
-
-    typer.echo(f"Function ({container.name}) has started.")
 
 
 @app.command()
@@ -157,11 +115,7 @@ def stop(
     ),
 ) -> None:
     """Stops a running function"""
-    # TODO: Add an option to stop them all
-    # TODO: Add a catch for when the name does not match
-    container = docker_client.containers.get(function_name)
-    container.stop()
-
+    stop_container(function_name)
     typer.echo(f"Function ({function_name}) has been stopped.")
 
 
@@ -169,7 +123,8 @@ def stop(
 def list() -> None:
     """List existing functions"""
     functions = all_functions()
-    if state["verbose"]:
+    # Check if a function is running at the moment
+    if app.state.verbose:
         typer.echo(f"Will write verbose lists")
     if functions:
         typer.echo(f"There are {len(functions)} build and available.\n")
@@ -195,4 +150,34 @@ def remove(
     typer.echo(f"Function ({function_name}) has been removed")
 
 
-# TODO: Add config command if useful
+@app.command()
+def config() -> None:
+    """Renders function's configuration file into the command line"""
+    raise NotImplementedError()
+
+
+@app.command()
+def rebuild(
+    function_name: str = typer.Argument(
+        ...,
+        help="Name of the function you want to rebuild",
+        autocompletion=autocomplete_function_names,
+    ),
+    show_logs: bool = typer.Option(False, "--show-logs", help="Show build logs"),
+) -> None:
+    """Rebuild a function if it is possible"""
+    functions = all_functions()
+
+    for function in functions:
+        if function.name == function_name:
+            build_image(function.config, show_logs)
+            raise typer.Exit()
+
+    typer.echo("No functions found")
+
+
+# Cleanse 
+# Maybe docker system prune? with filter
+
+# Remove containers 
+# Remove images 
