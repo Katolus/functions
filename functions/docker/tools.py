@@ -4,9 +4,9 @@ import re
 from typing import Generator, Optional
 from typing import Dict, Generator, Tuple
 
-import docker  # type: ignore
+import docker
 import typer
-from docker.utils.json_stream import json_stream  # type: ignore
+from docker.utils.json_stream import json_stream
 from pydantic.main import BaseModel
 
 from functions.config import FunctionConfig
