@@ -153,7 +153,7 @@ def remove(
 @app.command()
 def config() -> None:
     """Renders function's configuration file into the command line"""
-    ...
+    raise NotImplementedError()
 
 
 @app.command()
@@ -174,3 +174,10 @@ def rebuild(
             raise typer.Exit()
 
     typer.echo("No functions found")
+
+
+# Cleanse 
+# Maybe docker system prune? with filter
+
+# Remove containers 
+# Remove images 
