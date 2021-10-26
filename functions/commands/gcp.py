@@ -5,7 +5,7 @@ import typer
 
 from functions.autocomplete import autocomplete_deploy_functions
 from functions.constants import CloudServiceType
-from functions.input import confirm_abort
+from functions.user import confirm_abort
 from functions.gcp import delete_function, read_logs
 from functions.gcp import deploy_function
 from functions.services import describe_function

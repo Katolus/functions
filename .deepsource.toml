@@ -1,12 +1,12 @@
 version = 1
 
 [[analyzers]]
+enabled = false
 name = "shell"
-enabled = true
 
 [[analyzers]]
+enabled = false
 name = "python"
-enabled = true
 
-  [analyzers.meta]
-  runtime_version = "3.x.x"
+[analyzers.meta]
+runtime_version = "3.x.x"

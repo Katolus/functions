@@ -1,6 +1,6 @@
 [tool.poetry]
 authors = ["Katolus <katolus.work@gmail.com>"]
-description = "CLI tool for managing your FaaS repositories"
+description = "CLI tool for managing your FaaS resources"
 name = "functions-cli"
 license = "MIT"
 readme = "README.md"

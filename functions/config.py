@@ -11,9 +11,8 @@ import toml  # type: ignore
 from pydantic import BaseModel
 from functions.constants import ConfigName
 
+from functions.constants import BASE_DIR_NAME
 from functions.types import CallableGenerator
-
-BASE_DIR_NAME = "ventress-functions"
 
 # TODO: Rewrite this in a way that makes sense
 
@@ -45,6 +44,13 @@ class AppFiles(BaseModel):
     functions_file: str = "functions_registry"
 
 
+class AppLogging(BaseModel):
+    """Represents the logging settings of the application"""
+
+    is_logging: bool = False  # TODO: Look into making the logging
+    logging_file: str = "functions.log"
+
+
 class AppFunction(BaseModel):
     """Stores a configuration of a specific funcion"""
 
@@ -58,6 +64,7 @@ class AppConfig(BaseModel, BaseConfig):
     default_region: str = ""
     files: AppFiles = AppFiles()
     functions: List[AppFunction] = []
+    logging: AppLogging = AppLogging()
 
 
 class AppConfigManager(BaseModel):
@@ -104,6 +111,7 @@ class AppConfigManager(BaseModel):
             self._config = self.config_class()
         return self._config
 
+
     def create(self, file_path: str) -> None:
         """Create the configuration file if it does not exist."""
 
@@ -140,6 +148,11 @@ class AppConfigManager(BaseModel):
     class Config:
         arbitrary_types_allowed = True
         underscore_attrs_are_private = True
+
+
+def config_dir() -> str:
+    """Returns a directory path to were the configuration file is stored."""
+    return AppConfigManager().config_home_path
 
 
 app_config = AppConfigManager(config_class=AppConfig)
