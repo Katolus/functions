@@ -1,6 +1,6 @@
 # Contributing to `functions-cli`
 
-Since this is young and heavely self-developed repository, all the contributions are going to have to account for that.
+Since this is young and heavily self-developed repository, all the contributions are going to have to account for that.
 Expect changes to be made quickly. Don't get used to a code structure until a first stable release. 
 
 If **anyone** wants to contributed regardless of that, please feel free to pickup/create an issue, drop a discussion post. 
