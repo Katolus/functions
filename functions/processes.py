@@ -8,7 +8,7 @@ from pydantic import validate_arguments
 def run_cmd(
     cmd_exec: Sequence[str], capture_output: bool = False
 ) -> subprocess.CompletedProcess:
-    return subprocess.run(cmd_exec, capture_output=capture_output)
+    return subprocess.run(cmd_exec, capture_output=capture_output, check=True)
 
 
 @validate_arguments
