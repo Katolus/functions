@@ -126,8 +126,8 @@ def stop(
     user.inform(f"Function ({function_name}) has been stopped.")
 
 
-@app.command()
-def list() -> None:
+@app.command("list")
+def list_functions() -> None:
     """List existing functions"""
     functions = all_functions()
     # Check if a function is running at the moment
