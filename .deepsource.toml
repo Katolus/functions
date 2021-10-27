@@ -1,11 +1,11 @@
 version = 1
 
 [[analyzers]]
-enabled = false
+enabled = true
 name = "shell"
 
 [[analyzers]]
-enabled = false
+enabled = true
 name = "python"
 
 [analyzers.meta]

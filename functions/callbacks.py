@@ -36,7 +36,6 @@ def build_function_callack(ctx: typer.Context, param: typer.CallbackParam, value
     if config.run_variables.name in built_function_names:
         raise FunctionNameTaken(config.run_variables.name)
 
-    # TODO: Check if the port is in use
     return value
 
 
@@ -60,7 +59,6 @@ def function_name_autocomplete_callback(
 ) -> Optional[str]:
 
     build_functions = list(autocomplete_function_names(""))
-    # TODO: Check if the container is running and abort if it already is running
     if build_functions and value not in build_functions:
         raise typer.BadParameter(
             f"You can only run build functions {build_functions}. Use autocomplete the pass a valid name."

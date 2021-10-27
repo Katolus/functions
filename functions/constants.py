@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from enum import Enum
+from enum import unique
 from typing import List
 
 # Configration
@@ -41,11 +42,11 @@ class LoggingLevel(str, Enum):
     WARNING = "warning"
 
 
+@unique
 class CloudServiceType(str, Enum):
     CLOUD_FUNCTION = "cloud_function"
 
     @classmethod
     def all(cls) -> List[str]:
         """Returns all the available service types"""
-        # TODO: There might be a method that does this better
-        return [cls.CLOUD_FUNCTION]
+        return [enum.value for enum in cls]

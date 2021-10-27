@@ -128,7 +128,6 @@ def run_container(
     function_image: DockerImage, config: FunctionConfig
 ) -> DockerContainer:
     """Runs a container of a function"""
-    # TODO: Add the ability to get the config from a `function_name`
     container = docker_client.containers.run(
         function_image,
         ports={"8080": config.run_variables.port},
@@ -144,11 +143,4 @@ def stop_container(function_name: str) -> DockerContainer:
     """Stops a docker container"""
     container = docker_client.containers.get(function_name)
     container.stop()
-    # TODO: Add verbose logging
     return container
-
-
-def stop_all() -> None:
-    """Stops all the running function containers"""
-    # TODO: Add an option to stop them all
-    ...

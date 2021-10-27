@@ -4,14 +4,12 @@ from typing import List, Optional
 from pydantic import validate_arguments
 
 from functions.config import app_config
-from functions.config import EnvVariables 
-from functions.config import FunctionConfig 
+from functions.config import EnvVariables
+from functions.config import FunctionConfig
 from functions.constants import CloudServiceType
 from functions.processes import run_cmd
-from functions.validators import LocalFunctionPath 
+from functions.validators import LocalFunctionPath
 from functions.types import NotEmptyStr
-
-# TODO: Add check to make sure that the library installed and if not throw an error
 
 GCP_REGION = "australia-southeast1"
 
@@ -80,19 +78,16 @@ class GCPCloudFunction:
     @classmethod
     def add_trigger_arguments(cls) -> List[str]:
         """Returns a list of arguments to append that denote the type of trigger applied"""
-        # TODO: To Implement
         return ["--trigger-http"]
 
     @classmethod
     def add_runtime_arguments(cls) -> List[str]:
         """Returns runtime arguments"""
-        # TODO: To Implement
         return ["--runtime", "python39"]
 
     @classmethod
     def add_source_arguments(cls, function_dir: str) -> List[str]:
         """Returns source arguments"""
-        # TODO: To Implement
         return ["--source", str(function_dir)]
 
 
@@ -114,14 +109,12 @@ def add_env_vars_arguments(env_variables: EnvVariables) -> List[str]:
 
 @validate_arguments
 def add_entry_point_arguments(entry_point: NotEmptyStr) -> List[str]:
-    # TODO: Validate that the entry point has more than just empty string
     """Adds entry point variables to the scope of the deployment"""
     return ["--entry-point", entry_point]
 
 
 def add_ignore_file_arguments(files: Optional[List[str]] = None) -> List[str]:
     """Adds ignore file variables to the scope of the deployment"""
-    # TODO: To Implement
     default_ignores = ["config.json", "Dockerfile", ".dockerignore"]
     if not files:
         ingore_files = default_ignores
@@ -142,7 +135,6 @@ def add_region_argument(region: Optional[str] = None) -> List[str]:
     return ["--region", _region]
 
 
-# TODO: Ensure that the gcloud library is installed first
 def current_project() -> str:
     """Returns current working project"""
     output = run_cmd(["gcloud", "config", "get-value", "project"])

@@ -86,7 +86,6 @@ def build(
     config = load_config(full_path)
 
     image = build_image(config, show_logs)
-    # TODO: Update the log that prints out the information to the console
 
     user.inform(
         f"{styles.green('Successfully')} build a function's image. The name of the functions is -> {config.run_variables.name}"

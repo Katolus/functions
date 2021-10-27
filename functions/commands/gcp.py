@@ -38,7 +38,6 @@ def deploy(
         help="Path to the functions you want to deploy",
         resolve_path=True,
     ),
-    # TODO: Make service an enum
     service: Optional[CloudServiceType] = typer.Option(
         None,
         help="Type of service you want this resource to be deploy to",

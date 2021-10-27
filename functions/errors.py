@@ -15,7 +15,6 @@ class FunctionBaseError(FunctionErrorMixin, Exception):
 
     @classmethod
     def validate(cls, value: Any) -> Any:
-        # TODO: Think about enhancing this validation if it is going to be enforced
         # if not issubclass(value, cls):
         #     raise ConfigError(f"'{value}'Is not a valid exception class")
         return value
