@@ -47,8 +47,7 @@ def handle_error(
 
     if func:
         return handle(func)
-    else:
-        return handle
+    return handle
 
 
 CallbackCallable = Callable[[typer.Context, typer.CallbackParam, str], Optional[str]]
