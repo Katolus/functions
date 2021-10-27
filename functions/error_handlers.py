@@ -41,7 +41,7 @@ def print_basic_output_and_exit(error: ExceptionClass) -> NoReturn:
 
 @error_handler(error=ConfigValidationError)
 def check_config_in_path(error: ExceptionClass) -> NoReturn:
-    # TODO: Print a path where this is saved
+    # Print a path where this is saved
     raise typer.BadParameter(str(error))
 
 

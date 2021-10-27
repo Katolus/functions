@@ -12,9 +12,6 @@ from functions.system import add_required_files
 app = typer.Typer(help="Factory method for creating new functions")
 
 
-# TODO: Consider adding a new to the configuration file if decide to do anything with it.
-
-
 @app.command()
 def pubsub(
     function_name: str = FunctionNameArgument(...),

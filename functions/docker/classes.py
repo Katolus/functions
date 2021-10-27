@@ -15,16 +15,12 @@ from functions.validators import LocalFunctionPath
 DockerImageType = TypeVar("DockerImageType", bound=Image)
 
 
-# PIOTR
-# TODO: Implement stubs for the docker-py lib
 class DockerImage(BaseModel, Generic[DockerImageType]):
     labels: Dict[Any, str]
 
     @property
     def config(self) -> FunctionConfig:
-        # TODO: Find a way to use this without circular import issues
         config_path = self.labels.get(DockerLabel.FUNCTION_PATH)
-        # TODO: Fix types
         return load_config(LocalFunctionPath(config_path))
 
 
@@ -39,9 +35,9 @@ class DockerFunction(BaseModel):
 
     _image: Optional[Image] = PrivateAttr()
     _container: Optional[Container] = PrivateAttr()
-    name: str  # TODO: Find a way to enforce uniqueness
-    image: Optional[DockerImage]  # Temp solution
-    container: Optional[DockerContainer]  # Temp solution
+    name: str
+    image: Optional[DockerImage]
+    container: Optional[DockerContainer]
 
     def __init__(
         self, image: Image = None, container: Container = None, **data: Any

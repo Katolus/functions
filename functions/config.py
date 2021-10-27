@@ -14,8 +14,6 @@ from functions.constants import ConfigName
 from functions.constants import BASE_DIR_NAME
 from functions.types import CallableGenerator
 
-# TODO: Rewrite this in a way that makes sense
-
 
 class BaseConfig:
     """Base class for the configuration file to enforce a standard interface"""
@@ -47,7 +45,7 @@ class AppFiles(BaseModel):
 class AppLogging(BaseModel):
     """Represents the logging settings of the application"""
 
-    is_logging: bool = False  # TODO: Look into making the logging
+    is_logging: bool = False  # Look into making the logging
     logging_file: str = "functions.log"
 
 
@@ -92,7 +90,7 @@ class AppConfigManager(BaseModel):
     @property
     def config_home_path(self) -> str:
         """Returns the configuration folder"""
-        # TODO: Read this from the env first.
+        # Read this from the env first.
         config_folder = ".config"
         return os.path.join(str(Path().home()), config_folder)
 
