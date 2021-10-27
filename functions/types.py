@@ -12,7 +12,7 @@ StrBytes = Union[str, bytes]
 
 ExceptionClass = Type[BaseException]
 
+
 class NotEmptyStr(ConstrainedStr):
     strip_whitespace: bool = True
     min_length: int = 1
-

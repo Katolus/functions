@@ -67,7 +67,7 @@ def delete(
 
 @app.command()
 def describe(
-        function_name: str = typer.Argument(
+    function_name: str = typer.Argument(
         ...,
         help="Name of the function you want to describe",
     ),

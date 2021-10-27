@@ -3,6 +3,7 @@ from typing import Optional
 from typing import List
 from functions.config import FunctionConfig
 from functions.system import load_config
+
 # Add stubs for docker-py
 from functions.docker.client import docker_client
 from functions.docker.classes import DockerContainer
