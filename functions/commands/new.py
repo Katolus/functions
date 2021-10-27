@@ -4,6 +4,7 @@ from pathlib import Path
 import typer
 
 from functions import defaults
+from functions import user
 from functions.arguments import FunctionNameArgument
 from functions.callbacks import function_dir_callback
 from functions.constants import SignatureType
@@ -31,7 +32,7 @@ def pubsub(
         signature_type=SignatureType.PUBSUB,
     )
 
-    typer.echo(f"Added a new pubsub function -> {function_dir}")
+    user.inform(f"Added a new pubsub function -> {function_dir}")
 
 
 @app.command()
@@ -53,4 +54,4 @@ def http(
         signature_type=SignatureType.HTTP,
     )
 
-    typer.echo(f"Added a new http function to -> {function_dir}")
+    user.inform(f"Added a new http function to -> {function_dir}")

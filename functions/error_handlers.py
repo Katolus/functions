@@ -4,6 +4,7 @@ from typing import NoReturn
 
 import typer
 
+from functions import user
 from functions.types import AnyCallable, ExceptionClass
 from functions.errors import ConfigValidationError, FunctionNameTaken
 
@@ -35,7 +36,7 @@ def error_handler(*, error: ExceptionClass) -> AnyCallable:
 
 @error_handler(error=ValueError)
 def print_basic_output_and_exit(error: ExceptionClass) -> NoReturn:
-    typer.echo(f"Handling no image error - {error}")
+    user.inform(f"Handling no image error - {error}")
     raise typer.BadParameter(str(error))
 
 
@@ -48,8 +49,8 @@ def check_config_in_path(error: ExceptionClass) -> NoReturn:
 @error_handler(error=FunctionNameTaken)
 def handle_function_name_with_suggestion(error: ExceptionClass) -> NoReturn:
     error_msg = str(error)
-    typer.echo(f"Error: {error_msg}", err=True)
-    typer.echo(f"Unable to continue. See the errors", err=True)
+    user.inform(f"Error: {error_msg}")
+    user.inform(f"Unable to continue. See the errors")
     # Verbose - Consider renaming the function or removing the old one
     raise typer.Exit()
     
