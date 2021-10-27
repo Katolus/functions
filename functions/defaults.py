@@ -3,7 +3,9 @@ from functions.constants import SignatureType
 from functions.validators import name_validator
 
 
-def default_config(function_name: str, function_dir: str, signature_type: SignatureType) -> FunctionConfig:
+def default_config(
+    function_name: str, function_dir: str, signature_type: SignatureType
+) -> FunctionConfig:
     name_validator(function_name)
 
     config = FunctionConfig(
