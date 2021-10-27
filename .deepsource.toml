@@ -15,10 +15,6 @@ enabled = true
 
 [[analyzers]]
 enabled = true
-name = "test-coverage"
-
-[[analyzers]]
-enabled = true
 name = "python"
 # dependency_file_paths = [
 #   "pyproject.toml",
