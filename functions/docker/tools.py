@@ -2,7 +2,7 @@
 import json
 import re
 from typing import Generator, Optional
-from typing import Dict, Generator, Tuple
+from typing import Dict, Tuple
 
 import docker
 from docker.utils.json_stream import json_stream
