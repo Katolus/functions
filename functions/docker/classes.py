@@ -27,7 +27,7 @@ class DockerImage(BaseModel, Generic[DockerImageType]):
 class DockerContainer(BaseModel, Container):
     @property
     def config(self) -> FunctionConfig:
-        ...
+        raise NotImplementedError()
 
 
 class DockerFunction(BaseModel):
