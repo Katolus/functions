@@ -10,12 +10,8 @@ enabled = true
 name = "shell"
 
 [[analyzers]]
+enabled = true
 name = "secrets"
-enabled = true
-
-[[analyzers]]
-enabled = true
-name = "test-coverage"
 
 [[analyzers]]
 dependency_file_paths = [
@@ -27,7 +23,7 @@ name = "python"
 
 [analyzers.meta]
 max_line_length = 88
-runtime_version = "3.9.x"
+runtime_version = "3.x.x"
 skip_doc_coverage = ["magic", "init"]
 type_checker = "mypy"
 

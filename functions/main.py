@@ -65,8 +65,8 @@ def main(
 @app.command()
 def test() -> None:
     """Test command not to be dispayed"""
-    raise ValueError
-    user.inform("End of test command")
+    user.inform("Running a test command")
+    raise ValueError("Throwing an error in a test command")
 
 
 @app.command()
@@ -85,7 +85,7 @@ def build(
     # Load configuration
     config = load_config(full_path)
 
-    image = build_image(config, show_logs)
+    _ = build_image(config, show_logs)
 
     user.inform(
         f"{styles.green('Successfully')} build a function's image. The name of the functions is -> {config.run_variables.name}"
@@ -126,8 +126,8 @@ def stop(
     user.inform(f"Function ({function_name}) has been stopped.")
 
 
-@app.command()
-def list() -> None:
+@app.command("list")
+def list_functions() -> None:
     """List existing functions"""
     functions = all_functions()
     # Check if a function is running at the moment

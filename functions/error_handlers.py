@@ -50,6 +50,6 @@ def check_config_in_path(error: ExceptionClass) -> NoReturn:
 def handle_function_name_with_suggestion(error: ExceptionClass) -> NoReturn:
     error_msg = str(error)
     user.inform(f"Error: {error_msg}")
-    user.inform(f"Unable to continue. See the errors")
+    user.inform("Unable to continue. See the errors")
     # Verbose - Consider renaming the function or removing the old one
     raise typer.Exit()

@@ -16,42 +16,43 @@ app = typer.Typer(help="Factory method for creating new functions")
 @app.command()
 def pubsub(
     function_name: str = FunctionNameArgument(...),
-    dir: str = typer.Option(
+    function_dir: str = typer.Option(
         None,
+        "--dir",
         callback=function_dir_callback,
         help="Directory that will be used as a root of the new function",
     ),
 ) -> None:
     """Creates a new pubsub directory"""
-    function_dir = os.path.join(dir, function_name)
+    function_path = os.path.join(dir, function_name)
 
     add_required_files(
         function_name,
-        function_dir,
+        function_path,
         main_content=defaults.default_entry_hello_pubsub,
         signature_type=SignatureType.PUBSUB,
     )
 
-    user.inform(f"Added a new pubsub function -> {function_dir}")
+    user.inform(f"Added a new pubsub function -> {function_path}")
 
 
 @app.command()
 def http(
     function_name: str = FunctionNameArgument(...),
-    dir: Path = typer.Option(
+    function_dir: Path = typer.Option(
         None,
         callback=function_dir_callback,
         help="Directory that will be used as a root of the new function",
     ),
 ) -> None:
     """Creates a new http directory"""
-    function_dir = os.path.join(dir, function_name)
+    function_path = os.path.join(dir, function_name)
 
     add_required_files(
         function_name,
-        function_dir,
+        function_path,
         main_content=defaults.default_entry_hello_http,
         signature_type=SignatureType.HTTP,
     )
 
-    user.inform(f"Added a new http function to -> {function_dir}")
+    user.inform(f"Added a new http function to -> {function_path}")
