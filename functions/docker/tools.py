@@ -5,10 +5,10 @@ from typing import Generator, Optional
 from typing import Dict, Generator, Tuple
 
 import docker
-import typer
 from docker.utils.json_stream import json_stream
 from pydantic.main import BaseModel
 
+from functions import user
 from functions.config import FunctionConfig
 from functions.constants import DockerLabel
 from functions.docker.classes import DockerContainer, DockerImage
@@ -98,7 +98,7 @@ def build_image(config: FunctionConfig, show_logs: bool) -> DockerImage:
 
         for image_id_chunk, log_chunk in build_generator:
             if show_logs and log_chunk != "\n":
-                typer.echo(log_chunk)
+                user.inform(log_chunk)
 
             if image_id_chunk:
                 # If the chunk is present that means the build has

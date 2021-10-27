@@ -4,6 +4,7 @@ import typer
 
 from functions import __project_name__
 from functions import __version__
+from functions import user
 from functions import styles
 from functions.autocomplete import autocomplete_function_names
 from functions.autocomplete import autocomplete_running_function_names
@@ -21,7 +22,7 @@ from functions.validators import name_validator
 def version_callback(value: bool) -> None:
     """Prints out the version of the package and exists"""
     if value:
-        typer.echo(
+        user.inform(
             f"You are using {styles.bold(__version__)} version of the {styles.bold(__project_name__)} package"
         )
         raise typer.Exit()

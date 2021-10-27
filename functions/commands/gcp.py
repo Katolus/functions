@@ -3,9 +3,9 @@ from typing import Optional
 
 import typer
 
+from functions import user
 from functions.autocomplete import autocomplete_deploy_functions
 from functions.constants import CloudServiceType
-from functions.user import confirm_abort
 from functions.gcp import delete_function, read_logs
 from functions.gcp import deploy_function
 from functions.services import describe_function
@@ -50,7 +50,7 @@ def deploy(
 
     deploy_function(config, CloudServiceType(service_type))
 
-    typer.echo(f"{config.run_variables.name} functions has been deployed to GCP!")
+    user.inform(f"{config.run_variables.name} functions has been deployed to GCP!")
 
 
 @app.command()
@@ -61,9 +61,7 @@ def delete(
     ),
 ) -> None:
     """Deletes a functions deployed to GCP"""
-    # Check if the functions is really deployed. Add to confirmation.
-    # TODO: Implement a delete option with a confirmation
-    confirm_abort(f"Are you sure you want to remove '{function_name}'?")
+    user.confirm_abort(f"Are you sure you want to remove '{function_name}'?")
     delete_function(function_name)
 
 
