@@ -1,12 +1,36 @@
 version = 1
 
+test_patterns = [
+  "tests/**",
+  "test_*.py",
+]
+
 [[analyzers]]
 enabled = true
 name = "shell"
 
 [[analyzers]]
+name = "secrets"
+enabled = true
+
+[[analyzers]]
+enabled = true
+name = "test-coverage"
+
+[[analyzers]]
+dependency_file_paths = [
+  "pyproject.toml",
+  "poetry.lock",
+]
 enabled = true
 name = "python"
 
 [analyzers.meta]
-runtime_version = "3.x.x"
+max_line_length = 88
+runtime_version = "3.9.x"
+skip_doc_coverage = ["magic", "init"]
+type_checker = "mypy"
+
+[[transformers]]
+enabled = true
+name = "black"
