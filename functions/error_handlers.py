@@ -53,4 +53,3 @@ def handle_function_name_with_suggestion(error: ExceptionClass) -> NoReturn:
     user.inform("Unable to continue. See the errors")
     # Verbose - Consider renaming the function or removing the old one
     raise typer.Exit()
-    

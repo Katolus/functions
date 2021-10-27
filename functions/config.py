@@ -110,7 +110,6 @@ class AppConfigManager(BaseModel):
             self._config = self.config_class()
         return self._config
 
-
     def create(self, file_path: str) -> None:
         """Create the configuration file if it does not exist."""
 

@@ -95,6 +95,7 @@ def remove_function_name_callback(
 
     return value
 
+
 @resilient_parsing
 def function_dir_callback(
     ctx: typer.Context, param: typer.CallbackParam, value: str

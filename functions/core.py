@@ -45,6 +45,7 @@ class Functions(BaseModel):
         def wrapper(f):
             new_f = handle_error(f)
             return decorator(new_f)
+
         return wrapper
 
     def command(self, *args, **kwargs):
