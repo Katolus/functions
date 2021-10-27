@@ -1,4 +1,6 @@
-# `functions-cli`
+# `functions-cli` 
+
+[![DeepSource](https://deepsource.io/gh/Katolus/functions.svg/?label=active+issues&show_trend=true&token=NaMzVnONrQ-lLiofAWpYLilG)](https://deepsource.io/gh/Katolus/functions/?ref=repository-badge)
 
 > This package that will get you working with FaaS.
 
