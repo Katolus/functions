@@ -78,7 +78,8 @@ class AppConfigManager(BaseModel):
         # Only on Posix
         os.makedirs(self.base_dir, exist_ok=True)
 
-    def _write(self, file_path: str, content: str) -> None:
+    @staticmethod
+    def _write(file_path: str, content: str) -> None:
         with open(file_path, "w") as file:
             file.write(content)
 
