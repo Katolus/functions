@@ -16,16 +16,6 @@ enabled = true
 [[analyzers]]
 enabled = true
 name = "python"
-# dependency_file_paths = [
-#   "pyproject.toml",
-#   "poetry.lock",
-# ]
-
-    [analyzers.meta]
-    max_line_length = 88
-    runtime_version = "3.9.x"
-    skip_doc_coverage = ["magic", "init"]
-    type_checker = "mypy"
 
 [[transformers]]
 enabled = true
