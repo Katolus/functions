@@ -65,8 +65,8 @@ def main(
 @app.command()
 def test() -> None:
     """Test command not to be dispayed"""
-    raise ValueError
-    user.inform("End of test command")
+    user.inform("Running a test command")
+    raise ValueError('Throwing an error in a test command')
 
 
 @app.command()
