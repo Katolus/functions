@@ -1,8 +1,6 @@
 from functions.constants import DockerLabel
 from typing import Optional
 from typing import List
-
-from functions.constants import DockerLabel
 from functions.config import FunctionConfig
 from functions.system import load_config
 # Add stubs for docker-py
