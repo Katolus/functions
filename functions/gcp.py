@@ -8,7 +8,6 @@ from functions.config import EnvVariables
 from functions.config import FunctionConfig
 from functions.constants import CloudServiceType
 from functions.processes import run_cmd
-from functions.validators import LocalFunctionPath
 from functions.types import NotEmptyStr
 
 GCP_REGION = "australia-southeast1"
@@ -180,7 +179,7 @@ def read_logs(function_name: str):
 
 
 @validate_arguments
-def deploy_c_function(config: FunctionConfig, function_dir: LocalFunctionPath = None):
+def deploy_c_function(config: FunctionConfig):
     """Uses gcloud to deploy a cloud function"""
     cloud_function_name = config.run_variables.name
     run_cmd(
@@ -191,7 +190,7 @@ def deploy_c_function(config: FunctionConfig, function_dir: LocalFunctionPath = 
             cloud_function_name,
         ]
         + GCPCloudFunction.add_runtime_arguments()
-        + GCPCloudFunction.add_source_arguments(str(function_dir or config.path))
+        + GCPCloudFunction.add_source_arguments(str(config.path))
         + add_entry_point_arguments(config.run_variables.entry_point)
         + add_ignore_file_arguments()
         + add_region_argument()

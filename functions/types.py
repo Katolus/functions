@@ -1,15 +1,24 @@
-from typing import Any, Callable, Dict, Generator, Optional, Type, Union
+from pathlib import Path
+from typing import Any
+from typing import Callable
+from typing import Dict
+from typing import Generator
+from typing import Optional
+from typing import Type
+from typing import Union
 
 from pydantic import ConstrainedStr
 
 AnyCallable = Callable[..., Any]
 CallableGenerator = Generator[AnyCallable, None, None]
+DictStrAny = Dict[str, Any]
 NoneBytes = Optional[bytes]
 NoneStr = Optional[str]
 OptionalInt = Optional[int]
-DictStrAny = Dict[str, Any]
+PathStr = Union[Path, str]
 StrBytes = Union[str, bytes]
 
+# Used to represent...
 ExceptionClass = Type[BaseException]
 
 

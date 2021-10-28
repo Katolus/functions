@@ -4,18 +4,18 @@ import typer
 
 from functions import __project_name__
 from functions import __version__
-from functions import user
 from functions import styles
+from functions import user
 from functions.autocomplete import autocomplete_function_names
 from functions.autocomplete import autocomplete_running_function_names
 from functions.decorators import handle_error
 from functions.decorators import resilient_parsing
 from functions.docker.helpers import all_functions
 from functions.errors import FunctionNameTaken
-from functions.user import confirm_abort
 from functions.system import load_config
-from functions.validators import LocalFunctionPath
+from functions.user import confirm_abort
 from functions.validators import name_validator
+from functions.validators import validate_path
 
 
 @handle_error
@@ -31,7 +31,7 @@ def version_callback(value: bool) -> None:
 @handle_error
 def build_function_callack(ctx: typer.Context, param: typer.CallbackParam, value: str):
     """Check if a function name is already an existing function image. Throw an error if so"""
-    config = load_config(LocalFunctionPath(value))
+    config = load_config(value)
     built_function_names = [function.name for function in all_functions()]
 
     if config.run_variables.name in built_function_names:
@@ -104,7 +104,6 @@ def function_dir_callback(
         confirm_abort("Are you sure you want to use the current directory?")
         value = "."
 
-    # Find a better way of doing this
-    local_dir: LocalFunctionPath = value
+    valid_path = validate_path(value)
 
-    return str(local_dir)
+    return str(valid_path)

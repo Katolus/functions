@@ -3,34 +3,33 @@ from typing import Optional
 
 import typer
 
+from functions import logs
 from functions import styles
+from functions import user
 from functions.autocomplete import autocomplete_function_names
 from functions.autocomplete import autocomplete_running_function_names
-from functions.callbacks import (
-    build_function_callack,
-    function_name_autocomplete_callback,
-    version_callback,
-)
+from functions.callbacks import build_function_callack
+from functions.callbacks import function_name_autocomplete_callback
 from functions.callbacks import remove_function_name_callback
 from functions.callbacks import running_functions_autocomplete_callback
+from functions.callbacks import version_callback
 from functions.commands import gcp
 from functions.commands import new
 from functions.constants import LoggingLevel
 from functions.core import Functions
-from functions.docker.helpers import all_functions, get_config_from_image
-from functions.docker.tools import (
-    build_image,
-    get_image,
-    remove_image,
-    run_container,
-    stop_container,
-)
-from functions.styles import blue, green, red
-from functions.system import get_full_path
-from functions.system import load_config
-from functions import logs
-from functions import user
+from functions.docker.helpers import all_functions 
+from functions.docker.helpers import get_config_from_image
+from functions.docker.tools import build_image
+from functions.docker.tools import get_image
+from functions.docker.tools import remove_image
+from functions.docker.tools import run_container
+from functions.docker.tools import stop_container
 from functions.logs import set_logger_level
+from functions.styles import blue
+from functions.styles import green
+from functions.styles import red
+from functions.system import construct_abs_path
+from functions.system import load_config
 
 app = Functions(subcommands=[(new.app, "new"), (gcp.app, "gcp")])
 
@@ -80,7 +79,7 @@ def build(
 ) -> None:
     """Builds an image of a given function"""
     # Get the absolute path
-    full_path = get_full_path(function_path)
+    full_path = construct_abs_path(function_path)
 
     # Load configuration
     config = load_config(full_path)

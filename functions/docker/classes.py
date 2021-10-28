@@ -1,4 +1,8 @@
-from typing import Any, Dict, Generic, Optional, TypeVar
+from typing import Any
+from typing import Dict
+from typing import Generic
+from typing import Optional
+from typing import TypeVar
 
 from docker.models.images import Image
 from docker.models.containers import Container
@@ -7,9 +11,7 @@ from pydantic import PrivateAttr
 
 from functions.config import FunctionConfig
 from functions.constants import DockerLabel
-
 from functions.system import load_config
-from functions.validators import LocalFunctionPath
 
 
 DockerImageType = TypeVar("DockerImageType", bound=Image)
@@ -21,7 +23,7 @@ class DockerImage(BaseModel, Generic[DockerImageType]):
     @property
     def config(self) -> FunctionConfig:
         config_path = self.labels.get(DockerLabel.FUNCTION_PATH)
-        return load_config(LocalFunctionPath(config_path))
+        return load_config(config_path)
 
 
 class DockerContainer(BaseModel, Container):
