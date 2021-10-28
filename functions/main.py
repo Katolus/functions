@@ -17,7 +17,7 @@ from functions.commands import gcp
 from functions.commands import new
 from functions.constants import LoggingLevel
 from functions.core import Functions
-from functions.docker.helpers import all_functions 
+from functions.docker.helpers import all_functions
 from functions.docker.helpers import get_config_from_image
 from functions.docker.tools import build_image
 from functions.docker.tools import get_image

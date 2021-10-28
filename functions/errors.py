@@ -41,8 +41,9 @@ class ConfigNotFoundError(_PathValueError, FunctionBaseError):
 
 
 class PathNotADirectoryError(_PathValueError):
-    code = 'path.not_a_directory'
+    code = "path.not_a_directory"
     msg_template = 'Path "{path}" does not point to a directory'
+
 
 class FunctionBuildError(_DerivedError):
     code = "build.error"
@@ -60,4 +61,3 @@ class FunctionNameTaken(FunctionBaseError):
 
     def __init__(self, name: str, /) -> None:
         super().__init__(name=name)
-
