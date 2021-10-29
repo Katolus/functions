@@ -74,7 +74,7 @@ def add_required_files(
     function_dir: str,
     *,
     main_content: str,
-    signature_type: SignatureType
+    signature_type: SignatureType,
 ):
     """Add required files into the function directory"""
     # Get file contents before creating any system objects

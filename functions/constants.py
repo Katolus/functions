@@ -1,7 +1,7 @@
 import os
-from pathlib import Path
 from enum import Enum
 from enum import unique
+from pathlib import Path
 from typing import List
 
 # Configration

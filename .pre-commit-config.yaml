@@ -28,12 +28,15 @@ repos:
       rev: 4.0.1
       hooks:
           - id: flake8
+            # Uncomment if you don't want to fail on flake8 validation
+            # args: [--exit-zero]
+            # verbose: true
             additional_dependencies: [flake8-typing-imports==1.11.0]
-    - repo: https://github.com/pre-commit/mirrors-mypy
-      rev: v0.910
-      hooks:
-          - id: mypy
-            exclude: tests/
+    # - repo: https://github.com/pre-commit/mirrors-mypy
+    #   rev: v0.910
+    #   hooks:
+    #       - id: mypy
+    #         exclude: tests/
 #         additional_dependencies:
 #           - types-click
 default_language_version:

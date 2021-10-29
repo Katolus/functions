@@ -11,7 +11,7 @@ def FunctionNameArgument(
     *,
     callback=function_name_callback,
     help="Name of a function in alphabetic constrain [i.e new-function]",
-    **kwargs
+    **kwargs,
 ) -> Any:
     return typer.models.ArgumentInfo(
         default=default, callback=callback, help=help, **kwargs

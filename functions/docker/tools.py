@@ -1,8 +1,7 @@
 """Set of functions meant for building, manipulating docker objects."""
 import json
 import re
-from typing import Generator, Optional
-from typing import Dict, Tuple
+from typing import Dict, Generator, Optional, Tuple
 
 import docker
 from docker.utils.json_stream import json_stream
@@ -11,7 +10,8 @@ from pydantic.main import BaseModel
 from functions import user
 from functions.config import FunctionConfig
 from functions.constants import DockerLabel
-from functions.docker.classes import DockerContainer, DockerImage
+from functions.docker.classes import DockerContainer
+from functions.docker.classes import DockerImage
 from functions.docker.client import docker_client
 from functions.errors import FunctionBuildError
 

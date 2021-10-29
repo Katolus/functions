@@ -1,4 +1,4 @@
-"""Stores the core logic for the tool's ways of working. 
+"""Stores the core logic for the tool's ways of working.
 It is an entry point to the package and all ways lead from here out."""
 import functools
 from typing import Any, Sequence, Tuple

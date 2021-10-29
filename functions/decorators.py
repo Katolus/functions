@@ -4,8 +4,8 @@ from typing import Any, Callable, Optional, Tuple
 import typer
 from pydantic import validate_arguments
 
-from functions.errors import FunctionBaseError
 from functions.error_handlers import ERROR_REGISTRY
+from functions.errors import FunctionBaseError
 
 AnyCallableT = Callable[..., Any]
 

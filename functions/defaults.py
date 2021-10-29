@@ -10,7 +10,10 @@ def default_config(
 
     config = FunctionConfig(
         **{
-            "description": f"Generated functions template called '{function_name}' of '{signature_type}' type",
+            "description": str(
+                f"Generated functions template called '{function_name}'"
+                f" of '{signature_type}' type",
+            ),
             "path": function_dir,
             "run_variables": {
                 "source": "main.py",
@@ -94,7 +97,7 @@ default_docker_file = """
 
 # Use the official Python image.
 # https://hub.docker.com/_/python
-FROM python:3.9-slim    
+FROM python:3.9-slim
 
 ARG TARGET="main"
 ARG SOURCE="main.py"

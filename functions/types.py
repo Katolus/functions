@@ -1,11 +1,5 @@
 from pathlib import Path
-from typing import Any
-from typing import Callable
-from typing import Dict
-from typing import Generator
-from typing import Optional
-from typing import Type
-from typing import Union
+from typing import Any, Callable, Dict, Generator, Optional, Type, Union
 
 from pydantic import ConstrainedStr
 
