@@ -4,7 +4,7 @@ description = "CLI tool for managing your FaaS resources"
 name = "functions-cli"
 license = "MIT"
 readme = "README.md"
-version = "0.1.0a3"
+version = "0.1.0"
 classifiers=[
     'Development Status :: 2 - Pre-Alpha',
     'Intended Audience :: Developers',
