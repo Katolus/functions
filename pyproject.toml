@@ -1,10 +1,18 @@
 [tool.poetry]
-authors = ["Katolus <katolus.work@gmail.com>"]
+authors = ["Piotr Katolik <katolus@ventress.org>"]
 description = "CLI tool for managing your FaaS resources"
 name = "functions-cli"
 license = "MIT"
 readme = "README.md"
 version = "0.1.0a3"
+classifiers=[
+    'Development Status :: 2 - Pre-Alpha',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: MIT License',
+    'Natural Language :: English',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.9',
+]
 packages = [
     { include = "functions" },
 ]
@@ -25,9 +33,47 @@ pytest = "^5.2"
 mypy = "^0.910"
 black = {version = "^21.8b0", allow-prereleases = true}
 bpython = "^0.21"
+isort = "^5.9.3"
+flake8 = "^4.0.1"
+pytest-cov = "^3.0.0"
+tox = "^3.24.4"
+pre-commit = "^2.15.0"
+bump2version = "^1.0.1"
 
 [tool.mypy]
 mypy_path = "~/stubs/"
+
+[tool.black]
+line-length = 88
+# skip-string-normalization = true
+target-version = ['py36', 'py37', 'py38', 'py39']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+line_length = 88
+skip_gitignore = true
+# you can skip files as below
+#skip_glob = docs/conf.py
+
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
