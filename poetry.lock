@@ -230,6 +230,17 @@ pycodestyle = ">=2.8.0,<2.9.0"
 pyflakes = ">=2.4.0,<2.5.0"
 
 [[package]]
+name = "flake8-typing-imports"
+version = "1.11.0"
+description = "flake8 plugin which checks that typing imports are properly guarded"
+category = "dev"
+optional = false
+python-versions = ">=3.6.1"
+
+[package.dependencies]
+flake8 = ">=3.7"
+
+[[package]]
 name = "greenlet"
 version = "1.1.2"
 description = "Lightweight in-process concurrent programming"
@@ -651,7 +662,7 @@ test = ["websockets"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "1d7c30859628a2f2b67b5aae0a8c34c7a26c83024122277c93c286c5f0bd9ef4"
+content-hash = "0572d58bdc47ee382f5b75001202498364d79dfb731f9dd43ccb3d2c73cd59c0"
 
 [metadata.files]
 atomicwrites = [
@@ -779,6 +790,10 @@ filelock = [
 flake8 = [
     {file = "flake8-4.0.1-py2.py3-none-any.whl", hash = "sha256:479b1304f72536a55948cb40a32dce8bb0ffe3501e26eaf292c7e60eb5e0428d"},
     {file = "flake8-4.0.1.tar.gz", hash = "sha256:806e034dda44114815e23c16ef92f95c91e4c71100ff52813adf7132a6ad870d"},
+]
+flake8-typing-imports = [
+    {file = "flake8_typing_imports-1.11.0-py2.py3-none-any.whl", hash = "sha256:65ac067a41a68fd5e23fcbe75eab2179f53693f5f68eb9052dd7cc87b7d3b358"},
+    {file = "flake8_typing_imports-1.11.0.tar.gz", hash = "sha256:337b8be2fe28467143cbd86619906ce4c8bbdf9018866cbbd854b6c3c65e2582"},
 ]
 greenlet = [
     {file = "greenlet-1.1.2-cp27-cp27m-macosx_10_14_x86_64.whl", hash = "sha256:58df5c2a0e293bf665a51f8a100d3e9956febfbf1d9aaf8c0677cf70218910c6"},
