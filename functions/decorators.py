@@ -1,8 +1,8 @@
 import functools
 from typing import Any, Callable, Optional, Tuple
 
-from pydantic import validate_arguments
 import typer
+from pydantic import validate_arguments
 
 from functions.error_handlers import ERROR_REGISTRY
 from functions.errors import FunctionBaseError

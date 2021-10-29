@@ -1,6 +1,6 @@
+import os
 from enum import Enum
 from enum import unique
-import os
 from pathlib import Path
 from typing import List
 

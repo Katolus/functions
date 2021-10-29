@@ -1,17 +1,15 @@
 """Stores logic around creating and using a configuration file to amend and enhance the functioning of the package."""
 from __future__ import annotations
+
 import os
 from pathlib import Path
-from typing import Any, Optional
-from typing import Dict
-from typing import List
-from typing import Type
+from typing import Any, Dict, List, Optional, Type
 
 import toml  # type: ignore
 from pydantic import BaseModel
-from functions.constants import ConfigName
 
 from functions.constants import BASE_DIR_NAME
+from functions.constants import ConfigName
 from functions.types import CallableGenerator
 
 

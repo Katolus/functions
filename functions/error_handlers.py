@@ -1,13 +1,12 @@
-from typing import Callable
-from typing import Dict
-from typing import NoReturn
+from typing import Callable, Dict, NoReturn
 
 import typer
 
 from functions import user
-from functions.types import AnyCallable, ExceptionClass
-from functions.errors import ConfigValidationError, FunctionNameTaken
-
+from functions.errors import ConfigValidationError
+from functions.errors import FunctionNameTaken
+from functions.types import AnyCallable
+from functions.types import ExceptionClass
 
 ERROR_REGISTRY_TYPE = Dict[ExceptionClass, Callable]
 

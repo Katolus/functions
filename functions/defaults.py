@@ -94,7 +94,7 @@ default_docker_file = """
 
 # Use the official Python image.
 # https://hub.docker.com/_/python
-FROM python:3.9-slim    
+FROM python:3.9-slim
 
 ARG TARGET="main"
 ARG SOURCE="main.py"
