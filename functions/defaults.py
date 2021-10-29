@@ -10,7 +10,10 @@ def default_config(
 
     config = FunctionConfig(
         **{
-            "description": f"Generated functions template called '{function_name}' of '{signature_type}' type",
+            "description": str(
+                f"Generated functions template called '{function_name}'"
+                f" of '{signature_type}' type",
+            ),
             "path": function_dir,
             "run_variables": {
                 "source": "main.py",

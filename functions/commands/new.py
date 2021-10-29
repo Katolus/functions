@@ -24,7 +24,7 @@ def pubsub(
     ),
 ) -> None:
     """Creates a new pubsub directory"""
-    function_path = os.path.join(dir, function_name)
+    function_path = os.path.join(function_dir, function_name)
 
     add_required_files(
         function_name,
@@ -41,12 +41,13 @@ def http(
     function_name: str = FunctionNameArgument(...),
     function_dir: Path = typer.Option(
         None,
+        "--dir",
         callback=function_dir_callback,
         help="Directory that will be used as a root of the new function",
     ),
 ) -> None:
     """Creates a new http directory"""
-    function_path = os.path.join(dir, function_name)
+    function_path = os.path.join(function_dir, function_name)
 
     add_required_files(
         function_name,

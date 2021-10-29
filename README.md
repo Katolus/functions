@@ -27,7 +27,7 @@ It is using `docker` to build and orchestrate the functions locally. To deploy t
 
 The package is a utility one and it requires underlying software for specific function to be available.
 
-- Python >= 3.9 - for the functioning of the package.
+- Python >= 3.9 - for the functioning of the package. Min - `3.6.2` - to enhance support of types
 - `gcloud` - for deploying to the GCP environment.
 - `docker` - for running any of the functions locally.
 - `poetry` - for running the source code locally.

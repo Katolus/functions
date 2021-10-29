@@ -1,4 +1,7 @@
-"""Stores logic around creating and using a configuration file to amend and enhance the functioning of the package."""
+"""
+Stores logic around creating and using a configuration file to
+amend and enhance the functioning of the package.
+"""
 from __future__ import annotations
 
 import os

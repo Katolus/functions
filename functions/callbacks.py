@@ -5,7 +5,6 @@ import typer
 from functions import __project_name__
 from functions import __version__
 from functions import styles
-from functions import user
 from functions.autocomplete import autocomplete_function_names
 from functions.autocomplete import autocomplete_running_function_names
 from functions.decorators import handle_error
@@ -15,22 +14,24 @@ from functions.errors import FunctionNameTaken
 from functions.system import load_config
 from functions.user import confirm_abort
 from functions.validators import name_validator
-from functions.validators import validate_path
 
 
 @handle_error
 def version_callback(value: bool) -> None:
     """Prints out the version of the package and exists"""
     if value:
-        user.inform(
-            f"You are using {styles.bold(__version__)} version of the {styles.bold(__project_name__)} package"
+        typer.echo(
+            f"You are using {styles.bold(__version__)} version of the "
+            f"{styles.bold(__project_name__)} package"
         )
         raise typer.Exit()
 
 
 @handle_error
 def build_function_callack(ctx: typer.Context, param: typer.CallbackParam, value: str):
-    """Check if a function name is already an existing function image. Throw an error if so"""
+    """
+    Check if a function name is already an existing function image. Throw an error if so
+    """
     config = load_config(value)
     built_function_names = [function.name for function in all_functions()]
 
@@ -49,7 +50,8 @@ def function_name_callback(
         name_validator(value)
     except ValueError:
         raise typer.BadParameter(
-            "Only alphabetic characters with '-' and '_' characters are allowed as function names"
+            "Only alphabetic characters with '-' and '_' characters are allowed"
+            " as function names"
         )
     return value
 
@@ -62,7 +64,8 @@ def function_name_autocomplete_callback(
     build_functions = list(autocomplete_function_names(""))
     if build_functions and value not in build_functions:
         raise typer.BadParameter(
-            f"You can only run build functions {build_functions}. Use autocomplete the pass a valid name."
+            f"You can only run build functions {build_functions}."
+            " Use autocomplete the pass a valid name."
         )
 
     return value
@@ -76,7 +79,8 @@ def running_functions_autocomplete_callback(
         running_functions := list(autocomplete_running_function_names(""))
     ) and value not in running_functions:
         raise typer.BadParameter(
-            f"You can only stop already running functions {running_functions}. Use autocomplete the pass a valid name."
+            f"You can only stop already running functions {running_functions}."
+            " Use autocomplete the pass a valid name."
         )
 
     return value
@@ -90,7 +94,8 @@ def remove_function_name_callback(
         running_functions := list(autocomplete_running_function_names(""))
     ) and value not in running_functions:
         raise typer.BadParameter(
-            f"You can only remove existing functions {running_functions}. Use autocomplete the pass a valid name."
+            f"You can only remove existing functions {running_functions}."
+            " Use autocomplete the pass a valid name."
         )
 
     return value
@@ -104,6 +109,4 @@ def function_dir_callback(
         confirm_abort("Are you sure you want to use the current directory?")
         value = "."
 
-    valid_path = validate_path(value)
-
-    return str(valid_path)
+    return value
