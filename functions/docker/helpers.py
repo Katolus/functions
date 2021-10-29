@@ -1,13 +1,12 @@
-from typing import Optional
-from typing import List
+from typing import List, Optional
 
 # Add stubs for docker-py
 from functions.config import FunctionConfig
 from functions.constants import DockerLabel
-from functions.docker.client import docker_client
 from functions.docker.classes import DockerContainer
 from functions.docker.classes import DockerFunction
 from functions.docker.classes import DockerImage
+from functions.docker.client import docker_client
 from functions.system import load_config
 
 

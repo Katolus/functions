@@ -1,5 +1,5 @@
-from functions import __version__
 from functions import __project_name__
+from functions import __version__
 
 
 def test_version():

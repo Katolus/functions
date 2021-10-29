@@ -1,18 +1,13 @@
-from typing import Any
-from typing import Dict
-from typing import Generic
-from typing import Optional
-from typing import TypeVar
+from typing import Any, Dict, Generic, Optional, TypeVar
 
-from docker.models.images import Image
 from docker.models.containers import Container
+from docker.models.images import Image
 from pydantic import BaseModel
 from pydantic import PrivateAttr
 
 from functions.config import FunctionConfig
 from functions.constants import DockerLabel
 from functions.system import load_config
-
 
 DockerImageType = TypeVar("DockerImageType", bound=Image)
 

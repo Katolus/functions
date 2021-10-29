@@ -1,11 +1,11 @@
-"""Stores the core logic for the tool's ways of working. 
+"""Stores the core logic for the tool's ways of working.
 It is an entry point to the package and all ways lead from here out."""
 import functools
 from typing import Any, Sequence, Tuple
 
-import typer
 from pydantic import BaseModel
 from pydantic import PrivateAttr
+import typer
 from typer.main import get_command
 
 from functions.decorators import handle_error

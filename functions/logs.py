@@ -7,10 +7,10 @@ https://docs.python.org/3/howto/logging-cookbook.html#logging-cookbook
 """
 
 import logging
-import os
-import warnings
-from typing import List
 from logging.handlers import RotatingFileHandler
+import os
+from typing import List
+import warnings
 
 from functions.constants import APP_CONFIG_PATH
 from functions.constants import LoggingLevel
