@@ -60,7 +60,7 @@ class AppFunction(BaseModel):
 class AppConfig(BaseModel, BaseConfig):
     """Holds all the variables for the config file"""
 
-    default_region: str = ""
+    default_region: str = ""  # Transfer this into a GCP section
     files: AppFiles = AppFiles()
     functions: List[AppFunction] = []
     logging: AppLogging = AppLogging()

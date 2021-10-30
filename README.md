@@ -9,6 +9,11 @@
 
 <!-- ![Logo]() -->
 
+<!-- * Documentation: <https://Katolus.github.io/functions> -->
+* GitHub: <https://github.com/Katolus/functions>
+* PyPI: <https://pypi.org/project/functions-cli/>
+* Free software: MIT
+
 **Outstanding items before the first release**:
 - Add the ability to deploy functions in languages other than just Python.
 - Ability to run the package with configuration on other OS than Linux
@@ -18,6 +23,17 @@
 `functions-cli` is a utility package written in Python. It is built to help the developer code, test and deploy FaaS (Function as a Service) resources.
 
 It is using `docker` to build and orchestrate the functions locally. To deploy them to any of the cloud providers you need to have relevant software installed and appropriate authorization to deploy them.
+
+
+## Features
+
+### Locally
+- Build a **locally** stored cloud function using Docker.
+- Generate a new directory for starting new cloud functions. Two types `http`/`pubsub`.
+- Log the interaction with the cloud functions in a locally stored log file.
+
+### GCP
+- Deploy functions to GCP as cloud functions.
 
 ## Compatibility
 
