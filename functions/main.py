@@ -24,7 +24,7 @@ from functions.docker.tools import get_image
 from functions.docker.tools import remove_image
 from functions.docker.tools import run_container
 from functions.docker.tools import stop_container
-from functions.logs import set_logger_level
+from functions.logs import set_console_handler_level
 from functions.styles import blue
 from functions.styles import green
 from functions.styles import red
@@ -57,8 +57,8 @@ def main(
         app.state.verbose = True
         log_level = LoggingLevel.DEBUG
 
-    set_logger_level(log_level)
-    logs.debug(f"Running application in {log_level} log mode.")
+    set_console_handler_level(log_level)
+    logs.debug(f"Running application in {log_level} logging level.")
 
 
 @app.command()
@@ -87,7 +87,8 @@ def build(
     _ = build_image(config, show_logs)
 
     user.inform(
-        f"{styles.green('Successfully')} build a function's image. The name of the functions is -> {config.run_variables.name}"
+        f"{styles.green('Successfully')} build a function's image."
+        " The name of the functions is -> {config.run_variables.name}"
     )
 
 
@@ -107,7 +108,8 @@ def run(
     container = run_container(function_image, config)
 
     user.inform(
-        f"Function ({container.name}) has {green('started')}. Visit -> http://localhost:{config.run_variables.port}"
+        f"Function ({container.name}) has {green('started')}."
+        " Visit -> http://localhost:{config.run_variables.port}"
     )
 
 
@@ -131,6 +133,7 @@ def list_functions() -> None:
     functions = all_functions()
     # Check if a function is running at the moment
     if functions:
+        logs.debug(f"Found {len(functions)} functions.")
         user.inform(f"There are {len(functions)} build and available.\n")
         for function in functions:
             user.inform(

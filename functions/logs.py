@@ -8,7 +8,6 @@ https://docs.python.org/3/howto/logging-cookbook.html#logging-cookbook
 
 import logging
 import os
-import warnings
 from logging.handlers import RotatingFileHandler
 from typing import List
 
@@ -16,7 +15,7 @@ from functions.constants import APP_CONFIG_PATH
 from functions.constants import LoggingLevel
 
 logger = logging.getLogger(__name__)
-
+logger.setLevel(logging.DEBUG)
 
 # File logger
 log_name = "functions.log"
@@ -29,7 +28,7 @@ f_handler = RotatingFileHandler(
     mode="a",
 )
 f_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-f_handler.setLevel(logging.INFO)
+f_handler.setLevel(logging.DEBUG)
 f_handler.setFormatter(f_formatter)
 
 # Console logger
@@ -55,13 +54,10 @@ LOGGING_LEVELS = {
 }
 
 
-def set_logger_level(level: LoggingLevel = LoggingLevel.INFO) -> None:
-    """Set logging level for the application."""
+def set_console_handler_level(level: LoggingLevel = LoggingLevel.INFO) -> None:
+    """Set console logging level for the application."""
     log_level = LOGGING_LEVELS[level]
-
-    logger.setLevel(log_level)
-    for handler in handlers:
-        handler.setLevel(log_level)
+    c_handler.setLevel(log_level)
 
 
 def debug(msg: str) -> None:
@@ -79,11 +75,6 @@ def warning(msg: str) -> None:
     logger.warning(msg)
 
 
-def warn(msg: str, **kwargs) -> None:
-    """Warn a user instead of"""
-    warnings.warn(msg, **kwargs)
-
-
 def error(msg: str) -> None:
     """Use this level to record any error that occurs."""
     logger.error(msg)
@@ -92,3 +83,8 @@ def error(msg: str) -> None:
 def exception(msg: str) -> None:
     """Use this when you want to report an error with a stacktrace."""
     logger.exception(msg)
+
+
+def remove_empty_lines_from_string(string: str) -> str:
+    """Remove empty lines from a string."""
+    return "".join(string.splitlines()).strip()
