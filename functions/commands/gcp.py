@@ -6,9 +6,9 @@ import typer
 from functions import user
 from functions.autocomplete import autocomplete_deploy_functions
 from functions.constants import CloudServiceType
-from functions.gcp import delete_function
-from functions.gcp import deploy_function
-from functions.gcp import read_logs
+from functions.gcp.other import delete_function
+from functions.gcp.other import deploy_function
+from functions.gcp.other import read_logs
 from functions.services import describe_function
 from functions.system import load_config
 

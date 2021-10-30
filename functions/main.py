@@ -24,6 +24,7 @@ from functions.docker.tools import get_image
 from functions.docker.tools import remove_image
 from functions.docker.tools import run_container
 from functions.docker.tools import stop_container
+from functions.gcp.helpers import check_if_gcloud_cmd_installed
 from functions.logs import set_console_handler_level
 from functions.styles import blue
 from functions.styles import green
@@ -31,7 +32,13 @@ from functions.styles import red
 from functions.system import construct_abs_path
 from functions.system import load_config
 
-app = Functions(subcommands=[(new.app, "new"), (gcp.app, "gcp")])
+subcommands = [(new.app, "new")]
+
+# Only add gcp commands if gcloud is installed
+if check_if_gcloud_cmd_installed():
+    subcommands.append((gcp.app, "gcp"))
+
+app = Functions(subcommands=subcommands)
 
 
 @app.callback()

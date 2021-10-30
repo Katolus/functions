@@ -14,3 +14,17 @@ def run_cmd(
 @validate_arguments
 def run_process(cmd_exec: Sequence[str], **kwargs) -> subprocess.Popen:
     return subprocess.Popen(cmd_exec, **kwargs)
+
+
+@validate_arguments
+def check_output(cmd_exec: Sequence[str]) -> str:
+    return subprocess.check_output(cmd_exec, stderr=subprocess.STDOUT).decode()
+
+
+@validate_arguments
+def check_if_cmd_exists(cmd_exec: Sequence[str]) -> bool:
+    try:
+        run_cmd(cmd_exec, capture_output=True)
+        return True
+    except subprocess.CalledProcessError:
+        return False
