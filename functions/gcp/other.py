@@ -204,4 +204,3 @@ def deploy_c_function(config: FunctionConfig):
 def deploy_c_run(function_name: str):
     """Uses gcloud to deploy a cloud run container"""
     raise NotImplementedError("gcloud run is not implemented yet")
-
