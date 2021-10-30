@@ -34,7 +34,7 @@ f_handler.setFormatter(f_formatter)
 # Console logger
 c_handler = logging.StreamHandler()
 c_formatter = logging.Formatter("%(message)s")
-c_handler.setLevel(logging.WARNING)
+c_handler.setLevel(logging.INFO)
 c_handler.setFormatter(c_formatter)
 
 

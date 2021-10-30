@@ -22,11 +22,13 @@ def inform(msg: str, log=True) -> None:
     """Informs a user about something."""
     if log:
         logs.info(logs.remove_empty_lines_from_string(msg))
-    typer.echo(msg)
+    else:
+        typer.echo(msg)
 
 
 def warn(msg: str, log=True) -> None:
     """Warning to a user about something."""
     if log:
         logs.warning(logs.remove_empty_lines_from_string(msg))
-    warnings.warn(msg)
+    else:
+        warnings.warn(msg)
