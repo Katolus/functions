@@ -85,3 +85,15 @@ def logs(
 ) -> None:
     """Reads log from a deployed function"""
     read_logs(function_name)
+
+
+@app.command()
+def list(
+    service: Optional[CloudServiceType] = typer.Option(
+        None,
+        help="Type of service you want to list resources from",
+        autocompletion=CloudServiceType.all,
+    ),
+) -> None:
+    """Lists functions deployed to a service on GCP"""
+    raise NotImplementedError()
