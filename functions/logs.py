@@ -16,7 +16,7 @@ from functions.constants import APP_CONFIG_PATH
 from functions.constants import LoggingLevel
 
 logger = logging.getLogger(__name__)
-
+logger.setLevel(logging.DEBUG)
 
 # File logger
 log_name = "functions.log"
@@ -29,7 +29,7 @@ f_handler = RotatingFileHandler(
     mode="a",
 )
 f_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-f_handler.setLevel(logging.INFO)
+f_handler.setLevel(logging.DEBUG)
 f_handler.setFormatter(f_formatter)
 
 # Console logger
@@ -55,13 +55,10 @@ LOGGING_LEVELS = {
 }
 
 
-def set_logger_level(level: LoggingLevel = LoggingLevel.INFO) -> None:
-    """Set logging level for the application."""
+def set_console_handler_level(level: LoggingLevel = LoggingLevel.INFO) -> None:
+    """Set console logging level for the application."""
     log_level = LOGGING_LEVELS[level]
-
-    logger.setLevel(log_level)
-    for handler in handlers:
-        handler.setLevel(log_level)
+    c_handler.setLevel(log_level)
 
 
 def debug(msg: str) -> None:
