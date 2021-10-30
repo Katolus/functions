@@ -52,13 +52,12 @@ def main(
     """
     Manage users in the awesome CLI app.
     """
-    log_level = LoggingLevel.INFO
     if verbose:
         app.state.verbose = True
         log_level = LoggingLevel.DEBUG
+        set_logger_level(log_level)
 
-    set_logger_level(log_level)
-    logs.debug(f"Running application in {log_level} log mode.")
+        logs.debug(f"Running application in {log_level} log mode.")
 
 
 @app.command()
@@ -87,7 +86,8 @@ def build(
     _ = build_image(config, show_logs)
 
     user.inform(
-        f"{styles.green('Successfully')} build a function's image. The name of the functions is -> {config.run_variables.name}"
+        f"{styles.green('Successfully')} build a function's image."
+        " The name of the functions is -> {config.run_variables.name}"
     )
 
 
@@ -107,7 +107,8 @@ def run(
     container = run_container(function_image, config)
 
     user.inform(
-        f"Function ({container.name}) has {green('started')}. Visit -> http://localhost:{config.run_variables.port}"
+        f"Function ({container.name}) has {green('started')}."
+        " Visit -> http://localhost:{config.run_variables.port}"
     )
 
 

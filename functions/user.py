@@ -1,4 +1,6 @@
 """Holds functions that ask a user for input"""
+import warnings
+
 import typer
 
 from functions import logs
@@ -19,14 +21,12 @@ def confirm_abort(question: str) -> bool:
 def inform(msg: str, log=True) -> None:
     """Informs a user about something."""
     if log:
-        logs.info(msg)
-    else:
-        typer.echo(msg)
+        logs.info(logs.remove_empty_lines_from_string(msg))
+    typer.echo(msg)
 
 
 def warn(msg: str, log=True) -> None:
-    """Warn a user about something."""
+    """Warning to a user about something."""
     if log:
-        logs.warn(msg)
-    else:
-        typer.echo(msg)
+        logs.warning(logs.remove_empty_lines_from_string(msg))
+    warnings.warn(msg)

@@ -8,7 +8,6 @@ https://docs.python.org/3/howto/logging-cookbook.html#logging-cookbook
 
 import logging
 import os
-import warnings
 from logging.handlers import RotatingFileHandler
 from typing import List
 
@@ -16,7 +15,7 @@ from functions.constants import APP_CONFIG_PATH
 from functions.constants import LoggingLevel
 
 logger = logging.getLogger(__name__)
-
+logger.setLevel(logging.INFO)
 
 # File logger
 log_name = "functions.log"
@@ -35,7 +34,7 @@ f_handler.setFormatter(f_formatter)
 # Console logger
 c_handler = logging.StreamHandler()
 c_formatter = logging.Formatter("%(message)s")
-c_handler.setLevel(logging.INFO)
+c_handler.setLevel(logging.WARNING)
 c_handler.setFormatter(c_formatter)
 
 
@@ -79,11 +78,6 @@ def warning(msg: str) -> None:
     logger.warning(msg)
 
 
-def warn(msg: str, **kwargs) -> None:
-    """Warn a user instead of"""
-    warnings.warn(msg, **kwargs)
-
-
 def error(msg: str) -> None:
     """Use this level to record any error that occurs."""
     logger.error(msg)
@@ -92,3 +86,8 @@ def error(msg: str) -> None:
 def exception(msg: str) -> None:
     """Use this when you want to report an error with a stacktrace."""
     logger.exception(msg)
+
+
+def remove_empty_lines_from_string(string: str) -> str:
+    """Remove empty lines from a string."""
+    return "".join(string.splitlines()).strip()
