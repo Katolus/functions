@@ -32,12 +32,12 @@ repos:
             # args: [--exit-zero]
             # verbose: true
             additional_dependencies: [flake8-typing-imports==1.11.0]
-    # - repo: https://github.com/pre-commit/mirrors-mypy
-    #   rev: v0.910
-    #   hooks:
-    #       - id: mypy
-    #         exclude: tests/
-#         additional_dependencies:
-#           - types-click
+    - repo: https://github.com/pre-commit/mirrors-mypy
+      rev: v0.910
+      hooks:
+          - id: mypy
+            exclude: tests/
+          # additional_dependencies:
+          #   - types-click
 default_language_version:
     python: python3.9
