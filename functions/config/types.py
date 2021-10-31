@@ -11,19 +11,10 @@ else:
 import toml
 
 from functions.config.helpers import construct_filepath_in_config
-from functions.system import check_if_file_exists
 
 
 class File(Protocol):
     DEFAULT_CONFIG_FILENAME: str  # Make this a class attribute
-
-    @classmethod
-    def initialize_file(cls) -> None:
-        """Initializes the file"""
-        if check_if_file_exists(cls.filepath()):
-            cls.load()
-        else:
-            cls.create()
 
     @classmethod
     @functools.lru_cache()
@@ -39,7 +30,7 @@ class File(Protocol):
     @classmethod
     def default_content(cls) -> "File":
         """Returns the default content for the file"""
-        raise cls()
+        return cls()
 
     @classmethod
     def write_to_file(cls, content: "File") -> None:

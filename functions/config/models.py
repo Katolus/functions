@@ -1,26 +1,70 @@
+import os
+from typing import ClassVar, Optional
+
 from pydantic import BaseModel
 
-from functions.config.types import File
-from functions.config.types import TOML
-from functions.system import write_to_file
+from functions.constants import ConfigName
+from functions.types import DictStrAny
 
 
-class AppConfig(BaseModel, File, TOML):
+class RunVariables(BaseModel):
     """
-    This class is used to represent the main configuration file.
+    RunVariables class.
     """
 
-    DEFAULT_CONFIG_FILENAME: str = "config.toml"
+    # Add some validation to the variables
 
-    @classmethod
-    def write_to_file(cls, content: "AppConfig") -> None:
-        """Writes a config content to the config file"""
-        write_to_file(cls.filepath(), cls.to_toml(content.dict()))
+    entry_point: str
+    name: str
+    port: int
+    signature_type: str
+    source: str
 
-    @classmethod
-    def load(cls) -> "AppConfig":
-        """
-        Loads the main configuration from file.
-        """
-        filepath = cls.filepath()
-        return cls.parse_obj(cls.from_toml(filepath))
+
+class DeployVariables(BaseModel):
+    """
+    DeployVariables class.
+    """
+
+    # Add some validation to the variables
+
+    allow_unauthenticated: Optional[bool]
+    provider: str
+    service: str
+
+
+class FunctionConfig(BaseModel):
+    """Represents a configuration file of a specific function"""
+
+    path: str
+    config_name: ConfigName = ConfigName.BASE
+    description: str
+    run_variables: RunVariables
+    env_variables: DictStrAny
+    deploy_variables: DeployVariables
+
+    @property
+    def config_path(self) -> str:
+        return os.path.join(self.path, self.config_name)
+
+
+class FunctionRecord(BaseModel):
+    """
+    Represents a function record.
+    """
+
+    name: str
+    config: FunctionConfig
+
+    def __str__(self) -> str:
+        return f"{self.name} - {self.config.description}"
+
+    def remove(self) -> None:
+        ...
+
+
+class AppLogging(BaseModel):
+    """Represents the logging settings of the application"""
+
+    LOG_FILENAME: ClassVar[str] = "functions.log"
+    enabled: bool = False

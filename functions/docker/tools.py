@@ -7,8 +7,9 @@ import docker
 from docker.utils.json_stream import json_stream
 from pydantic.main import BaseModel
 
+from functions import logs
 from functions import user
-from functions.config import FunctionConfig
+from functions.config.models import FunctionConfig
 from functions.constants import DockerLabel
 from functions.docker.classes import DockerContainer
 from functions.docker.classes import DockerImage
@@ -110,6 +111,8 @@ def build_image(config: FunctionConfig, show_logs: bool) -> DockerImage:
         raise FunctionBuildError(error=error)
 
     image = get_image(image_id)
+
+    logs.debug(f"Built image: {image}")
 
     return image
 

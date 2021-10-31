@@ -7,22 +7,19 @@ https://docs.python.org/3/howto/logging-cookbook.html#logging-cookbook
 """
 
 import logging
-import os
 from logging.handlers import RotatingFileHandler
 from typing import List
 
-from functions.constants import APP_CONFIG_PATH
+from functions.config.helpers import construct_filepath_in_config
+from functions.config.models import AppLogging
 from functions.constants import LoggingLevel
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 # File logger
-log_name = "functions.log"
-log_path = os.path.join(APP_CONFIG_PATH, log_name)
-
 f_handler = RotatingFileHandler(
-    log_path,
+    construct_filepath_in_config(AppLogging.LOG_FILENAME),
     backupCount=3,
     maxBytes=1000000,
     mode="a",

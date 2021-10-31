@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from pydantic import PrivateAttr
 from typer.main import get_command
 
+from functions.config.managers import AppConfigManager
 from functions.decorators import handle_error
 
 
@@ -21,6 +22,7 @@ class Functions(BaseModel):
     """Main class, designed to be a wrapper over an underlying Typer class"""
 
     _main: typer.Typer = PrivateAttr()
+    config_manager: AppConfigManager = AppConfigManager()
     subcommands: Sequence[Tuple[typer.Typer, str]]
     state: FunctionsState = FunctionsState()
 

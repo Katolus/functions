@@ -1,8 +1,8 @@
 """Stores and manages application's configuration class"""
 import os
 
+from functions.config.files import AppConfig
 from functions.config.helpers import get_default_system_config_path
-from functions.config.models import AppConfig
 from functions.constants import PACKAGE_BASE_CONFIG_FOLDER
 
 
