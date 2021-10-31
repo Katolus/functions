@@ -1,17 +1,8 @@
-import os
 from enum import Enum
 from enum import unique
-from pathlib import Path
 from typing import List
 
-# Configration
-BASE_DIR_NAME = "ventress-functions"
-CONFIG_FOLDER_NAME = ".config"  # Set based on environment
-APP_CONFIG_PATH = os.path.join(
-    str(Path().home()),
-    CONFIG_FOLDER_NAME,
-    BASE_DIR_NAME,
-)
+PACKAGE_BASE_CONFIG_FOLDER = "ventress-functions"
 
 
 class ConfigName(str, Enum):
@@ -40,6 +31,17 @@ class LoggingLevel(str, Enum):
     ERROR = "error"
     INFO = "info"
     WARNING = "warning"
+
+
+class FunctionStatus(str, Enum):
+    """Represents the status of a function"""
+
+    BUILT = "built"
+    CREATED = "created"
+    DEPLOYED = "deployed"
+    RUNNING = "running"
+    STOPPED = "stopped"
+    UNKNOWN = "unknown"
 
 
 @unique

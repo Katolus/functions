@@ -86,6 +86,8 @@ def build(
 
     _ = build_image(config, show_logs)
 
+    # store the function details in the config
+
     user.inform(
         f"{styles.green('Successfully')} build a function's image."
         " The name of the functions is -> {config.run_variables.name}"

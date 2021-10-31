@@ -5,8 +5,9 @@ from docker.models.images import Image
 from pydantic import BaseModel
 from pydantic import PrivateAttr
 
-from functions.config import FunctionConfig
+from functions.config.models import FunctionConfig
 from functions.constants import DockerLabel
+from functions.constants import FunctionStatus
 from functions.system import load_config
 
 DockerImageType = TypeVar("DockerImageType", bound=Image)
@@ -50,11 +51,11 @@ class DockerFunction(BaseModel):
     @property
     def status(self) -> str:
         """Returns a status of a docker function."""
-        status = "Unknown"
+        status = FunctionStatus.UNKNOWN
         if self.image:
-            status = "Build"
+            status = FunctionStatus.BUILT
         if self.container:
-            status = "Running"
+            status = FunctionStatus.RUNNING
         return status
 
     @property
