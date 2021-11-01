@@ -1,5 +1,5 @@
 import functools
-from typing import Any, Callable, Optional, Tuple
+from typing import Any, Callable, Optional, Tuple, Type
 
 import typer
 from pydantic import validate_arguments
@@ -8,13 +8,14 @@ from functions.error_handlers import ERROR_REGISTRY
 from functions.errors import FunctionBaseError
 
 AnyCallableT = Callable[..., Any]
+FunctionBaseErrorC = Type[FunctionBaseError]
 
 
 @validate_arguments
 def handle_error(
     func: Optional["AnyCallableT"] = None,
     *,
-    error_class: Optional[Tuple[FunctionBaseError, ...]] = None,
+    error_class: Optional[Tuple[FunctionBaseErrorC, ...]] = None,
     message_tmp: str = "Something has happened. Error {error}",
 ):
     """

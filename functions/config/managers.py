@@ -3,8 +3,7 @@ import os
 
 from functions.config.files import AppConfig
 from functions.config.files import FunctionRegistry
-from functions.config.helpers import get_default_system_config_path
-from functions.constants import PACKAGE_BASE_CONFIG_FOLDER
+from functions.constants import PACKAGE_CONFIG_DIR_PATH
 
 
 class AppConfigManager:
@@ -24,8 +23,7 @@ class AppConfigManager:
         For example, Windows.
         """
 
-        system_config_path = get_default_system_config_path()
-        return os.path.join(system_config_path, PACKAGE_BASE_CONFIG_FOLDER)
+        return PACKAGE_CONFIG_DIR_PATH
 
     def make_base_dir(self) -> None:
         """Creates the base directory for the configuration file"""

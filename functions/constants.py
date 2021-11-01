@@ -1,8 +1,27 @@
+import os
+import sys
 from enum import Enum
 from enum import unique
 from typing import List
 
+DEFAULT_LOG_FILE = "functions.log"
+
+# Set system constants based on the current platform
+if sys.platform.startswith("win32"):
+    DEFAULT_SYSTEM_CONFIG_PATH = os.path.join(os.environ["APPDATA"], "config")
+elif sys.platform.startswith("linux"):
+    DEFAULT_SYSTEM_CONFIG_PATH = os.path.join(os.environ["HOME"], ".config")
+elif sys.platform.startswith("darwin"):
+    DEFAULT_SYSTEM_CONFIG_PATH = os.path.join(
+        os.environ["HOME"], "Library", "Application Support"
+    )
+else:
+    DEFAULT_SYSTEM_CONFIG_PATH = os.path.join(os.environ["HOME"], "config")
+
 PACKAGE_BASE_CONFIG_FOLDER = "ventress-functions"
+PACKAGE_CONFIG_DIR_PATH = os.path.join(
+    DEFAULT_SYSTEM_CONFIG_PATH, PACKAGE_BASE_CONFIG_FOLDER
+)
 
 
 class ConfigName(str, Enum):

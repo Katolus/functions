@@ -4,6 +4,7 @@ from typing import ClassVar, Optional
 from pydantic import BaseModel
 
 from functions.constants import ConfigName
+from functions.constants import DEFAULT_LOG_FILE
 from functions.types import DictStrAny
 
 
@@ -66,5 +67,5 @@ class FunctionRecord(BaseModel):
 class AppLogging(BaseModel):
     """Represents the logging settings of the application"""
 
-    LOG_FILENAME: ClassVar[str] = "functions.log"
+    LOG_FILENAME: ClassVar[str] = DEFAULT_LOG_FILE
     enabled: bool = False
