@@ -1,9 +1,9 @@
 import os
 import sys
 
-import pytest
+import pytest  # type: ignore
 
-from functions.config.helpers import get_default_system_config_path
+from functions.constants import PACKAGE_CONFIG_DIR_PATH
 
 
 # Skip if sys.platform is not linux
@@ -11,7 +11,7 @@ from functions.config.helpers import get_default_system_config_path
 def test_getting_default_system_config_path_for_linux():
     # Set home environment variable to home/user
     os.environ["HOME"] = "/home/user"
-    assert get_default_system_config_path() == "/home/user/.config"
+    assert PACKAGE_CONFIG_DIR_PATH == "/home/user/.config"
 
 
 # Skip if sys.platform is not windows
@@ -19,7 +19,7 @@ def test_getting_default_system_config_path_for_linux():
 def test_getting_default_system_config_path_for_windows():
     # Set APPDATA environment variable
     os.environ["APPDATA"] = "C:\\Users\\user\\AppData\\"
-    assert get_default_system_config_path() == "C:\\Users\\user\\AppData\\config"
+    assert PACKAGE_CONFIG_DIR_PATH == "C:\\Users\\user\\AppData\\config"
 
 
 # Skip if sys.platform is not darwin
@@ -27,4 +27,4 @@ def test_getting_default_system_config_path_for_windows():
 def test_getting_default_system_config_path_for_darwin():
     # Set Darwin HOME environment variable
     os.environ["HOME"] = "/Users/user"
-    assert get_default_system_config_path() == "Unknown"
+    assert PACKAGE_CONFIG_DIR_PATH == "Unknown"

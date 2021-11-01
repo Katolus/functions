@@ -8,6 +8,7 @@ from pydantic import ValidationError
 from functions import defaults
 from functions.config.models import FunctionConfig
 from functions.constants import ConfigName
+from functions.constants import PACKAGE_CONFIG_DIR_PATH
 from functions.constants import SignatureType
 from functions.errors import ConfigValidationError
 from functions.types import PathStr
@@ -125,3 +126,10 @@ def write_to_file(filepath: PathStr, content: str) -> None:
 def check_if_file_exists(filepath: PathStr) -> bool:
     """Checks if a file exists."""
     return Path(filepath).exists()
+
+
+def construct_filepath_in_config(filename: str) -> str:
+    """
+    Construct a config filepath based on the system's default config path.
+    """
+    return os.path.join(PACKAGE_CONFIG_DIR_PATH, filename)

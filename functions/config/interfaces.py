@@ -14,7 +14,7 @@ else:
 
 import toml
 
-from functions.config.helpers import construct_filepath_in_config
+from functions.system import construct_filepath_in_config
 
 
 class File(Protocol):

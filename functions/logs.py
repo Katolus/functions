@@ -5,13 +5,13 @@ https://docs.python.org/3/howto/logging.html#when-to-use-logging
 https://docs.python.org/3/howto/logging-cookbook.html#logging-cookbook
 
 """
-
 import logging
+import os
 from logging.handlers import RotatingFileHandler
 
-from functions.config.helpers import construct_filepath_in_config
 from functions.constants import DEFAULT_LOG_FILE
 from functions.constants import LoggingLevel
+from functions.constants import PACKAGE_CONFIG_DIR_PATH
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -32,10 +32,11 @@ logger.addHandler(c_handler)
 
 # Set up the file handler
 f_handler = RotatingFileHandler(
-    filename=construct_filepath_in_config(DEFAULT_LOG_FILE),
+    filename=os.path.join(PACKAGE_CONFIG_DIR_PATH, DEFAULT_LOG_FILE),
     backupCount=3,
     maxBytes=1000000,
     mode="a",
+    delay=True,
 )
 f_handler.setLevel(logging.DEBUG)
 f_handler.setFormatter(
