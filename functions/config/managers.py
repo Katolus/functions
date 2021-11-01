@@ -7,7 +7,6 @@ from functions.constants import PACKAGE_CONFIG_DIR_PATH
 
 
 class AppConfigManager:
-
     """Stores and manages application's configuration files"""
 
     def __init__(self):

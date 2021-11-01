@@ -129,7 +129,5 @@ def check_if_file_exists(filepath: PathStr) -> bool:
 
 
 def construct_filepath_in_config(filename: str) -> str:
-    """
-    Construct a config filepath based on the system's default config path.
-    """
+    """Construct a config filepath based on the system's default config path."""
     return os.path.join(PACKAGE_CONFIG_DIR_PATH, filename)
