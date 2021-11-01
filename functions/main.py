@@ -15,6 +15,9 @@ from functions.callbacks import running_functions_autocomplete_callback
 from functions.callbacks import version_callback
 from functions.commands import gcp
 from functions.commands import new
+from functions.config import remove_function_from_registry
+from functions.config import store_function_info_to_registry
+from functions.constants import FunctionStatus
 from functions.constants import LoggingLevel
 from functions.core import Functions
 from functions.docker.helpers import all_functions
@@ -93,9 +96,13 @@ def build(
 
     _ = build_image(config, show_logs)
 
+    function_name = config.run_variables.name
+    # store the function details in the config
+    store_function_info_to_registry(function_name, config, FunctionStatus.BUILT)
+
     user.inform(
         f"{styles.green('Successfully')} build a function's image."
-        " The name of the functions is -> {config.run_variables.name}"
+        f" The name of the functions is -> {function_name}"
     )
 
 
@@ -116,7 +123,7 @@ def run(
 
     user.inform(
         f"Function ({container.name}) has {green('started')}."
-        " Visit -> http://localhost:{config.run_variables.port}"
+        f" Visit -> http://localhost:{config.run_variables.port}"
     )
 
 
@@ -161,6 +168,7 @@ def remove(
 ) -> None:
     """Removes an image of a functions from the local registry"""
     remove_image(function_name)
+    remove_function_from_registry(function_name)
     user.inform(f"Function ({function_name}) has been removed")
 
 

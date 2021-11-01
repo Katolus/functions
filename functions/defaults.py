@@ -1,4 +1,4 @@
-from functions.config import FunctionConfig
+from functions.config.models import FunctionConfig
 from functions.constants import SignatureType
 from functions.validators import name_validator
 

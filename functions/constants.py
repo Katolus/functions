@@ -1,16 +1,26 @@
 import os
+import sys
 from enum import Enum
 from enum import unique
-from pathlib import Path
 from typing import List
 
-# Configration
-BASE_DIR_NAME = "ventress-functions"
-CONFIG_FOLDER_NAME = ".config"  # Set based on environment
-APP_CONFIG_PATH = os.path.join(
-    str(Path().home()),
-    CONFIG_FOLDER_NAME,
-    BASE_DIR_NAME,
+DEFAULT_LOG_FILE = "functions.log"
+
+# Set system constants based on the current platform
+if sys.platform.startswith("win32"):
+    DEFAULT_SYSTEM_CONFIG_PATH = os.path.join(os.environ["APPDATA"], "config")
+elif sys.platform.startswith("linux"):
+    DEFAULT_SYSTEM_CONFIG_PATH = os.path.join(os.environ["HOME"], ".config")
+elif sys.platform.startswith("darwin"):
+    DEFAULT_SYSTEM_CONFIG_PATH = os.path.join(
+        os.environ["HOME"], "Library", "Application Support"
+    )
+else:
+    DEFAULT_SYSTEM_CONFIG_PATH = os.path.join(os.environ["HOME"], "config")
+
+PACKAGE_BASE_CONFIG_FOLDER = "ventress-functions"
+PACKAGE_CONFIG_DIR_PATH = os.path.join(
+    DEFAULT_SYSTEM_CONFIG_PATH, PACKAGE_BASE_CONFIG_FOLDER
 )
 
 
@@ -40,6 +50,19 @@ class LoggingLevel(str, Enum):
     ERROR = "error"
     INFO = "info"
     WARNING = "warning"
+
+
+class FunctionStatus(str, Enum):
+    """Represents the status of a function"""
+
+    BUILT = "built"
+    DEPLOYED = "deployed"
+    INVALID = "invalid"
+    NEW = "new"
+    REMOVED = "removed"
+    RUNNING = "running"
+    STOPPED = "stopped"
+    UNKNOWN = "unknown"
 
 
 @unique

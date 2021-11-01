@@ -5,11 +5,10 @@ from typing import List, Optional
 
 from pydantic import validate_arguments
 
-from functions.config import app_config
-from functions.config import EnvVariables
-from functions.config import FunctionConfig
+from functions.config.models import FunctionConfig
 from functions.constants import CloudServiceType
 from functions.processes import run_cmd
+from functions.types import DictStrAny
 from functions.types import NotEmptyStr
 
 GCP_REGION = "australia-southeast1"
@@ -92,7 +91,7 @@ class GCPCloudFunction:
         return ["--source", str(function_dir)]
 
 
-def add_env_vars_arguments(env_variables: EnvVariables) -> List[str]:
+def add_env_vars_arguments(env_variables: DictStrAny) -> List[str]:
     """Adds environmental variables to the scope of the deployment if any are present"""
     # https://cloud.google.com/sdk/gcloud/reference/functions/deploy#--set-env-vars
     env_list = []
@@ -130,10 +129,10 @@ def add_ignore_file_arguments(files: Optional[List[str]] = None) -> List[str]:
 
 
 def add_region_argument(region: Optional[str] = None) -> List[str]:
-    _region = region or app_config.config.default_region or GCP_REGION
-    app_config.config.default_region = _region
-    app_config.save()
-    return ["--region", _region]
+    # _region = region or app_config.config.default_region or GCP_REGION
+    # app_config.config.default_region = _region
+    # app_config.save()
+    return ["--region", "_region"]
 
 
 def current_project() -> str:

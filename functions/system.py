@@ -6,8 +6,9 @@ from pydantic import validate_arguments
 from pydantic import ValidationError
 
 from functions import defaults
-from functions.config import FunctionConfig
+from functions.config.models import FunctionConfig
 from functions.constants import ConfigName
+from functions.constants import PACKAGE_CONFIG_DIR_PATH
 from functions.constants import SignatureType
 from functions.errors import ConfigValidationError
 from functions.types import PathStr
@@ -55,6 +56,7 @@ def make_dir(function_dir: str):
     os.makedirs(function_dir, exist_ok=False)
 
 
+# Consider using the write to file method instead of this
 def add_file(function_dir: str, *, filename: str, content: str):
     """Adds a file into a directory with given content"""
     with open(os.path.join(function_dir, filename), "w") as file:
@@ -75,12 +77,13 @@ def add_required_files(
     *,
     main_content: str,
     signature_type: SignatureType,
-):
+) -> FunctionConfig:
     """Add required files into the function directory"""
     # Get file contents before creating any system objects
-    config_content = json.dumps(
-        defaults.default_config(function_name, function_dir, signature_type).dict()
+    function_config = defaults.default_config(
+        function_name, function_dir, signature_type
     )
+    config_content = json.dumps(function_config.dict())
 
     # Make a new directory
     make_dir(function_dir)
@@ -110,3 +113,21 @@ def add_required_files(
 
     # Create a default entry point
     add_file(function_dir, filename="main.py", content=main_content)
+
+    return function_config
+
+
+def write_to_file(filepath: PathStr, content: str) -> None:
+    """Writes content to a file."""
+    with open(filepath, "w") as file:
+        file.write(content)
+
+
+def check_if_file_exists(filepath: PathStr) -> bool:
+    """Checks if a file exists."""
+    return Path(filepath).exists()
+
+
+def construct_filepath_in_config(filename: str) -> str:
+    """Construct a config filepath based on the system's default config path."""
+    return os.path.join(PACKAGE_CONFIG_DIR_PATH, filename)
