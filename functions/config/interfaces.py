@@ -15,8 +15,6 @@ import toml
 
 from functions.config.helpers import construct_filepath_in_config
 
-# FileT = TypeVar('FileT', bound='File')
-
 
 class File(Protocol):
     """
