@@ -14,9 +14,7 @@ from functions.system import write_to_file
 
 
 class AppConfig(BaseModel, File, TOML):
-    """
-    Represents the main configuration file.
-    """
+    """Represents the main configuration file"""
 
     DEFAULT_CONFIG_FILENAME: ClassVar[str] = "config.toml"
 
@@ -30,9 +28,7 @@ class AppConfig(BaseModel, File, TOML):
 
     @classmethod
     def load(cls) -> AppConfig:
-        """
-        Loads the main configuration from file.
-        """
+        """Loads the main configuration from file"""
         filepath = cls.filepath()
         if not check_if_file_exists(filepath):
             cls.create()
@@ -40,9 +36,7 @@ class AppConfig(BaseModel, File, TOML):
 
 
 class FunctionRegistry(BaseModel, File, TOML):
-    """
-    Represents the function registry file.
-    """
+    """Represents the function registry file"""
 
     DEFAULT_REGISTRY_FILENAME = "registry.toml"
     functions: FunctionsMap = {}
@@ -54,9 +48,7 @@ class FunctionRegistry(BaseModel, File, TOML):
 
     @classmethod
     def load(cls) -> FunctionRegistry:
-        """
-        Loads the main configuration from file.
-        """
+        """Loads the main configuration from file"""
         filepath = cls.filepath()
         if not check_if_file_exists(filepath):
             cls.create()
@@ -64,9 +56,7 @@ class FunctionRegistry(BaseModel, File, TOML):
 
     @classmethod
     def add_function(cls, function: FunctionRecord) -> None:
-        """
-        Adds a function to the registry.
-        """
+        """Adds a function to the registry"""
         registry = cls.load()
         # Check if the function already exists
         if function.name in registry.functions:
@@ -79,9 +69,7 @@ class FunctionRegistry(BaseModel, File, TOML):
 
     @classmethod
     def remove_function(cls, function_name: str) -> None:
-        """
-        Removes a function from the registry.
-        """
+        """Removes a function from the registry"""
         registry = cls.load()
         if function_name not in registry.functions:
             raise ValueError(

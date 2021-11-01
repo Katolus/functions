@@ -52,20 +52,14 @@ class File(Protocol):
 
 
 class TOML(Protocol):
-    """
-    Interface for TOML files.
-    """
+    """Interface for TOML files"""
 
     @classmethod
     def from_toml(cls, filepath: str) -> Mapping:
-        """
-        Loads a .toml file.
-        """
+        """Loads a .toml file"""
         return toml.load(filepath)
 
     @classmethod
     def to_toml(cls, config: Dict) -> str:
-        """
-        Returns content from a .toml file.
-        """
+        """Returns content from a .toml file"""
         return toml.dumps(config)
