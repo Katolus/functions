@@ -44,11 +44,13 @@ class FunctionRegistry(BaseModel, File, TOML):
     @classmethod
     def write_to_file(cls, content: FunctionRegistry) -> None:
         """Writes a config content to the config file"""
+
         write_to_file(cls.filepath(), cls.to_toml(content.dict()))
 
     @classmethod
     def load(cls) -> FunctionRegistry:
         """Loads the main configuration from file"""
+
         filepath = cls.filepath()
         if not check_if_file_exists(filepath):
             cls.create()
@@ -57,6 +59,7 @@ class FunctionRegistry(BaseModel, File, TOML):
     @classmethod
     def add_function(cls, function: FunctionRecord) -> None:
         """Adds a function to the registry"""
+
         registry = cls.load()
         # Check if the function already exists
         if function.name in registry.functions:
@@ -70,6 +73,7 @@ class FunctionRegistry(BaseModel, File, TOML):
     @classmethod
     def remove_function(cls, function_name: str) -> None:
         """Removes a function from the registry"""
+
         registry = cls.load()
         if function_name not in registry.functions:
             raise ValueError(

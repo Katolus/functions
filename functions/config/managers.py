@@ -24,13 +24,16 @@ class AppConfigManager:
         in relation to a specific system platform like.
         For example, Windows.
         """
+
         system_config_path = get_default_system_config_path()
         return os.path.join(system_config_path, PACKAGE_BASE_CONFIG_FOLDER)
 
     def make_base_dir(self) -> None:
         """Creates the base directory for the configuration file"""
+
         os.makedirs(self.base_dir_path, exist_ok=True)
 
     def initialize(self):
         """Initializes configuration's scope"""
+
         self.make_base_dir()
