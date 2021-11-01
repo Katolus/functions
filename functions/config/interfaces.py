@@ -7,6 +7,7 @@ from typing import Any, ClassVar, Dict, Mapping, TYPE_CHECKING
 if TYPE_CHECKING:
     from typing import Protocol
 else:
+    # < Python 3.7.2
     # Consider using typing_extensions for this
     # Or maybe assign an ABC class instead if not available
     Protocol = object
