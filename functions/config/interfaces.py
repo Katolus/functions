@@ -18,9 +18,7 @@ from functions.config.helpers import construct_filepath_in_config
 
 
 class File(Protocol):
-    """
-    Interface for working with system files in config directory.
-    """
+    """Interface for working with system files in config directory"""
 
     DEFAULT_CONFIG_FILENAME: ClassVar[str]
 

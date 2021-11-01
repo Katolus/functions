@@ -8,7 +8,6 @@ from functions.constants import PACKAGE_BASE_CONFIG_FOLDER
 
 
 class AppConfigManager:
-
     """Stores and manages application's configuration files"""
 
     def __init__(self):
