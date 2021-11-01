@@ -7,7 +7,8 @@ from functions import defaults
 from functions import user
 from functions.arguments import FunctionNameArgument
 from functions.callbacks import function_dir_callback
-from functions.config import add_function_to_registry
+from functions.config import store_function_info_to_registry
+from functions.constants import FunctionStatus
 from functions.constants import SignatureType
 from functions.system import add_required_files
 
@@ -35,7 +36,7 @@ def pubsub(
     )
 
     # Add function to functions' function registry
-    add_function_to_registry(function_name, config)
+    store_function_info_to_registry(function_name, config, FunctionStatus.NEW)
 
     user.inform(f"Added a new pubsub function -> {function_path}")
 
@@ -60,6 +61,6 @@ def http(
         signature_type=SignatureType.HTTP,
     )
 
-    add_function_to_registry(function_name, config)
+    store_function_info_to_registry(function_name, config, FunctionStatus.NEW)
 
     user.inform(f"Added a new http function to -> {function_path}")

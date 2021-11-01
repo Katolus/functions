@@ -3,8 +3,10 @@ from typing import ClassVar, Optional
 
 from pydantic import BaseModel
 
+from functions import styles
 from functions.constants import ConfigName
 from functions.constants import DEFAULT_LOG_FILE
+from functions.constants import FunctionStatus
 from functions.types import DictStrAny
 
 
@@ -56,12 +58,13 @@ class FunctionRecord(BaseModel):
 
     name: str
     config: FunctionConfig
+    status: FunctionStatus
 
     def __str__(self) -> str:
-        return f"{self.name} - {self.config.description}"
-
-    def remove(self) -> None:
-        ...
+        return (
+            f"Function - {styles.red(self.name)}"
+            f" | Status - {styles.blue(self.status)}"
+        )
 
 
 class AppLogging(BaseModel):

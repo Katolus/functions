@@ -56,8 +56,10 @@ class FunctionStatus(str, Enum):
     """Represents the status of a function"""
 
     BUILT = "built"
-    CREATED = "created"
     DEPLOYED = "deployed"
+    INVALID = "invalid"
+    NEW = "new"
+    REMOVED = "removed"
     RUNNING = "running"
     STOPPED = "stopped"
     UNKNOWN = "unknown"
