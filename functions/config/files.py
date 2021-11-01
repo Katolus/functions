@@ -4,6 +4,7 @@ from typing import ClassVar
 
 from pydantic import BaseModel
 
+from functions import logs
 from functions.config.interfaces import File
 from functions.config.interfaces import TOML
 from functions.config.models import AppLogging
@@ -57,6 +58,11 @@ class FunctionRegistry(BaseModel, File):
         return cls.parse_file(filepath)
 
     @classmethod
+    def check_if_function_in_registry(cls, function_name: str) -> bool:
+        """Checks if a function is in the registry"""
+        return function_name in cls.load().functions
+
+    @classmethod
     def add_function(cls, function: FunctionRecord) -> None:
         """Adds a function to the registry"""
 
@@ -69,6 +75,22 @@ class FunctionRegistry(BaseModel, File):
             )
         registry.functions[function.name] = function
         registry.write_to_file(registry)
+        logs.debug(f"Added function {function.name} to registry")
+
+    @classmethod
+    def update_function(cls, function: FunctionRecord) -> None:
+        """Updates a function in the registry"""
+
+        registry = cls.load()
+        # Check if the function already exists
+        if function.name not in registry.functions:
+            # Swap with a custom error class
+            raise ValueError(
+                f"Function {function.name} does not exist in the registry."
+            )
+        registry.functions[function.name] = function
+        registry.write_to_file(registry)
+        logs.debug(f"Updated function {function.name} in registry")
 
     @classmethod
     def remove_function(cls, function_name: str) -> None:
@@ -81,3 +103,4 @@ class FunctionRegistry(BaseModel, File):
             )
         del registry.functions[function_name]
         registry.write_to_file(registry)
+        logs.debug(f"Removed function {function_name} from registry")
