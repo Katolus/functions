@@ -25,6 +25,8 @@ class AppConfig(BaseModel, File, TOML):
     @classmethod
     def write_to_file(cls, content: AppConfig) -> None:
         """Writes a config content to the config file"""
+
+        logs.debug(f"Writing function registry to file: {cls.filepath()}")
         write_to_file(cls.filepath(), cls.to_toml(content.dict()))
 
     @classmethod
@@ -32,7 +34,9 @@ class AppConfig(BaseModel, File, TOML):
         """Loads the main configuration from file"""
         filepath = cls.filepath()
         if not check_if_file_exists(filepath):
+            logs.debug(f"Config file not found: {filepath}")
             cls.create()
+            logs.debug(f"Config file created: {filepath}")
         return cls.parse_obj(cls.from_toml(filepath))
 
 
@@ -46,6 +50,7 @@ class FunctionRegistry(BaseModel, File):
     def write_to_file(cls, content: FunctionRegistry) -> None:
         """Writes a config content to the config file"""
 
+        logs.debug(f"Writing function registry to file: {cls.filepath()}")
         write_to_file(cls.filepath(), content.json())
 
     @classmethod
