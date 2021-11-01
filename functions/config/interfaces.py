@@ -22,14 +22,14 @@ class File(Protocol):
     Interface for working with system files in config directory.
     """
 
-    DEFAULT_CONFIG_FILENAME: ClassVar[str]
+    DEFAULT_FILENAME: ClassVar[str]
 
     @classmethod
     @functools.lru_cache()
     def filepath(cls) -> str:
         """Returns filepath"""
 
-        return construct_filepath_in_config(cls.DEFAULT_CONFIG_FILENAME)
+        return construct_filepath_in_config(cls.DEFAULT_FILENAME)
 
     @classmethod
     def create(cls) -> None:

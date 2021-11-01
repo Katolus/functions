@@ -16,7 +16,7 @@ from functions.system import write_to_file
 class AppConfig(BaseModel, File, TOML):
     """Represents the main configuration file"""
 
-    DEFAULT_CONFIG_FILENAME: ClassVar[str] = "config.toml"
+    DEFAULT_FILENAME: ClassVar[str] = "config.toml"
 
     default_region: str = ""
     logging: AppLogging = AppLogging()
@@ -38,7 +38,7 @@ class AppConfig(BaseModel, File, TOML):
 class FunctionRegistry(BaseModel, File, TOML):
     """Represents the function registry file"""
 
-    DEFAULT_REGISTRY_FILENAME = "registry.toml"
+    DEFAULT_FILENAME: ClassVar[str] = "registry.toml"
     functions: FunctionsMap = {}
 
     @classmethod
