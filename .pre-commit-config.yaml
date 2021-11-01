@@ -37,7 +37,8 @@ repos:
       hooks:
           - id: mypy
             exclude: tests/
-          # additional_dependencies:
+            additional_dependencies:
+                - types-toml
           #   - types-click
 default_language_version:
     python: python3.9

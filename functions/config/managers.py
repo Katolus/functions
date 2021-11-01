@@ -2,6 +2,7 @@
 import os
 
 from functions.config.files import AppConfig
+from functions.config.files import FunctionRegistry
 from functions.config.helpers import get_default_system_config_path
 from functions.constants import PACKAGE_BASE_CONFIG_FOLDER
 
@@ -13,7 +14,8 @@ class AppConfigManager:
     def __init__(self):
         """Initializes the AppConfigManager class"""
         self.initialize()
-        self.app_config = AppConfig.load()
+        self.app_config = AppConfig
+        self.function_registry = FunctionRegistry
 
     @property
     def base_dir_path(self) -> str:
