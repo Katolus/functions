@@ -8,40 +8,13 @@ https://docs.python.org/3/howto/logging-cookbook.html#logging-cookbook
 
 import logging
 from logging.handlers import RotatingFileHandler
-from typing import List
 
 from functions.config.helpers import construct_filepath_in_config
-from functions.config.models import AppLogging
+from functions.constants import DEFAULT_LOG_FILE
 from functions.constants import LoggingLevel
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-
-# File logger
-f_handler = RotatingFileHandler(
-    construct_filepath_in_config(AppLogging.LOG_FILENAME),
-    backupCount=3,
-    maxBytes=1000000,
-    mode="a",
-)
-f_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-f_handler.setLevel(logging.DEBUG)
-f_handler.setFormatter(f_formatter)
-
-# Console logger
-c_handler = logging.StreamHandler()
-c_formatter = logging.Formatter("%(message)s")
-c_handler.setLevel(logging.INFO)
-c_handler.setFormatter(c_formatter)
-
-
-handlers: List[logging.Handler] = [f_handler, c_handler]
-
-
-# Add handlers to the logger
-for handler in handlers:
-    logger.addHandler(handler)
-
 
 LOGGING_LEVELS = {
     LoggingLevel.INFO: logging.INFO,
@@ -49,6 +22,26 @@ LOGGING_LEVELS = {
     LoggingLevel.WARNING: logging.WARNING,
     LoggingLevel.ERROR: logging.ERROR,
 }
+
+
+# Set up the console handler
+c_handler = logging.StreamHandler()
+c_handler.setLevel(logging.INFO)
+c_handler.setFormatter(logging.Formatter("%(message)s"))
+logger.addHandler(c_handler)
+
+# Set up the file handler
+f_handler = RotatingFileHandler(
+    filename=construct_filepath_in_config(DEFAULT_LOG_FILE),
+    backupCount=3,
+    maxBytes=1000000,
+    mode="a",
+)
+f_handler.setLevel(logging.DEBUG)
+f_handler.setFormatter(
+    logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+)
+logger.addHandler(f_handler)
 
 
 def set_console_handler_level(level: LoggingLevel = LoggingLevel.INFO) -> None:

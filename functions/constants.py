@@ -3,6 +3,7 @@ from enum import unique
 from typing import List
 
 PACKAGE_BASE_CONFIG_FOLDER = "ventress-functions"
+DEFAULT_LOG_FILE = "functions.log"
 
 
 class ConfigName(str, Enum):
