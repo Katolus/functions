@@ -35,17 +35,17 @@ class AppConfig(BaseModel, File, TOML):
         return cls.parse_obj(cls.from_toml(filepath))
 
 
-class FunctionRegistry(BaseModel, File, TOML):
+class FunctionRegistry(BaseModel, File):
     """Represents the function registry file"""
 
-    DEFAULT_FILENAME: ClassVar[str] = "registry.toml"
+    DEFAULT_FILENAME: ClassVar[str] = "registry.json"
     functions: FunctionsMap = {}
 
     @classmethod
     def write_to_file(cls, content: FunctionRegistry) -> None:
         """Writes a config content to the config file"""
 
-        write_to_file(cls.filepath(), cls.to_toml(content.dict()))
+        write_to_file(cls.filepath(), content.json())
 
     @classmethod
     def load(cls) -> FunctionRegistry:
@@ -54,7 +54,7 @@ class FunctionRegistry(BaseModel, File, TOML):
         filepath = cls.filepath()
         if not check_if_file_exists(filepath):
             cls.create()
-        return cls.parse_obj(cls.from_toml(filepath))
+        return cls.parse_file(filepath)
 
     @classmethod
     def add_function(cls, function: FunctionRecord) -> None:
