@@ -76,12 +76,13 @@ def add_required_files(
     *,
     main_content: str,
     signature_type: SignatureType,
-):
+) -> FunctionConfig:
     """Add required files into the function directory"""
     # Get file contents before creating any system objects
-    config_content = json.dumps(
-        defaults.default_config(function_name, function_dir, signature_type).dict()
+    function_config = defaults.default_config(
+        function_name, function_dir, signature_type
     )
+    config_content = json.dumps(function_config.dict())
 
     # Make a new directory
     make_dir(function_dir)
@@ -111,6 +112,8 @@ def add_required_files(
 
     # Create a default entry point
     add_file(function_dir, filename="main.py", content=main_content)
+
+    return function_config
 
 
 def write_to_file(filepath: PathStr, content: str) -> None:
