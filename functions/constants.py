@@ -66,29 +66,15 @@ class FunctionStatus(str, Enum):
 
 
 @unique
-class CloudProvider(Enum):
+class CloudProvider(str, Enum):
     """Represents the various cloud providers supported by the functions package"""
 
-    AWS = ("aws", False)
-    AZURE = ("azure", False)
-    GCP = ("gcp", True)
-    LOCAL = ("local", False)
-    OPENFASS = ("openfass", False)
-    OPENSTACK = ("openstack", False)
-
-    def __init__(self, alias: str, is_enabled: bool):
-        self.alias = alias
-        self.is_enabled = is_enabled
-
-    @classmethod
-    def all(cls) -> List[str]:
-        """Returns all the available providers types"""
-        return [provider.alias for provider in cls]
-
-    @classmethod
-    def supported(cls) -> List[str]:
-        """Returns all the supported providers"""
-        return [provider.alias for provider in cls if provider.is_enabled]
+    AWS = "aws"
+    AZURE = "azure"
+    GCP = "gcp"
+    LOCAL = "local"
+    OPENFASS = "openfass"
+    OPENSTACK = "openstack"
 
 
 @unique
