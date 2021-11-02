@@ -32,8 +32,10 @@ class DeployVariables(BaseModel):
     # Add some validation to the variables
 
     allow_unauthenticated: Optional[bool]
-    provider: str
-    service: str
+    provider: str  # Add supported providers
+    service: str  # Add supported services
+    runtime: str  # Add supported runtimes
+    trigger: Optional[DictStrAny] = None
 
 
 class FunctionConfig(BaseModel):
