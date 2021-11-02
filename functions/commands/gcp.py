@@ -5,10 +5,10 @@ import typer
 
 from functions import user
 from functions.autocomplete import autocomplete_deploy_functions
-from functions.constants import CloudProvider, CloudServiceType
+from functions.cloud import deploy_function
+from functions.constants import CloudServiceType
 from functions.gcp.cloud_function.cli import delete_function
 from functions.gcp.cloud_function.cli import read_logs
-from functions.services import deploy_function
 from functions.system import load_config
 
 app = typer.Typer(help="Deploy functions in GCP")
@@ -46,7 +46,7 @@ def deploy(
     """Deploy a functions to GCP"""
     config = load_config(function_dir)
 
-    deploy_function(config, provider=CloudProvider.GCP)
+    deploy_function(config, provider=config.deploy_variables.provider)
 
     user.inform(f"{config.run_variables.name} functions has been deployed to GCP!")
 
