@@ -5,11 +5,10 @@ import typer
 
 from functions import user
 from functions.autocomplete import autocomplete_deploy_functions
-from functions.constants import CloudServiceType
-from functions.gcp.other import delete_function
-from functions.gcp.other import deploy_function
-from functions.gcp.other import read_logs
-from functions.services import describe_function
+from functions.constants import CloudProvider, CloudServiceType
+from functions.gcp.cloud_function.cli import delete_function
+from functions.gcp.cloud_function.cli import read_logs
+from functions.services import deploy_function
 from functions.system import load_config
 
 app = typer.Typer(help="Deploy functions in GCP")
@@ -46,9 +45,8 @@ def deploy(
 ) -> None:
     """Deploy a functions to GCP"""
     config = load_config(function_dir)
-    service_type = service or config.deploy_variables.service
 
-    deploy_function(config, CloudServiceType(service_type))
+    deploy_function(config, provider=CloudProvider.GCP)
 
     user.inform(f"{config.run_variables.name} functions has been deployed to GCP!")
 
@@ -73,7 +71,7 @@ def describe(
     ),
 ) -> None:
     """Returns information about a deployed function"""
-    describe_function(function_name)
+    raise NotImplementedError
 
 
 @app.command()

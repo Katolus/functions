@@ -1,5 +1,5 @@
 from functions.config.models import FunctionConfig
-from functions.constants import SignatureType
+from functions.constants import CloudProvider, SignatureType
 from functions.validators import name_validator
 
 
@@ -24,7 +24,8 @@ def default_config(
             },
             "env_variables": {},
             "deploy_variables": {
-                "provider": "gcp",
+                "provider": CloudProvider.GCP,
+                "runtime": "python3.7",
                 "service": "cloud_function",
             },
         }

@@ -4,7 +4,7 @@ from typing import ClassVar, Optional
 from pydantic import BaseModel
 
 from functions import styles
-from functions.constants import ConfigName
+from functions.constants import CloudProvider, ConfigName
 from functions.constants import DEFAULT_LOG_FILE
 from functions.constants import FunctionStatus
 from functions.types import DictStrAny
@@ -32,7 +32,7 @@ class DeployVariables(BaseModel):
     # Add some validation to the variables
 
     allow_unauthenticated: Optional[bool]
-    provider: str  # Add supported providers
+    provider: CloudProvider
     service: str  # Add supported services
     runtime: str  # Add supported runtimes
     trigger: Optional[DictStrAny] = None

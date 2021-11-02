@@ -1,4 +1,4 @@
-"""Temporary script holder"""
+"""Holds functions that interact with the gcloud cli tool"""
 
 import itertools
 from typing import List, Optional
@@ -6,13 +6,15 @@ from typing import List, Optional
 from pydantic import validate_arguments
 
 from functions.config.models import FunctionConfig
-from functions.constants import CloudServiceType
 from functions.processes import run_cmd
 from functions.types import DictStrAny
 from functions.types import NotEmptyStr
+from functions.gcp.constants import GCP_RESERVED_VARIABLES
+from functions.gcp.constants import DEFAULT_GCP_REGION
 
-GCP_REGION = "australia-southeast1"
 
+# Preinstalled dependencies
+# https://cloud.google.com/functions/docs/writing/specifying-dependencies-python
 
 # Example ENV variables
 # {
@@ -36,43 +38,6 @@ GCP_REGION = "australia-southeast1"
 #   "LC_CTYPE": "C.UTF-8",
 #   "SERVER_SOFTWARE": "gunicorn/20.0.4",
 # }
-
-# Do not use "GOOGLE_*" property names
-GCP_RESERVED_VARIABLES = {
-    "ENTRY_POINT": {"description": "Reserved: The function to be executed."},
-    "GCP_PROJECT": {"description": "Reserved: The current GCP project ID."},
-    "GCLOUD_PROJECT": {
-        "description": "Reserved: The current GCP project ID (deprecated)."
-    },
-    "GOOGLE_CLOUD_PROJECT": {
-        "description": "Reserved: Not set but reserved for internal use."
-    },
-    "FUNCTION_TRIGGER_TYPE": {
-        "description": "Reserved: The trigger type of the function."
-    },
-    "FUNCTION_NAME": {"description": "Reserved: The name of the function resource."},
-    "FUNCTION_MEMORY_MB": {
-        "description": "Reserved: The maximum memory of the function."
-    },
-    "FUNCTION_TIMEOUT_SEC": {
-        "description": "Reserved: The execution timeout in seconds."
-    },
-    "FUNCTION_IDENTITY": {
-        "description": "Reserved: The current identity (service account) of the function."
-    },
-    "FUNCTION_REGION": {
-        "description": "Reserved: The function region (example: us-central1)."
-    },
-    # Newer below
-    "FUNCTION_TARGET": {"description": "Reserved: The function to be executed."},
-    "FUNCTION_SIGNATURE_TYPE": {
-        "description": "Reserved: The type of the function: http for HTTP functions, and event for event-driven functions."
-    },
-    "K_SERVICE": {"description": "Reserved: The name of the function resource."},
-    "K_REVISION": {"description": "Reserved: The version identifier of the function."},
-    "PORT": {"description": "Reserved: The port over which the function is invoked."},
-}
-
 
 class GCPCloudFunction:
     @classmethod
@@ -132,21 +97,29 @@ def add_region_argument(region: Optional[str] = None) -> List[str]:
     # _region = region or app_config.config.default_region or GCP_REGION
     # app_config.config.default_region = _region
     # app_config.save()
-    return ["--region", "_region"]
+    return ["--region", DEFAULT_GCP_REGION]
 
 
-def current_project() -> str:
-    """Returns current working project"""
-    output = run_cmd(["gcloud", "config", "get-value", "project"])
-    return output.stdout.strip()
+@validate_arguments
+def deploy_function(config: FunctionConfig):
+    """Uses gcloud to deploy a cloud function"""
+    cloud_function_name = config.run_variables.name
+    run_cmd(
+        [
+            "gcloud",
+            "functions",
+            "deploy",
+            cloud_function_name,
+        ]
+        + GCPCloudFunction.add_runtime_arguments()
+        + GCPCloudFunction.add_source_arguments(str(config.path))
+        + add_entry_point_arguments(config.run_variables.entry_point)
+        + add_ignore_file_arguments()
+        + add_region_argument()
+        + add_env_vars_arguments(config.env_variables)
+        + GCPCloudFunction.add_trigger_arguments()
+    )
 
-
-def deploy_function(config: FunctionConfig, service_type: CloudServiceType):
-    """Deploys a function to a given service"""
-    if service_type == CloudServiceType.CLOUD_FUNCTION:
-        deploy_c_function(config)
-    else:
-        raise NotImplementedError()
 
 
 def delete_function(function_name: str):
@@ -177,29 +150,3 @@ def read_logs(function_name: str):
         ]
         + add_region_argument()
     )
-
-
-@validate_arguments
-def deploy_c_function(config: FunctionConfig):
-    """Uses gcloud to deploy a cloud function"""
-    cloud_function_name = config.run_variables.name
-    run_cmd(
-        [
-            "gcloud",
-            "functions",
-            "deploy",
-            cloud_function_name,
-        ]
-        + GCPCloudFunction.add_runtime_arguments()
-        + GCPCloudFunction.add_source_arguments(str(config.path))
-        + add_entry_point_arguments(config.run_variables.entry_point)
-        + add_ignore_file_arguments()
-        + add_region_argument()
-        + add_env_vars_arguments(config.env_variables)
-        + GCPCloudFunction.add_trigger_arguments()
-    )
-
-
-def deploy_c_run(function_name: str):
-    """Uses gcloud to deploy a cloud run container"""
-    raise NotImplementedError("gcloud run is not implemented yet")

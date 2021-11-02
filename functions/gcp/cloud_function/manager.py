@@ -10,6 +10,7 @@ from .errors import DeploymentError
 credentials, default_project_id = google.auth.default()
 
 
+# TODO: Figure out how to handle gcs uploads
 def deploy(
     function_name: str,
     *,
@@ -23,14 +24,17 @@ def deploy(
     """
     Deploy a cloud function to a project and region.
     """
+    # Upload the function to GCS
+
 
     service = build("cloudfunctions", "v1", credentials=credentials)
 
+    location = f"projects/{project_id}/locations/{region}"
     body = {
-        "name": function_name,
-        "sourceArchiveUrl": source_path,
+        "name": f"{location}/functions/{function_name}",
+        "sourceArchiveUrl": source_path,  # This is a problem, cause it needs to be hosted
         "entryPoint": entry_point,
-        "runtime": runtime,
+        "runtime": "python37",
         "httpsTrigger": {},
     }
     if trigger:
@@ -41,7 +45,7 @@ def deploy(
         .locations()
         .functions()
         .create(
-            parent=f"projects/{project_id}/locations/{region}",
+            location=f"projects/{project_id}/locations/{region}",
             body=body,
         )
     )
