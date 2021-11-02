@@ -44,7 +44,7 @@ pytest-cov = "^3.0.0"
 tox = "^3.24.4"
 types-toml = "^0.10.1"
 
-[tool.poetry.extra]
+[tool.poetry.extras]
 gcp = [
   "google-api-python-client",
   "google-auth",
