@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Any, Dict
 
 DEFAULT_GCP_REGION: str = "australia-southeast1"
@@ -42,3 +43,11 @@ GCP_RESERVED_VARIABLES: Dict[str, Any] = {
     "K_REVISION": {"description": "Reserved: The version identifier of the function."},
     "PORT": {"description": "Reserved: The port over which the function is invoked."},
 }
+
+
+class GCPServices(str, Enum):
+    """
+    Enum of GCP services.
+    """
+
+    CLOUD_FUNCTIONS = "cloudfunctions"
