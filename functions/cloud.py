@@ -9,7 +9,7 @@ def deploy_function(config: FunctionConfig, provider: CloudProvider = None):
     provider = provider or deploy_variables.provider
 
     if config.deploy_variables.provider == CloudProvider.GCP:
-        from functions.gcp.cloud_function import deploy
+        from functions.gcp.services import deploy
 
         return deploy(config)
     if deploy_variables.provider in CloudProvider.all():
