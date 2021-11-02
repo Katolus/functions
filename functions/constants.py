@@ -66,6 +66,28 @@ class FunctionStatus(str, Enum):
 
 
 @unique
+class CloudProvider(str, Enum):
+    """Represents the various cloud providers supported by the functions package"""
+
+    AWS = ("aws", False)
+    AZURE = ("azure", False)
+    GCP = ("gcp", True)
+    LOCAL = ("local", False)
+    OPENFASS = ("openfass", False)
+    OPENSTACK = ("openstack", False)
+
+    @classmethod
+    def all(cls) -> List[str]:
+        """Returns all the available providers types"""
+        return [enum.value[0] for enum in cls]
+
+    @classmethod
+    def supported(cls) -> List[str]:
+        """Returns all the supported providers"""
+        return [enum.value[0] for enum in cls if enum.value[1]]
+
+
+@unique
 class CloudServiceType(str, Enum):
     CLOUD_FUNCTION = "cloud_function"
 
