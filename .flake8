@@ -1,6 +1,7 @@
 [flake8]
 # required by black, https://github.com/psf/black/blob/master/.flake8
-max-line-length = 88
+max-line-length = 120
+max-doc-length = 120
 max-complexity = 10
 ; Set minimum version so that type availability is ensured
 min_python_version = 3.6.2
