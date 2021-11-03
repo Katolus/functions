@@ -7,13 +7,12 @@ from functions.docker.classes import DockerContainer
 from functions.docker.classes import DockerFunction
 from functions.docker.classes import DockerImage
 from functions.docker.client import docker_client
-from functions.system import load_config
 
 
 def get_config_from_image(image: DockerImage) -> FunctionConfig:
     """Returns a function config from a given function image"""
     config_path = image.labels.get(DockerLabel.FUNCTION_PATH)
-    return load_config(config_path)
+    return FunctionConfig.load(config_path)
 
 
 def get_function_name_from_labels(labels: dict) -> Optional[str]:

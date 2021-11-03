@@ -8,7 +8,6 @@ from pydantic import PrivateAttr
 from functions.config.models import FunctionConfig
 from functions.constants import DockerLabel
 from functions.constants import FunctionStatus
-from functions.system import load_config
 
 DockerImageType = TypeVar("DockerImageType", bound=Image)
 
@@ -19,7 +18,7 @@ class DockerImage(BaseModel, Generic[DockerImageType]):
     @property
     def config(self) -> FunctionConfig:
         config_path = self.labels.get(DockerLabel.FUNCTION_PATH)
-        return load_config(config_path)
+        return FunctionConfig.load(config_path)
 
 
 class DockerContainer(BaseModel, Container):

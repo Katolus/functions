@@ -2,41 +2,13 @@ import json
 import os
 from pathlib import Path
 
-from pydantic import validate_arguments
-from pydantic import ValidationError
-
 from functions import defaults
 from functions import logs
-from functions.config.errors import ConfigValidationError
 from functions.config.models import FunctionConfig
 from functions.constants import ConfigName
 from functions.constants import PACKAGE_CONFIG_DIR_PATH
 from functions.constants import SignatureType
 from functions.types import PathStr
-from functions.validators import validate_path
-
-
-@validate_arguments
-def load_config(config_dir: PathStr) -> FunctionConfig:
-    """Load a configuration file into a Python object."""
-    # Validate directory
-    valid_dir = validate_path(config_dir)
-
-    # Read the config
-    config = {}
-    with open(construct_config_path(valid_dir), "r") as file:
-        config = json.load(file)
-
-    # Add explanation
-    config["path"] = str(valid_dir) if valid_dir else config.get("path")
-
-    # Try to validate config format
-    try:
-        valid_config = FunctionConfig(**config)
-    except ValidationError as error:
-        raise ConfigValidationError(error=error)
-
-    return valid_config
 
 
 def construct_abs_path(path: PathStr) -> Path:
