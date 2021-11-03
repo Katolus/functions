@@ -29,7 +29,7 @@ repos:
       hooks:
           - id: flake8
             # Uncomment if you don't want to fail on flake8 validation
-            # args: [--exit-zero]
+            args: [--max-line-length, '120']
             # verbose: true
             additional_dependencies: [flake8-typing-imports==1.11.0]
     - repo: https://github.com/pre-commit/mirrors-mypy
