@@ -3,12 +3,15 @@ from typing import Optional
 
 import typer
 
+from functions import cloud
 from functions import user
 from functions.autocomplete import autocomplete_deploy_functions
 from functions.cloud import deploy_function
+from functions.constants import CloudProvider
 from functions.constants import CloudServiceType
 from functions.gcp.cloud_function.cli import delete_function
-from functions.gcp.cloud_function.cli import read_logs
+
+# from functions.gcp.cloud_function.cli import read_logs
 from functions.system import load_config
 
 app = typer.Typer(help="Deploy functions in GCP")
@@ -37,6 +40,12 @@ def deploy(
         help="Path to the functions you want to deploy",
         resolve_path=True,
     ),
+    function_name: Optional[str] = typer.Option(
+        None,
+        "--name",
+        "-n",
+        help="Name of the function you want to deploy",
+    ),
     service: Optional[CloudServiceType] = typer.Option(
         None,
         help="Type of service you want this resource to be deploy to",
@@ -46,7 +55,10 @@ def deploy(
     """Deploy a functions to GCP"""
     config = load_config(function_dir)
 
-    deploy_function(config, provider=config.deploy_variables.provider)
+    function_name = function_name or config.run_variables.name
+    deploy_function(
+        function_name, config=config, provider=config.deploy_variables.provider
+    )
 
     user.inform(f"{config.run_variables.name} functions has been deployed to GCP!")
 
@@ -82,7 +94,7 @@ def logs(
     ),
 ) -> None:
     """Reads log from a deployed function"""
-    read_logs(function_name)
+    cloud.read_logs(function_name, provider=CloudProvider.GCP)
 
 
 @app.command()

@@ -50,4 +50,4 @@ class GCPServices(str, Enum):
     Enum of GCP services.
     """
 
-    CLOUD_FUNCTIONS = "cloudfunctions"
+    CLOUD_FUNCTION = "cloud_function"
