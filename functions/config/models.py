@@ -4,7 +4,6 @@ import os
 from typing import ClassVar, Optional
 
 from pydantic import BaseModel
-from pydantic.decorator import validate_arguments
 from pydantic.error_wrappers import ValidationError
 
 from functions import styles
@@ -74,7 +73,6 @@ class FunctionConfig(BaseModel):
         return FunctionRegistry.get_function_record(function_name).config
 
     @classmethod
-    @validate_arguments
     def load(cls, path: PathStr, /) -> FunctionConfig:
         """
         Load a function's configuration from the given path.
