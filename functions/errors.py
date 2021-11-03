@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Optional
 
 from functions.types import ExceptionClass
 
@@ -6,9 +6,9 @@ from functions.types import ExceptionClass
 class FunctionBaseError(Exception):
     code: str
     msg_template: str
-    original_error: ExceptionClass
+    original_error: Optional[ExceptionClass]
 
-    def __init__(self, *, error: ExceptionClass, **kwargs: Any) -> None:
+    def __init__(self, *, error: ExceptionClass = None, **kwargs: Any) -> None:
         self.original_error = error
         self.__dict__ = kwargs
         super().__init__()

@@ -14,7 +14,7 @@ else:
 
 import toml
 
-from functions.system import construct_filepath_in_config
+from functions.system import construct_filepath_in_config_dir
 
 
 class File(Protocol):
@@ -27,7 +27,7 @@ class File(Protocol):
     def filepath(cls) -> str:
         """Returns filepath"""
 
-        return construct_filepath_in_config(cls.DEFAULT_FILENAME)
+        return construct_filepath_in_config_dir(cls.DEFAULT_FILENAME)
 
     @classmethod
     def create(cls) -> None:

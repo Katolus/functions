@@ -71,7 +71,7 @@ def error(msg: str) -> None:
     logger.error(msg)
 
 
-def exception(msg: str) -> None:
+def exception(msg: object) -> None:
     """Use this when you want to report an error with a stacktrace."""
     logger.exception(msg)
 

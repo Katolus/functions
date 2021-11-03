@@ -6,11 +6,12 @@ from pydantic import validate_arguments
 from pydantic import ValidationError
 
 from functions import defaults
+from functions import logs
+from functions.config.errors import ConfigValidationError
 from functions.config.models import FunctionConfig
 from functions.constants import ConfigName
 from functions.constants import PACKAGE_CONFIG_DIR_PATH
 from functions.constants import SignatureType
-from functions.errors import ConfigValidationError
 from functions.types import PathStr
 from functions.validators import validate_path
 
@@ -51,9 +52,11 @@ def construct_config_path(
     return Path(os.path.join(full_path, config_name))
 
 
-def make_dir(function_dir: str):
-    """Creates a directory will throw an error if a directory exists already."""
-    os.makedirs(function_dir, exist_ok=False)
+def make_dir(function_dir: str) -> None:
+    """Makes a directory or skips if already exists"""
+    if not os.path.exists(function_dir):
+        os.makedirs(function_dir)
+        logs.debug(f"Created directory {function_dir}")
 
 
 # Consider using the write to file method instead of this
@@ -128,6 +131,6 @@ def check_if_file_exists(filepath: PathStr) -> bool:
     return Path(filepath).exists()
 
 
-def construct_filepath_in_config(filename: str) -> str:
+def construct_filepath_in_config_dir(filename: str) -> str:
     """Construct a config filepath based on the system's default config path."""
     return os.path.join(PACKAGE_CONFIG_DIR_PATH, filename)

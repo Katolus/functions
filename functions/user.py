@@ -32,3 +32,11 @@ def warn(msg: str, log=True) -> None:
         logs.warning(logs.remove_empty_lines_from_string(msg))
     else:
         warnings.warn(msg)
+
+
+def fail(msg: str, log=True) -> None:
+    """Inform a user about a failed execution"""
+    if log:
+        logs.error(logs.remove_empty_lines_from_string(msg))
+    else:
+        warnings.warn(msg)
