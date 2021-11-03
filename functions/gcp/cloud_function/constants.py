@@ -1,40 +1,56 @@
 from enum import Enum
 
+# Example ENV variables
+# {
+#   "GCF_BLOCK_RUNTIME_go112": "410",
+#   "FUNCTION_TARGET": "main",
+#   "HOME": "/root",
+#   "K_REVISION": "2",
+#   "PYTHONUSERBASE": "/layers/google.python.pip/pip",
+#   "PYTHONDONTWRITEBYTECODE": "1",
+#   "DEBIAN_FRONTEND": "noninteractive",
+#   "FUNCTION_SIGNATURE_TYPE": "http",
+#   "PORT": "8080",
+#   "GCF_BLOCK_RUNTIME_nodejs6": "410",
+#   "PWD": "/workspace",
+#   "GAE_RUNTIME": "python39",
+#   "K_SERVICE": "test-funcion",
+#   "PYTHONUNBUFFERED": "1",
+#   "PATH": "/layers/google.python.pip/pip/bin:/opt/python3.9/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+#   "S2A_ACCESS_TOKEN": "e13755294ada4a6059f3cf3683a7b2f30b0052938e522063e640386830c6bdab",
+#   "LD_LIBRARY_PATH": "/layers/google.python.pip/pip/lib",
+#   "LC_CTYPE": "C.UTF-8",
+#   "SERVER_SOFTWARE": "gunicorn/20.0.4",
+# }
+
 
 class Runtime(str, Enum):
     """
     Runtime constants for Cloud Functions.
     """
-    PYTHON37 = 'python37'
-    NODEJS10 = 'nodejs10'
-    NODEJS12 = 'nodejs12'
-    NODEJS14 = 'nodejs14'
-    NODEJS8 = 'nodejs8'
-    JAVA8 = 'java8'
-    GO111 = 'go111'
-    GO = 'go'
-    PHP56 = 'php56'
-    PHP70 = 'php70'
-    PHP71 = 'php71'
-    PYTHON35 = 'python35'
-    PYTHON36 = 'python36'
-    PYTHON38 = 'python38'
-    CLOUD_FUNCTION = 'cloud_function'
 
-# nodejs10: Node.js 10
-# nodejs12: Node.js 12
-# nodejs14: Node.js 14
-# nodejs16: Node.js 16 (preview)
-# php74: PHP 7.4
-# python37: Python 3.7
-# python38: Python 3.8
-# python39: Python 3.9
-# go111: Go 1.11
-# go113: Go 1.13
-# go116: Go 1.16 (preview)
-# java11: Java 11
-# dotnet3: .NET Framework 3
-# ruby26: Ruby 2.6
-# ruby27: Ruby 2.7
-# nodejs6: Node.js 6 (deprecated)
-# nodejs8: Node.js 8 (deprecated)
+    PYTHON37 = "python37"
+    PYTHON38 = "python38"
+    PYTHON39 = "python39"
+    NODEJS10 = "nodejs10"
+    NODEJS12 = "nodejs12"
+    NODEJS14 = "nodejs14"
+    NODEJS16 = "nodejs16"
+    JAVA11 = "java11"
+    GO111 = "go111"
+    GO113 = "go113"
+    GO116 = "go116"
+    DOTNET3 = "dotnet3"
+    PHP74 = "php74"
+    RUBY26 = "ruby26"
+    RUBY27 = "ruby27"
+
+
+class Trigger(str, Enum):
+    """
+    Trigger constants for Cloud Functions.
+    """
+
+    HTTP = "--trigger-http"
+    PUBSUB = "--trigger-topic"
+    BUCKET = "--trigger-bucket"
