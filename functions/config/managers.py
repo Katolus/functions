@@ -1,7 +1,6 @@
 """Stores and manages application's configuration class"""
 import os
 
-from functions import logs
 from functions.config.files import AppConfig
 from functions.config.files import FunctionRegistry
 from functions.constants import PACKAGE_CONFIG_DIR_PATH
@@ -29,10 +28,6 @@ class AppConfigManager:
     def make_base_dir(self) -> None:
         """Creates the base directory for the configuration file"""
 
-        logs.debug(
-            f"Creating base directory for package's configuration"
-            f" files: {self.base_dir_path}"
-        )
         os.makedirs(self.base_dir_path, exist_ok=True)
 
     def initialize(self):

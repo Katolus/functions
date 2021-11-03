@@ -1,10 +1,13 @@
+from __future__ import annotations
+
 import os
 from typing import ClassVar, Optional
 
 from pydantic import BaseModel
 
 from functions import styles
-from functions.constants import CloudProvider, ConfigName
+from functions.constants import CloudProvider
+from functions.constants import ConfigName
 from functions.constants import DEFAULT_LOG_FILE
 from functions.constants import FunctionStatus
 from functions.types import DictStrAny
@@ -35,7 +38,8 @@ class DeployVariables(BaseModel):
     provider: CloudProvider
     service: str  # Add supported services
     runtime: str  # Add supported runtimes
-    trigger: Optional[DictStrAny] = None
+    trigger: Optional[str] = None
+    region: str
 
 
 class FunctionConfig(BaseModel):
@@ -51,6 +55,18 @@ class FunctionConfig(BaseModel):
     @property
     def config_path(self) -> str:
         return os.path.join(self.path, self.config_name)
+
+    @classmethod
+    def fetch(cls, function_name: str, /) -> FunctionConfig:
+        """
+        Fetch a function's configuration from the given function name.
+        """
+        # Consider order of precedence:
+        # 1. Config file in the function's directory
+        # 2. Config file in the function's registry
+        from functions.config.files import FunctionRegistry
+
+        return FunctionRegistry.get_function_record(function_name).config
 
 
 class FunctionRecord(BaseModel):

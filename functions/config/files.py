@@ -68,6 +68,11 @@ class FunctionRegistry(BaseModel, File):
         return function_name in cls.load().functions
 
     @classmethod
+    def get_function_record(cls, function_name: str) -> FunctionRecord:
+        """Returns the function record for a function"""
+        return cls.load().functions[function_name]
+
+    @classmethod
     def add_function(cls, function: FunctionRecord) -> None:
         """Adds a function to the registry"""
 
