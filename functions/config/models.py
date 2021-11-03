@@ -82,14 +82,14 @@ class FunctionConfig(BaseModel):
 
         try:
             # Read the config file
-            with open(valid_path, "r") as config_file:
+            with open(os.path.join(valid_path, ConfigName.BASE), "r") as config_file:
                 # Load as JSON
                 config = cls.parse_raw(config_file.read())
         except ValidationError as error:
             raise ConfigValidationError(error=error, path=valid_path)
 
         # Update the path in config in case changed
-        config.path = os.path.dirname(valid_path)
+        config.path = str(valid_path)
         return config
 
 
