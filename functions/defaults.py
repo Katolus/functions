@@ -1,5 +1,10 @@
 from functions.config.models import FunctionConfig
-from functions.constants import CloudProvider, SignatureType
+from functions.constants import CloudProvider
+from functions.constants import CloudServiceType
+from functions.constants import SignatureType
+from functions.gcp.cloud_function.constants import Runtime as GCP_Runtime
+from functions.gcp.cloud_function.constants import Trigger
+from functions.gcp.constants import DEFAULT_GCP_REGION
 from functions.validators import name_validator
 
 
@@ -25,8 +30,10 @@ def default_config(
             "env_variables": {},
             "deploy_variables": {
                 "provider": CloudProvider.GCP,
-                "runtime": "python3.7",
-                "service": "cloud_function",
+                "runtime": GCP_Runtime.PYTHON37,
+                "service": CloudServiceType.CLOUD_FUNCTION,
+                "region": DEFAULT_GCP_REGION,
+                "trigger": Trigger.HTTP,
             },
         }
     )
