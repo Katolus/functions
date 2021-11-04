@@ -1,6 +1,14 @@
 from typing import Any, Optional
 
+from click.exceptions import UsageError as ClickUsageError
+
 from functions.types import ExceptionClass
+
+
+class UsageError(ClickUsageError):
+    """Wrapper class over click's error handler class"""
+
+    pass
 
 
 class FunctionBaseError(Exception):
@@ -14,7 +22,11 @@ class FunctionBaseError(Exception):
         super().__init__()
 
     def __str__(self) -> str:
-        return self.msg_template.format(**self.__dict__)
+        return (
+            self.msg_template.format(**self.__dict__)
+            if self.msg_template
+            else "Unknown error occurred"
+        )
 
     @property
     def message(self) -> str:
