@@ -154,8 +154,6 @@ def fetch_function_logs(function: FunctionRecord):
 def fetch_function_names() -> str:
     """Returns a list of cloud function names"""
     logs.debug("Fetching cloud function names")
-    cmd_result = run_cmd(
-        ["gcloud", "functions", "list", "--format", "json"] + add_region_argument()
-    )
+    cmd_result = run_cmd(["gcloud", "functions", "list", "--format", "json"])
     logs.debug(f"Fetched cloud function names: {cmd_result.stdout}")
     return cmd_result.stdout

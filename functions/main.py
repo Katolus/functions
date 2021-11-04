@@ -80,16 +80,19 @@ def test() -> None:
 
 @app.command()
 def build(
-    function_path: Path = typer.Argument(
+    function_dir: Path = typer.Argument(
         ...,
-        help="Path to the functions you want to build",
+        help="Path to  a function's directory you want to build",
+        exists=True,
+        file_okay=False,
+        resolve_path=True,
         callback=build_function_callack,
     ),
     show_logs: bool = typer.Option(False, "--show-logs", help="Show build logs"),
 ) -> None:
     """Builds an image of a given function"""
     # Get the absolute path
-    full_path = construct_abs_path(function_path)
+    full_path = construct_abs_path(function_dir)
 
     # Load configuration
     config = FunctionConfig.load(full_path)

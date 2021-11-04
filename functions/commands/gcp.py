@@ -1,13 +1,11 @@
-from pathlib import Path
 from typing import Optional
 
 import typer
 
 from functions import cloud
 from functions import user
-from functions.autocomplete import autocomplete_deploy_functions
 from functions.cloud import deploy_function
-from functions.config.models import FunctionConfig
+from functions.config.files import FunctionRegistry
 from functions.constants import CloudProvider
 from functions.constants import CloudServiceType
 from functions.gcp.callbacks import gcp_logs_callback
@@ -30,19 +28,8 @@ def update() -> None:
 
 @app.command()
 def deploy(
-    function_dir: Path = typer.Argument(
+    function_name: str = typer.Argument(
         ...,
-        # It would be great if it supported both image name and path
-        autocompletion=autocomplete_deploy_functions,
-        exists=True,
-        file_okay=False,
-        help="Path to the functions you want to deploy",
-        resolve_path=True,
-    ),
-    function_name: Optional[str] = typer.Option(
-        None,
-        "--name",
-        "-n",
         help="Name of the function you want to deploy",
     ),
     service: Optional[CloudServiceType] = typer.Option(
@@ -52,14 +39,11 @@ def deploy(
     ),
 ) -> None:
     """Deploy a functions to GCP"""
-    config = FunctionConfig.load(function_dir)
+    function = FunctionRegistry.fetch_function(function_name)
 
-    function_name = function_name or config.run_variables.name
-    deploy_function(
-        function_name, config=config, provider=config.deploy_variables.provider
-    )
+    deploy_function(function, provider=CloudProvider.GCP)
 
-    user.inform(f"{config.run_variables.name} functions has been deployed to GCP!")
+    user.inform(f"{function_name} functions has been deployed to GCP!")
 
 
 @app.command()
