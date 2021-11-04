@@ -14,10 +14,12 @@ from functions.config.managers import FunctionRegistry
 from functions.config.models import FunctionConfig
 from functions.config.models import FunctionRecord
 from functions.constants import FunctionStatus
+from functions.gcp.cloud_function.constants import CloudFunctionLabel
 from functions.gcp.cloud_function.constants import Runtime
 from functions.gcp.cloud_function.constants import Trigger
 from functions.gcp.constants import DEFAULT_GCP_REGION
 from functions.gcp.constants import GCP_RESERVED_VARIABLES
+from functions.gcp.constants import PROJECT_FUNCTION_MARK
 from functions.processes import check_output
 from functions.processes import run_cmd
 from functions.types import DictStrAny
@@ -81,23 +83,42 @@ def add_ignore_file_arguments(files: Optional[List[str]] = None) -> List[str]:
     )
 
 
-def add_update_labels_arguments(labels: DictStrAny) -> List[str]:
+def add_update_labels_arguments(function_labels: DictStrAny = None) -> List[str]:
     """Adds labels to the scope of the deployment"""
     # https://cloud.google.com/sdk/gcloud/reference/functions/deploy#--update-labels
+
+    default_labels = {
+        CloudFunctionLabel.FUNCTION_MARK: PROJECT_FUNCTION_MARK,
+        CloudFunctionLabel.FUNCTION_NAME: "function_name",
+        CloudFunctionLabel.FUNCTION_VERSION: 1,
+    }
+    # Zip function labels with default labels
+    labels = {**default_labels, **(function_labels or {})}
+
+    argument_template = "--update-labels={kv_pairs}"
     label_list = []
     for key, value in labels.items():
-        label_list.append(["--set-labels", f"{key}={value}"])
-    return list(itertools.chain.from_iterable(label_list))
+        label_list.append(f"{key}={value}")
+    return [argument_template.format(kv_pairs=",".join(label_list))]
 
 
 def add_region_argument(region: str = DEFAULT_GCP_REGION) -> List[str]:
     return ["--region", region]
 
 
+def add_filter_argument(filter_labels: List[str] = None) -> List[str]:
+    """Adds a filter argument to the gcloud command"""
+    core_label = f"labels.{CloudFunctionLabel.FUNCTION_MARK}:{PROJECT_FUNCTION_MARK}"
+    all_labels = " AND ".join([core_label] + (filter_labels or []))
+    return [
+        f"--filter='{all_labels}'",
+    ]
+
+
 @validate_arguments
 def deploy_function(cloud_function_name: str, config: FunctionConfig):
     """Uses gcloud to deploy a cloud function"""
-    logs.debug(f"Deploying cloud function: {cloud_function_name}")
+    logs.debug(f"Deploying {cloud_function_name} as a cloud function")
     run_cmd(
         [
             "gcloud",
@@ -109,6 +130,7 @@ def deploy_function(cloud_function_name: str, config: FunctionConfig):
         + add_source_arguments(Path(config.path))
         + add_entry_point_arguments(config.run_variables.entry_point)
         + add_ignore_file_arguments()
+        + add_update_labels_arguments()
         + add_region_argument(config.deploy_variables.region)
         + add_env_vars_arguments(config.env_variables)
         + add_trigger_arguments(config.deploy_variables.trigger)
@@ -149,6 +171,7 @@ def fetch_function_logs(function: FunctionRecord):
             "read",
         ]
         + add_region_argument(function.config.deploy_variables.region)
+        + add_filter_argument()
     )
 
 
