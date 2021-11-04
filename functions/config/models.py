@@ -103,9 +103,12 @@ class FunctionRecord(BaseModel):
     status: FunctionStatus
 
     def __str__(self) -> str:
-        return (
-            f"Function - {styles.red(self.name)}"
-            f" | Status - {styles.blue(self.status)}"
+        return " | ".join(
+            [
+                f"Function - {styles.red(self.name)}",
+                f"Local - {styles.blue(self.status.upper())}",
+                f"GCP - {styles.blue(self.status.upper())}",
+            ]
         )
 
 

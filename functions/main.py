@@ -17,6 +17,7 @@ from functions.commands import gcp
 from functions.commands import new
 from functions.config import remove_function_from_registry
 from functions.config import store_function_info_to_registry
+from functions.config.files import FunctionRegistry
 from functions.config.models import FunctionConfig
 from functions.constants import FunctionStatus
 from functions.constants import LoggingLevel
@@ -31,9 +32,7 @@ from functions.docker.tools import stop_container
 from functions.gcp.cloud_function.errors import GCPCommandError
 from functions.gcp.helpers import check_if_gcloud_cmd_installed
 from functions.logs import set_console_debug_level
-from functions.styles import blue
 from functions.styles import green
-from functions.styles import red
 from functions.system import construct_abs_path
 
 subcommands = [(new.app, "new")]
@@ -148,15 +147,18 @@ def stop(
 @app.command("list")
 def list_functions() -> None:
     """List existing functions"""
-    functions = all_functions()
+    # TODO: Merge docker images and registry functions together
+    # functions = all_functions()
+    functions = FunctionRegistry.fetch_all_functions()
+
     # Check if a function is running at the moment
     if functions:
-        logs.debug(f"Found {len(functions)} functions.")
-        user.inform(f"There are {len(functions)} build and available.\n")
+        # Pluralize the word functions based on the number of functions
+        plural_function = "functions" if len(functions) > 1 else "function"
+
+        user.inform(f"We found {len(functions)} {plural_function}\n")
         for function in functions:
-            user.inform(
-                f"Function - {red(function.name)} | Status - {blue(function.status)}"
-            )
+            user.inform(str(function))
     else:
         user.inform("No functions found")
 
