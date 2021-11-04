@@ -3,11 +3,13 @@ from typing import Optional
 import typer
 
 from functions import cloud
+from functions import styles
 from functions import user
 from functions.cloud import deploy_function
 from functions.config.files import FunctionRegistry
 from functions.constants import CloudProvider
 from functions.constants import CloudServiceType
+from functions.gcp.autocomplete import gcp_delete_autocomplete
 from functions.gcp.autocomplete import gcp_deploy_autocomplete
 from functions.gcp.callbacks import gcp_logs_callback
 from functions.gcp.cloud_function.cli import delete_function
@@ -18,12 +20,6 @@ app = typer.Typer(help="Deploy functions in GCP")
 @app.command()
 def install() -> None:
     """Install required libraries"""
-    raise NotImplementedError()
-
-
-@app.command()
-def update() -> None:
-    """Update required libraries"""
     raise NotImplementedError()
 
 
@@ -45,7 +41,7 @@ def deploy(
 
     deploy_function(function, provider=CloudProvider.GCP)
 
-    user.inform(f"{function_name} functions has been deployed to GCP!")
+    user.inform(f"'{function_name}' functions has been deployed to GCP!")
 
 
 @app.command()
@@ -53,11 +49,16 @@ def delete(
     function_name: str = typer.Argument(
         ...,
         help="Name of the function you want to remove",
+        autocompletion=gcp_delete_autocomplete,
     ),
 ) -> None:
     """Deletes a functions deployed to GCP"""
-    user.confirm_abort(f"Are you sure you want to remove '{function_name}'?")
+    provider = CloudProvider.GCP.upper()
+    user.confirm_abort(
+        f"Are you sure you want to remove '{function_name}' from {provider}?"
+    )
     delete_function(function_name)
+    user.inform(f"'{styles.green(function_name)}' has been removed from {provider}!")
 
 
 @app.command()
