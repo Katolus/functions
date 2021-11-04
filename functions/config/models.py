@@ -70,7 +70,7 @@ class FunctionConfig(BaseModel):
         # 2. Config file in the function's registry
         from functions.config.files import FunctionRegistry
 
-        return FunctionRegistry.get_function_record(function_name).config
+        return FunctionRegistry.fetch_function(function_name).config
 
     @classmethod
     def load(cls, path: PathStr, /) -> FunctionConfig:

@@ -1,6 +1,7 @@
 """Holds the information about interaction with remote services"""
 from typing import NoReturn
 
+from functions.config.files import FunctionRegistry
 from functions.config.models import FunctionConfig
 from functions.constants import CloudProvider
 
@@ -28,10 +29,10 @@ def deploy_function(
 
 def read_logs(function_name: str, *, provider: CloudProvider):
     """Reads logs from a given provider using a defined service"""
-    config = FunctionConfig.fetch(function_name)
+    function = FunctionRegistry.fetch_function(function_name)
 
     if provider == CloudProvider.GCP:
-        from functions.gcp.services import read_logs
+        from functions.gcp.services import fetch_logs
 
-        return read_logs(function_name, config=config)
+        return fetch_logs(function)
     handle_unmatched_provider(provider)

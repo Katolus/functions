@@ -10,6 +10,7 @@ from functions.cloud import deploy_function
 from functions.config.models import FunctionConfig
 from functions.constants import CloudProvider
 from functions.constants import CloudServiceType
+from functions.gcp.callbacks import gcp_logs_callback
 from functions.gcp.cloud_function.cli import delete_function
 
 app = typer.Typer(help="Deploy functions in GCP")
@@ -89,6 +90,7 @@ def logs(
     function_name: str = typer.Argument(
         ...,
         help="Name of the function you want to read logs from",
+        callback=gcp_logs_callback,
     ),
 ) -> None:
     """Reads log from a deployed function"""

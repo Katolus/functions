@@ -1,5 +1,6 @@
 """Holds functions that interact with the gcloud cli tool"""
 
+import functools
 import itertools
 from pathlib import Path
 from typing import List, Optional
@@ -136,11 +137,8 @@ def describe_function(function_name: str):
     run_cmd(["gcloud", "functions", "describe", function_name] + add_region_argument())
 
 
-def read_logs(
-    function_name: str,
-    config: FunctionConfig,
-):
-    logs.debug(f"Reading logs for {function_name}")
+def fetch_function_logs(function: FunctionRecord):
+    logs.debug(f"Reading logs for {function.name}")
     run_cmd(
         [
             "gcloud",
@@ -148,5 +146,16 @@ def read_logs(
             "logs",
             "read",
         ]
-        + add_region_argument(config.deploy_variables.region)
+        + add_region_argument(function.config.deploy_variables.region)
     )
+
+
+@functools.cache
+def fetch_function_names() -> str:
+    """Returns a list of cloud function names"""
+    logs.debug("Fetching cloud function names")
+    cmd_result = run_cmd(
+        ["gcloud", "functions", "list", "--format", "json"] + add_region_argument()
+    )
+    logs.debug(f"Fetched cloud function names: {cmd_result.stdout}")
+    return cmd_result.stdout
