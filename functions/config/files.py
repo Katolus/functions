@@ -75,6 +75,11 @@ class FunctionRegistry(BaseModel, File):
         return cls.load().functions[function_name]
 
     @classmethod
+    def fetch_all_functions(cls) -> List[FunctionRecord]:
+        """Returns all functions in the registry"""
+        return list(cls.load().functions.values())
+
+    @classmethod
     def fetch_function_names(cls) -> List[str]:
         """Returns a list of all function names"""
         return list(cls.load().functions.keys())
