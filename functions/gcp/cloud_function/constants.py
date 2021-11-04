@@ -16,7 +16,7 @@ from enum import Enum
 #   "GAE_RUNTIME": "python39",
 #   "K_SERVICE": "test-funcion",
 #   "PYTHONUNBUFFERED": "1",
-#   "PATH": "/layers/google.python.pip/pip/bin:/opt/python3.9/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+#   "PATH": "/layers/google.python.pip/pip/bin:/opt/python3.9/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin", # noqa: E501, W505
 #   "S2A_ACCESS_TOKEN": "e13755294ada4a6059f3cf3683a7b2f30b0052938e522063e640386830c6bdab",
 #   "LD_LIBRARY_PATH": "/layers/google.python.pip/pip/lib",
 #   "LC_CTYPE": "C.UTF-8",
@@ -54,3 +54,13 @@ class Trigger(str, Enum):
     HTTP = "--trigger-http"
     PUBSUB = "--trigger-topic"
     BUCKET = "--trigger-bucket"
+
+
+class CloudFunctionLabel(str, Enum):
+    """
+    Cloud Function label constants.
+    """
+
+    FUNCTION_MARK = "functions-cli_function-mark"
+    FUNCTION_NAME = "functions-cli_function-name"
+    FUNCTION_VERSION = "functions-cli_function-version"

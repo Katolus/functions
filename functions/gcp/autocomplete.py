@@ -1,18 +1,20 @@
 """Stores methods for autocompleting GCP commands"""
 
-from typing import List
+from typing import Iterable
+
+from functions.config.files import FunctionRegistry
+from functions.gcp.services import fetch_deployed_function_names
 
 
-def names_of_functions_deployed_as_cloud_functions(gcp_project_id: str) -> List[str]:
-    """Returns a list of names of functions deployed as cloud functions
+def gcp_deploy_autocomplete(incomplete: str) -> Iterable[str]:
+    """Returns a list of deployable functions"""
+    for name in FunctionRegistry.fetch_function_names():
+        if name.startswith(incomplete):
+            yield name
 
-    Args:
-        gcp_project_id (str): The GCP project ID.
 
-    Returns:
-        list: A list of names of functions deployed as cloud functions.
-    """
-    from functions.gcp.cloud_functions import get_cloud_functions
-
-    cloud_functions = get_cloud_functions(gcp_project_id)
-    return [cloud_function.name for cloud_function in cloud_functions]
+def gcp_delete_autocomplete(incomplete: str) -> Iterable[str]:
+    """Returns a list of resources available for deletion"""
+    for name in fetch_deployed_function_names():
+        if name.startswith(incomplete):
+            yield name

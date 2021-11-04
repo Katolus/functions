@@ -3,7 +3,7 @@ import functools
 import itertools
 import json
 from pathlib import Path
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from pydantic import DirectoryPath
 from pydantic import validate_arguments
@@ -11,13 +11,14 @@ from pydantic.types import Json
 
 from functions import logs
 from functions.config.managers import FunctionRegistry
-from functions.config.models import FunctionConfig
 from functions.config.models import FunctionRecord
 from functions.constants import FunctionStatus
+from functions.gcp.cloud_function.constants import CloudFunctionLabel
 from functions.gcp.cloud_function.constants import Runtime
 from functions.gcp.cloud_function.constants import Trigger
 from functions.gcp.constants import DEFAULT_GCP_REGION
 from functions.gcp.constants import GCP_RESERVED_VARIABLES
+from functions.gcp.constants import PROJECT_FUNCTION_MARK
 from functions.processes import check_output
 from functions.processes import run_cmd
 from functions.types import DictStrAny
@@ -81,43 +82,69 @@ def add_ignore_file_arguments(files: Optional[List[str]] = None) -> List[str]:
     )
 
 
-def add_update_labels_arguments(labels: DictStrAny) -> List[str]:
+def add_update_labels_arguments(function: FunctionRecord) -> List[str]:
     """Adds labels to the scope of the deployment"""
     # https://cloud.google.com/sdk/gcloud/reference/functions/deploy#--update-labels
+
+    function_labels: Dict[
+        str, str
+    ] = {}  # Temp until we can get the labels from the config
+    default_labels = {
+        CloudFunctionLabel.FUNCTION_MARK: PROJECT_FUNCTION_MARK,
+        CloudFunctionLabel.FUNCTION_NAME: function.name,
+        CloudFunctionLabel.FUNCTION_VERSION: 1,
+    }
+    # Zip function labels with default labels
+    labels = {**default_labels, **(function_labels or {})}
+
+    argument_template = "--update-labels={kv_pairs}"
     label_list = []
     for key, value in labels.items():
-        label_list.append(["--set-labels", f"{key}={value}"])
-    return list(itertools.chain.from_iterable(label_list))
+        label_list.append(f"{key}={value}")
+    return [argument_template.format(kv_pairs=",".join(label_list))]
 
 
 def add_region_argument(region: str = DEFAULT_GCP_REGION) -> List[str]:
     return ["--region", region]
 
 
+def add_filter_argument(filter_labels: List[str] = None) -> List[str]:
+    """Adds a filter argument to the gcloud command"""
+    # https://cloud.google.com/sdk/gcloud/reference/functions/logs/read#--filter
+    core_label = f"labels.{CloudFunctionLabel.FUNCTION_MARK}:{PROJECT_FUNCTION_MARK}"
+    all_labels = " AND ".join([core_label] + (filter_labels or []))
+    return [
+        f"--filter='{all_labels}'",
+    ]
+
+
 @validate_arguments
-def deploy_function(cloud_function_name: str, config: FunctionConfig):
+def deploy_function(function: FunctionRecord, *, new_name: str = None):
     """Uses gcloud to deploy a cloud function"""
-    logs.debug(f"Deploying cloud function: {cloud_function_name}")
+    cloud_function_name = new_name or function.name
+    logs.debug(f"Deploying {cloud_function_name} as a cloud function")
     run_cmd(
         [
             "gcloud",
             "functions",
             "deploy",
+            "--quiet",
+            "--no-user-output-enabled",
             cloud_function_name,
         ]
-        + add_runtime_arguments(config.deploy_variables.runtime)
-        + add_source_arguments(Path(config.path))
-        + add_entry_point_arguments(config.run_variables.entry_point)
+        + add_runtime_arguments(function.config.deploy_variables.runtime)
+        + add_source_arguments(Path(function.config.path))
+        + add_entry_point_arguments(function.config.run_variables.entry_point)
         + add_ignore_file_arguments()
-        + add_region_argument(config.deploy_variables.region)
-        + add_env_vars_arguments(config.env_variables)
-        + add_trigger_arguments(config.deploy_variables.trigger)
+        + add_update_labels_arguments(function)
+        + add_region_argument(function.config.deploy_variables.region)
+        + add_env_vars_arguments(function.config.env_variables)
+        + add_trigger_arguments(function.config.deploy_variables.trigger)
     )
-    FunctionRegistry.update_function(
-        FunctionRecord(
-            name=cloud_function_name, config=config, status=FunctionStatus.DEPLOYED
-        )
-    )
+
+    function.status = FunctionStatus.DEPLOYED
+    FunctionRegistry.update_function(function)
+    logs.debug(f"Successfully deployed {cloud_function_name}")
 
 
 def delete_function(function_name: str):
@@ -128,10 +155,13 @@ def delete_function(function_name: str):
             "gcloud",
             "functions",
             "delete",
+            "--quiet",
+            "--no-user-output-enabled",
             function_name,
         ]
         + add_region_argument()
     )
+    logs.debug(f"Successfully deleted cloud function: {function_name}")
 
 
 def describe_function(function_name: str):
@@ -149,13 +179,15 @@ def fetch_function_logs(function: FunctionRecord):
             "read",
         ]
         + add_region_argument(function.config.deploy_variables.region)
+        + add_filter_argument()
     )
 
 
 @functools.cache
-def fetch_functions() -> List[Json]:
+def fetch_functions_in_json() -> List[Json]:
     """Runs a gcloud command to list all functions"""
     logs.debug("Fetching cloud functions")
+    # https://cloud.google.com/sdk/gcloud/reference/topic/formats#json
     cmd_result = check_output(["gcloud", "functions", "list", "--format", "json"])
     return json.loads(cmd_result)
 
@@ -163,6 +195,23 @@ def fetch_functions() -> List[Json]:
 @functools.cache
 def fetch_function_names() -> str:
     """Returns a list of cloud function names"""
-    functions = fetch_functions()
+    functions = fetch_functions_in_json()
     logs.debug(f"Fetched {len(functions)} cloud functions")
     return "Temp holder until I figure out how to get a function's name"
+
+
+@functools.cache
+def fetch_deployed_function_names() -> List[str]:
+    """Returns a list of cloud function names"""
+    logs.debug("Fetching deployed cloud function names")
+    cmd_result = check_output(
+        [
+            "gcloud",
+            "functions",
+            "list",
+            "--format",
+            f"get(labels.{CloudFunctionLabel.FUNCTION_NAME.value})",
+        ]
+    )
+    # Split the result into a list of strings
+    return cmd_result.splitlines()
