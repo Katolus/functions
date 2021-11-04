@@ -1,12 +1,13 @@
 """Holds functions that interact with the gcloud cli tool"""
-
 import functools
 import itertools
+import json
 from pathlib import Path
 from typing import List, Optional
 
 from pydantic import DirectoryPath
 from pydantic import validate_arguments
+from pydantic.types import Json
 
 from functions import logs
 from functions.config.managers import FunctionRegistry
@@ -17,6 +18,7 @@ from functions.gcp.cloud_function.constants import Runtime
 from functions.gcp.cloud_function.constants import Trigger
 from functions.gcp.constants import DEFAULT_GCP_REGION
 from functions.gcp.constants import GCP_RESERVED_VARIABLES
+from functions.processes import check_output
 from functions.processes import run_cmd
 from functions.types import DictStrAny
 
@@ -151,9 +153,16 @@ def fetch_function_logs(function: FunctionRecord):
 
 
 @functools.cache
+def fetch_functions() -> List[Json]:
+    """Runs a gcloud command to list all functions"""
+    logs.debug("Fetching cloud functions")
+    cmd_result = check_output(["gcloud", "functions", "list", "--format", "json"])
+    return json.loads(cmd_result)
+
+
+@functools.cache
 def fetch_function_names() -> str:
     """Returns a list of cloud function names"""
-    logs.debug("Fetching cloud function names")
-    cmd_result = run_cmd(["gcloud", "functions", "list", "--format", "json"])
-    logs.debug(f"Fetched cloud function names: {cmd_result.stdout}")
-    return cmd_result.stdout
+    functions = fetch_functions()
+    logs.debug(f"Fetched {len(functions)} cloud functions")
+    return "Temp holder until I figure out how to get a function's name"
