@@ -8,6 +8,7 @@ from functions.cloud import deploy_function
 from functions.config.files import FunctionRegistry
 from functions.constants import CloudProvider
 from functions.constants import CloudServiceType
+from functions.gcp.autocomplete import gcp_deploy_autocomplete
 from functions.gcp.callbacks import gcp_logs_callback
 from functions.gcp.cloud_function.cli import delete_function
 
@@ -31,6 +32,7 @@ def deploy(
     function_name: str = typer.Argument(
         ...,
         help="Name of the function you want to deploy",
+        autocompletion=gcp_deploy_autocomplete,
     ),
     service: Optional[CloudServiceType] = typer.Option(
         None,
