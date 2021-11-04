@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import ClassVar
+from typing import ClassVar, List
 
 from pydantic import BaseModel
 
@@ -60,6 +60,8 @@ class FunctionRegistry(BaseModel, File):
         filepath = cls.filepath()
         if not check_if_file_exists(filepath):
             cls.create()
+            logs.debug(f"Config file created: {filepath}")
+        logs.debug(f"Loading function registry from file: {cls.filepath()}")
         return cls.parse_file(filepath)
 
     @classmethod
@@ -71,6 +73,11 @@ class FunctionRegistry(BaseModel, File):
     def fetch_function(cls, function_name: str) -> FunctionRecord:
         """Returns the function record for a function"""
         return cls.load().functions[function_name]
+
+    @classmethod
+    def fetch_function_names(cls) -> List[str]:
+        """Returns a list of all function names"""
+        return list(cls.load().functions.keys())
 
     @classmethod
     def add_function(cls, function: FunctionRecord) -> None:
