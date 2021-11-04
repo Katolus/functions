@@ -17,6 +17,7 @@ from functions.commands import gcp
 from functions.commands import new
 from functions.config import remove_function_from_registry
 from functions.config import store_function_info_to_registry
+from functions.config.models import FunctionConfig
 from functions.constants import FunctionStatus
 from functions.constants import LoggingLevel
 from functions.core import Functions
@@ -33,7 +34,6 @@ from functions.styles import blue
 from functions.styles import green
 from functions.styles import red
 from functions.system import construct_abs_path
-from functions.system import load_config
 
 subcommands = [(new.app, "new")]
 
@@ -80,19 +80,22 @@ def test() -> None:
 
 @app.command()
 def build(
-    function_path: Path = typer.Argument(
+    function_dir: Path = typer.Argument(
         ...,
-        help="Path to the functions you want to build",
+        help="Path to  a function's directory you want to build",
+        exists=True,
+        file_okay=False,
+        resolve_path=True,
         callback=build_function_callack,
     ),
     show_logs: bool = typer.Option(False, "--show-logs", help="Show build logs"),
 ) -> None:
     """Builds an image of a given function"""
     # Get the absolute path
-    full_path = construct_abs_path(function_path)
+    full_path = construct_abs_path(function_dir)
 
     # Load configuration
-    config = load_config(full_path)
+    config = FunctionConfig.load(full_path)
 
     _ = build_image(config, show_logs)
 

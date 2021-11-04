@@ -66,14 +66,14 @@ def warning(msg: str) -> None:
     logger.warning(msg)
 
 
-def error(msg: str) -> None:
+def error(error: object) -> None:
     """Use this level to record any error that occurs."""
-    logger.error(msg)
+    logger.error(error)
 
 
-def exception(msg: str) -> None:
+def exception(error: object) -> None:
     """Use this when you want to report an error with a stacktrace."""
-    logger.exception(msg)
+    logger.exception(error)
 
 
 def remove_empty_lines_from_string(string: str) -> str:

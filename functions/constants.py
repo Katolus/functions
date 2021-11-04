@@ -80,6 +80,8 @@ class CloudProvider(str, Enum):
     def all(cls) -> List[str]:
         """Returns all the available service types"""
         return [enum.value for enum in cls]
+
+
 @unique
 class CloudServiceType(str, Enum):
     CLOUD_FUNCTION = "cloud_function"
