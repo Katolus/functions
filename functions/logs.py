@@ -24,10 +24,25 @@ LOGGING_LEVELS = {
 }
 
 
+class ConsoleFilter(logging.Filter):
+    """Filter that only allows messages with a specific level to be printed to the console."""
+
+    def __init__(self, level: LoggingLevel):
+        super().__init__()
+        self.level = LOGGING_LEVELS[level]
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        """Return True if the record is at the level of the filter."""
+        return record.levelno == self.level
+
+
 # Set up the console handler
 c_handler = logging.StreamHandler()
 c_handler.setLevel(logging.INFO)
 c_handler.setFormatter(logging.Formatter("%(message)s"))
+
+c_filter = ConsoleFilter(LoggingLevel.INFO)
+c_handler.addFilter(c_filter)
 logger.addHandler(c_handler)
 
 # Set up the file handler
@@ -45,10 +60,10 @@ f_handler.setFormatter(
 logger.addHandler(f_handler)
 
 
-def set_console_handler_level(level: LoggingLevel = LoggingLevel.INFO) -> None:
+def set_console_debug_level() -> None:
     """Set console logging level for the application."""
-    log_level = LOGGING_LEVELS[level]
-    c_handler.setLevel(log_level)
+    c_handler.removeFilter(c_filter)
+    c_handler.setLevel(logging.DEBUG)
 
 
 def debug(msg: str) -> None:
@@ -66,14 +81,14 @@ def warning(msg: str) -> None:
     logger.warning(msg)
 
 
-def error(msg: str) -> None:
+def error(error: object) -> None:
     """Use this level to record any error that occurs."""
-    logger.error(msg)
+    logger.error(error)
 
 
-def exception(msg: object) -> None:
+def exception(error: object) -> None:
     """Use this when you want to report an error with a stacktrace."""
-    logger.exception(msg)
+    logger.exception(error)
 
 
 def remove_empty_lines_from_string(string: str) -> str:

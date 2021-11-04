@@ -28,8 +28,9 @@ from functions.docker.tools import get_image
 from functions.docker.tools import remove_image
 from functions.docker.tools import run_container
 from functions.docker.tools import stop_container
+from functions.gcp.cloud_function.errors import GCPCommandError
 from functions.gcp.helpers import check_if_gcloud_cmd_installed
-from functions.logs import set_console_handler_level
+from functions.logs import set_console_debug_level
 from functions.styles import blue
 from functions.styles import green
 from functions.styles import red
@@ -66,16 +67,16 @@ def main(
     if verbose:
         app.state.verbose = True
         log_level = LoggingLevel.DEBUG
+        set_console_debug_level()
 
-    set_console_handler_level(log_level)
     logs.debug(f"Running application in {log_level} logging level.")
 
 
 @app.command()
-def test() -> None:
-    """Test command not to be dispayed"""
-    user.inform("Running a test command")
-    raise ValueError("Throwing an error in a test command")
+def error() -> None:
+    """A command for testing error messages"""
+    user.inform("Message before the error")
+    raise GCPCommandError(error_msg="Throwing an error in a test command")
 
 
 @app.command()
