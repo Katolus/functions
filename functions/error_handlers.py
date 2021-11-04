@@ -3,7 +3,6 @@ from typing import Callable, Dict, NoReturn
 import typer
 
 from functions import user
-from functions.errors import ConfigValidationError
 from functions.errors import FunctionNameTaken
 from functions.types import AnyCallable
 from functions.types import ExceptionClass
@@ -36,12 +35,6 @@ def error_handler(*, error: ExceptionClass) -> AnyCallable:
 @error_handler(error=ValueError)
 def print_basic_output_and_exit(error: ExceptionClass) -> NoReturn:
     user.inform(f"Handling no image error - {error}")
-    raise typer.BadParameter(str(error))
-
-
-@error_handler(error=ConfigValidationError)
-def check_config_in_path(error: ExceptionClass) -> NoReturn:
-    # Print a path where this is saved
     raise typer.BadParameter(str(error))
 
 

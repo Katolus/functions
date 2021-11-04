@@ -1,7 +1,8 @@
 """Holds the information about interaction with remote services"""
 from typing import NoReturn
 
-from functions.config.models import FunctionConfig
+from functions.config.files import FunctionRegistry
+from functions.config.models import FunctionRecord
 from functions.constants import CloudProvider
 
 
@@ -13,25 +14,23 @@ def handle_unmatched_provider(provider: str) -> NoReturn:
         raise Exception("No such provider")
 
 
-def deploy_function(
-    function_name: str, *, config: FunctionConfig, provider: CloudProvider = None
-):
+def deploy_function(function: FunctionRecord, /, provider: CloudProvider):
     """Deploys a function to a given provider using a defined service"""
-    provider = provider or config.deploy_variables.provider
+    provider = provider or function.config.deploy_variables.provider
 
     if provider == CloudProvider.GCP:
         from functions.gcp.services import deploy
 
-        return deploy(function_name, config)
+        return deploy(function)
     handle_unmatched_provider(provider)
 
 
 def read_logs(function_name: str, *, provider: CloudProvider):
     """Reads logs from a given provider using a defined service"""
-    config = FunctionConfig.fetch(function_name)
+    function = FunctionRegistry.fetch_function(function_name)
 
     if provider == CloudProvider.GCP:
-        from functions.gcp.services import read_logs
+        from functions.gcp.services import fetch_logs
 
-        return read_logs(function_name, config=config)
+        return fetch_logs(function)
     handle_unmatched_provider(provider)

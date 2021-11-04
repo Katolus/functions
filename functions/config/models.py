@@ -4,13 +4,17 @@ import os
 from typing import ClassVar, Optional
 
 from pydantic import BaseModel
+from pydantic.error_wrappers import ValidationError
 
 from functions import styles
+from functions.config.errors import ConfigValidationError
 from functions.constants import CloudProvider
 from functions.constants import ConfigName
 from functions.constants import DEFAULT_LOG_FILE
 from functions.constants import FunctionStatus
 from functions.types import DictStrAny
+from functions.types import PathStr
+from functions.validators import validate_path
 
 
 class RunVariables(BaseModel):
@@ -66,7 +70,27 @@ class FunctionConfig(BaseModel):
         # 2. Config file in the function's registry
         from functions.config.files import FunctionRegistry
 
-        return FunctionRegistry.get_function_record(function_name).config
+        return FunctionRegistry.fetch_function(function_name).config
+
+    @classmethod
+    def load(cls, path: PathStr, /) -> FunctionConfig:
+        """
+        Load a function's configuration from the given path.
+        """
+        # Validate the path
+        valid_path = validate_path(path)
+
+        try:
+            # Read the config file
+            with open(os.path.join(valid_path, ConfigName.BASE), "r") as config_file:
+                # Load as JSON
+                config = cls.parse_raw(config_file.read())
+        except ValidationError as error:
+            raise ConfigValidationError(error=error, path=valid_path)
+
+        # Update the path in config in case changed
+        config.path = str(valid_path)
+        return config
 
 
 class FunctionRecord(BaseModel):

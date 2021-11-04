@@ -7,11 +7,11 @@ from functions import __version__
 from functions import styles
 from functions.autocomplete import autocomplete_function_names
 from functions.autocomplete import autocomplete_running_function_names
+from functions.config.models import FunctionConfig
 from functions.decorators import handle_error
 from functions.decorators import resilient_parsing
 from functions.docker.helpers import all_functions
 from functions.errors import FunctionNameTaken
-from functions.system import load_config
 from functions.user import confirm_abort
 from functions.validators import name_validator
 
@@ -28,17 +28,19 @@ def version_callback(value: bool) -> None:
 
 
 @handle_error
-def build_function_callack(ctx: typer.Context, param: typer.CallbackParam, value: str):
+def build_function_callack(
+    ctx: typer.Context, param: typer.CallbackParam, function_path: str
+):
     """
     Check if a function name is already an existing function image. Throw an error if so
     """
-    config = load_config(value)
+    config = FunctionConfig.load(function_path)
     built_function_names = [function.name for function in all_functions()]
 
     if config.run_variables.name in built_function_names:
-        raise FunctionNameTaken(config.run_variables.name)
+        raise FunctionNameTaken(name=config.run_variables.name)
 
-    return value
+    return function_path
 
 
 @resilient_parsing

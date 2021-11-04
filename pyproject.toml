@@ -92,17 +92,17 @@ skip_gitignore = true
 [tool.pyright]
 # This is for pylance/pyright extension of vscode. Remove me if you're not intented to use vscode.
 # include = ["src"]
-exclude = [
-  ".git",
-  ".eggs",
-  ".github",
-  ".history",
-  ".idea",
-  ".tox",
-  ".vscode",
-  "docs",
-  "**/__pycache__",
-]
+# exclude = [
+#   ".git",
+#   ".eggs",
+#   ".github",
+#   ".history",
+#   ".idea",
+#   ".tox",
+#   ".vscode",
+#   "docs",
+#   "**/__pycache__",
+# ] # Commented out due to its influence on performance
 # ignore = ["src/oldstuff"]
 stubPath = "~/stubs/"
 venv = ".venv"

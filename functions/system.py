@@ -2,40 +2,13 @@ import json
 import os
 from pathlib import Path
 
-from pydantic import validate_arguments
-from pydantic import ValidationError
-
 from functions import defaults
+from functions import logs
 from functions.config.models import FunctionConfig
 from functions.constants import ConfigName
 from functions.constants import PACKAGE_CONFIG_DIR_PATH
 from functions.constants import SignatureType
-from functions.errors import ConfigValidationError
 from functions.types import PathStr
-from functions.validators import validate_path
-
-
-@validate_arguments
-def load_config(config_dir: PathStr) -> FunctionConfig:
-    """Load a configuration file into a Python object."""
-    # Validate directory
-    valid_dir = validate_path(config_dir)
-
-    # Read the config
-    config = {}
-    with open(construct_config_path(valid_dir), "r") as file:
-        config = json.load(file)
-
-    # Add explanation
-    config["path"] = str(valid_dir) if valid_dir else config.get("path")
-
-    # Try to validate config format
-    try:
-        valid_config = FunctionConfig(**config)
-    except ValidationError as error:
-        raise ConfigValidationError(error=error)
-
-    return valid_config
 
 
 def construct_abs_path(path: PathStr) -> Path:
@@ -51,9 +24,11 @@ def construct_config_path(
     return Path(os.path.join(full_path, config_name))
 
 
-def make_dir(function_dir: str):
-    """Creates a directory will throw an error if a directory exists already."""
-    os.makedirs(function_dir, exist_ok=False)
+def make_dir(function_dir: str) -> None:
+    """Makes a directory or skips if already exists"""
+    if not os.path.exists(function_dir):
+        os.makedirs(function_dir)
+        logs.debug(f"Created directory {function_dir}")
 
 
 # Consider using the write to file method instead of this
@@ -128,6 +103,6 @@ def check_if_file_exists(filepath: PathStr) -> bool:
     return Path(filepath).exists()
 
 
-def construct_filepath_in_config(filename: str) -> str:
+def construct_filepath_in_config_dir(filename: str) -> str:
     """Construct a config filepath based on the system's default config path."""
     return os.path.join(PACKAGE_CONFIG_DIR_PATH, filename)
