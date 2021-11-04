@@ -2,8 +2,10 @@ from typing import Callable, Dict, NoReturn
 
 import typer
 
+from functions import logs
 from functions import user
 from functions.errors import ConfigValidationError
+from functions.errors import FunctionBaseError
 from functions.errors import FunctionNameTaken
 from functions.types import AnyCallable
 from functions.types import ExceptionClass
@@ -31,6 +33,14 @@ def error_handler(*, error: ExceptionClass) -> AnyCallable:
         return _func
 
     return handle
+
+
+@error_handler(error=FunctionBaseError)
+def handle_function_all_errors(error: FunctionBaseError) -> NoReturn:
+    """Handles the base case for all the function errors"""
+    logs.error(error)
+    user.fail(error.message)
+    raise typer.BadParameter(error.message)
 
 
 @error_handler(error=ValueError)

@@ -5,6 +5,7 @@ import typer
 from pydantic import validate_arguments
 
 from functions.error_handlers import ERROR_REGISTRY
+from functions.error_handlers import handle_function_all_errors
 from functions.errors import FunctionBaseError
 
 AnyCallableT = Callable[..., Any]
@@ -27,7 +28,8 @@ def handle_error(
         def command(*args: Any, **kwargs: Any) -> Any:
             try:
                 return _func(*args, **kwargs)
-            except Exception as err:
+            except FunctionBaseError as err:
+
                 # Check initial params for handlers
                 if error_class and isinstance(err, error_class):
                     message = message_tmp.format(error=err, **kwargs)
@@ -35,10 +37,9 @@ def handle_error(
 
                 # Check registry for handlers
                 if handler := ERROR_REGISTRY.get(err.__class__):
-                    handler(err)
-                else:
-                    # If nothing matches reraise exception
-                    raise err
+                    return handler(err)
+
+                handle_function_all_errors(err)
 
         return command
 
