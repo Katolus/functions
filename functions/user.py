@@ -1,5 +1,6 @@
 """Holds functions that ask a user for input"""
 import warnings
+from typing import List
 
 import typer
 
@@ -7,8 +8,14 @@ from functions import logs
 from functions import styles
 
 
-def ask(question: str, default: str = None) -> str:
-    return typer.prompt(question, default=default)
+def ask(question: str, default: str = None, options: List[str] = None) -> str:
+    if options:
+        question += f" ({', '.join(options)})"
+
+    return typer.prompt(
+        question,
+        default=default,
+    )
 
 
 def confirm(question: str, default: bool = False) -> bool:

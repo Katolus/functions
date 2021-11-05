@@ -163,13 +163,12 @@ class FunctionConfig(BaseModel):
             return Defaults.GCP.CloudFunction.HTTP.config(f_name, f_path)
         if f_type == FunctionType.PUBSUB:
             # Load the default PUBSUB config
-            return Defaults.GCP.CloudFunction.PubSub.config(f_name, f_path)\
-
+            return Defaults.GCP.CloudFunction.PubSub.config(f_name, f_path)
         raise InvalidFunctionTypeError(type=f_type)
 
     @classmethod
     def generate(
-        cls, *, f_name: str, f_type: FunctionType, f_path: PathStr
+        cls, f_name: str, f_type: FunctionType, f_path: PathStr, /
     ) -> FunctionConfig:
         """
         Generate a function's configuration file.
