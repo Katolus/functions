@@ -62,6 +62,7 @@ class FunctionType(str, Enum):
 class FunctionStatus(str, Enum):
     """Represents the status of a function"""
 
+    ADDED = "added"
     BUILT = "built"
     DEPLOYED = "deployed"
     INVALID = "invalid"

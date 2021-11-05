@@ -11,7 +11,7 @@ def store_function_info_to_registry(
     function_name: str, function_config: FunctionConfig, status: FunctionStatus
 ) -> None:
     """Add a function to the registry"""
-    if FunctionRegistry.check_if_function_in_registry(function_name):
+    if FunctionRegistry.check_if_function_name_in_registry(function_name):
         debug(f"FunctionRegistry: Updating function {function_name}")
         FunctionRegistry.update_function(
             FunctionRecord(name=function_name, config=function_config, status=status)

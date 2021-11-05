@@ -241,23 +241,27 @@ def add(
             options=FunctionType.options(),
         )
         # Generate a config instance
-        config = FunctionConfig.generate(function_type, abs_path)
-
-    # Load the config file if exists otherwise generate a new one
+        config = FunctionConfig.generate(function_name, function_type, abs_path)
 
     # Check if the function is already in the registry based on the name
 
-    # Check if the function is already in the registry based on the path
+    if FunctionRegistry.check_if_function_name_in_registry(function_name):
+        user.warn(f"A function with the name {function_name} already exists")
+        user.confirm_abort(
+            f"Hala, it looks like a function with the name '{function_name}' already exists. Do you want to overwrite?"
+        )
+        store_function_info_to_registry(function_name, config, FunctionStatus.ADDED)
 
-    # If it does not exist, add it to the registry
+    # Ask if user wants to store the configuration file in the directory
+    store_config_file = user.confirm(
+        f"Do you want to store the configuration file in the function directory ({abs_path})?",
+        default=True,
+    )
 
-    # If it does exist, ask the user if he wants to overwrite it
+    if store_config_file:
+        config.save()
 
-    # Load configuration
-    config = FunctionConfig.load(abs_path)
-
-    # store the function details in the config
-    store_function_info_to_registry(function_name, config, FunctionStatus.ADDED)
+    # Maybe: Check if the function is already in the registry based on the path
 
     user.inform(
         f"{styles.green('Successfully')} added a function to the registry."

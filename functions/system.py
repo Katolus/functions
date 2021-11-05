@@ -7,7 +7,6 @@ from functions import logs
 from functions.config.models import FunctionConfig
 from functions.constants import ConfigName
 from functions.constants import PACKAGE_CONFIG_DIR_PATH
-from functions.constants import SignatureType
 from functions.types import PathStr
 
 
@@ -46,12 +45,13 @@ def link_common(function_dir: str):
     os.symlink(src_path, dst_path, target_is_directory=False)
 
 
+# TODO: Update this method
 def add_required_files(
     function_name: str,
     function_dir: str,
     *,
     main_content: str,
-    signature_type: SignatureType,
+    signature_type: str,
 ) -> FunctionConfig:
     """Add required files into the function directory"""
     # Get file contents before creating any system objects
@@ -94,6 +94,7 @@ def add_required_files(
 
 def write_to_file(filepath: PathStr, content: str) -> None:
     """Writes content to a file."""
+    logs.debug(f"Writing to file {filepath}")
     with open(filepath, "w") as file:
         file.write(content)
 

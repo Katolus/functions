@@ -14,6 +14,7 @@ from functions.constants import ConfigName
 from functions.constants import DEFAULT_LOG_FILE
 from functions.constants import FunctionStatus
 from functions.constants import FunctionType
+from functions.errors import InvalidFunctionTypeError
 from functions.types import DictStrAny
 from functions.types import PathStr
 from functions.validators import validate_name
@@ -63,6 +64,14 @@ class FunctionConfig(BaseModel):
     def config_path(self) -> str:
         return os.path.join(self.path, self.config_name)
 
+    def save(self) -> None:
+        """
+        Store the function config file in the given path.
+        """
+        from functions.system import write_to_file
+
+        write_to_file(os.path.join(self.path, ConfigName.BASE), self.json())
+
     @classmethod
     def default(
         cls,
@@ -76,7 +85,7 @@ class FunctionConfig(BaseModel):
         signature_type: str,
         trigger: str,
     ) -> FunctionConfig:
-        """Returns a default function config"""
+        """Returns a instance of class with some default values"""
         validate_name(function_name)
 
         return cls.parse_obj(
@@ -143,23 +152,33 @@ class FunctionConfig(BaseModel):
         return os.path.isfile(os.path.join(path, ConfigName.BASE))
 
     @classmethod
-    def load_default_config(cls, function_type: FunctionType, /) -> FunctionConfig:
+    def load_default_config(
+        cls, f_name: str, f_type: FunctionType, f_path: PathStr, /
+    ) -> FunctionConfig:
         """Loads a specific type of a config"""
-        if function_type == FunctionType.HTTP:
+        from functions.defaults import Defaults
+
+        if f_type == FunctionType.HTTP:
             # Load the default HTTP config
-            ...
-            # return Defaults.HTTP.config()
+            return Defaults.GCP.CloudFunction.HTTP.config(f_name, f_path)
+        if f_type == FunctionType.PUBSUB:
+            # Load the default PUBSUB config
+            return Defaults.GCP.CloudFunction.PubSub.config(f_name, f_path)\
+
+        raise InvalidFunctionTypeError(type=f_type)
 
     @classmethod
-    def generate(cls, *, type: FunctionType, path: PathStr) -> FunctionConfig:
+    def generate(
+        cls, *, f_name: str, f_type: FunctionType, f_path: PathStr
+    ) -> FunctionConfig:
         """
         Generate a function's configuration file.
         """
         # Validate the path
-        valid_path = validate_path(path)
+        validate_path(f_path)
 
         # Load a default config based on a function type
-        config = cls.load_default_config(type)
+        return cls.load_default_config(f_name, f_type, f_path)
 
 
 class FunctionRecord(BaseModel):

@@ -56,3 +56,8 @@ class FunctionBuildError(FunctionBaseError):
 class FunctionNameTaken(FunctionBaseError):
     code = "functions.name_taken"
     msg_template = "Function with that name ('{name}') already exists"
+
+
+class InvalidFunctionTypeError(FunctionBaseError):
+    code = "functions.invalid_type"
+    msg_template = "Function type ({type}) is not valid nor supported"

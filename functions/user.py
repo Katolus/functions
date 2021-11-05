@@ -4,14 +4,15 @@ import warnings
 import typer
 
 from functions import logs
+from functions import styles
 
 
 def ask(question: str, default: str = None) -> str:
     return typer.prompt(question, default=default)
 
 
-def confirm(question: str) -> bool:
-    return typer.confirm(question)
+def confirm(question: str, default: bool = False) -> bool:
+    return typer.confirm(question, default=default)
 
 
 def confirm_abort(question: str) -> bool:
@@ -31,7 +32,7 @@ def warn(msg: str, log=True) -> None:
     if log:
         logs.warning(logs.remove_empty_lines_from_string(msg))
     else:
-        warnings.warn(msg)
+        warnings.warn(f"{styles.yellow('WARNING: ')}{msg}")
 
 
 def fail(msg: str, log=True) -> None:

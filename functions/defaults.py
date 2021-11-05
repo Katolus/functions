@@ -1,12 +1,12 @@
 from pydantic.main import BaseModel
 
-from functions.gcp.defaults import GCPFunctionConfig
+from functions.gcp.defaults import GCPDefaults
 
 
-class ConfigDefaults(BaseModel):
-    """Links to together all the default objects"""
+class Defaults(BaseModel):
+    """Links to together all the default classes"""
 
-    GCP = GCPFunctionConfig()
+    GCP = GCPDefaults()
 
 
 default_entry_hello_pubsub = """

@@ -4,6 +4,10 @@ from .cloud_function.defaults import HTTP
 from .cloud_function.defaults import PubSub
 
 
-class GCPFunctionConfig(BaseModel):
+class CloudFunctionDefaults(BaseModel):
     HTTP = HTTP()
     PubSub = PubSub()
+
+
+class GCPDefaults(BaseModel):
+    CloudFunction = CloudFunctionDefaults()

@@ -9,12 +9,13 @@ from functions.arguments import FunctionNameArgument
 from functions.callbacks import function_dir_callback
 from functions.config import store_function_info_to_registry
 from functions.constants import FunctionStatus
-from functions.constants import SignatureType
+from functions.gcp.cloud_function.constants import SignatureType
 from functions.system import add_required_files
 
 app = typer.Typer(help="Factory method for creating new functions")
 
 
+# TODO: Update to use the new defaults
 @app.command()
 def pubsub(
     function_name: str = FunctionNameArgument(...),
