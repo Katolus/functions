@@ -23,10 +23,11 @@ def path_includes_config_validator(v: Any) -> Path:
     return v
 
 
-def name_validator(v: str) -> str:
-    if not re.match("^[a-zA-Z0-9_-]*$", v):
+def validate_name(name: str) -> str:
+    """Validate a name string against a set of rules"""
+    if not re.match("^[a-zA-Z0-9_-]*$", name):
         raise ValueError("Value does not match name requirements")
-    return v
+    return name
 
 
 def validate_path(v: PathStr) -> Path:

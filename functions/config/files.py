@@ -65,7 +65,7 @@ class FunctionRegistry(BaseModel, File):
         return cls.parse_file(filepath)
 
     @classmethod
-    def check_if_function_in_registry(cls, function_name: str) -> bool:
+    def check_if_function_name_in_registry(cls, function_name: str) -> bool:
         """Checks if a function is in the registry"""
         return function_name in cls.load().functions
 

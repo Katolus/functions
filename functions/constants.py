@@ -30,9 +30,14 @@ class ConfigName(str, Enum):
     BASE = "config.json"
 
 
-class SignatureType(str, Enum):
-    PUBSUB = "event"
-    HTTP = "http"
+class RequiredFile(str, Enum):
+    """Enum for required file names in a function's directory"""
+
+    CONFIG = "config.json"
+    DOCKERFILE = "Dockerfile"
+    DOCKERIGNORE = ".dockerignore"
+    ENTRY_POINT = "main.py"
+    REQUIREMENTS = "requirements.txt"
 
 
 class DockerLabel(str, Enum):
@@ -52,9 +57,22 @@ class LoggingLevel(str, Enum):
     WARNING = "warning"
 
 
+class FunctionType(str, Enum):
+    """Represents the various types of functions that can be run"""
+
+    HTTP = "http"
+    PUBSUB = "pubsub"
+
+    @classmethod
+    def options(cls) -> List[str]:
+        """Returns a list of all the function types"""
+        return [enum.value for enum in cls]
+
+
 class FunctionStatus(str, Enum):
     """Represents the status of a function"""
 
+    ADDED = "added"
     BUILT = "built"
     DEPLOYED = "deployed"
     INVALID = "invalid"
@@ -69,12 +87,12 @@ class FunctionStatus(str, Enum):
 class CloudProvider(str, Enum):
     """Represents the various cloud providers supported by the functions package"""
 
-    AWS = "aws"
-    AZURE = "azure"
+    # AWS = "aws"
+    # AZURE = "azure"
     GCP = "gcp"
-    LOCAL = "local"
-    OPENFASS = "openfass"
-    OPENSTACK = "openstack"
+    # LOCAL = "local"
+    # OPENFASS = "openfass"
+    # OPENSTACK = "openstack"
 
     @classmethod
     def all(cls) -> List[str]:

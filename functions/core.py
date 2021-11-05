@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from pydantic import PrivateAttr
 from typer.main import get_command
 
+from functions import commands
 from functions.config.managers import AppConfigManager
 from functions.decorators import handle_error
 
@@ -18,8 +19,9 @@ class FunctionsState(BaseModel):
     verbose = False
 
 
-class Functions(BaseModel):
-    """Main class, designed to be a wrapper over an underlying Typer class"""
+# Add a singleton instance for this class
+class FunctionsCli(BaseModel):
+    """FunctionsCli class, designed to be a wrapper over an underlying Typer class"""
 
     _main: typer.Typer = PrivateAttr()
     config_manager: AppConfigManager = AppConfigManager()
@@ -27,11 +29,16 @@ class Functions(BaseModel):
     state: FunctionsState = FunctionsState()
 
     def __init__(self, **data) -> None:
-        super().__init__(**data)
         self._main = typer.Typer(
             name="functions-cli",
             help="Run script to executing, testing and deploying included functions.",
         )
+
+        subcommands = (
+            (commands.new, "new"),
+            (commands.gcp, "gcp"),
+        )
+        super().__init__(subcommands=subcommands, **data)
 
         for app, name in self.subcommands:
             self._main.add_typer(app, name=name)

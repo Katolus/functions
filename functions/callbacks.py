@@ -13,7 +13,7 @@ from functions.decorators import resilient_parsing
 from functions.docker.helpers import all_functions
 from functions.errors import FunctionNameTaken
 from functions.user import confirm_abort
-from functions.validators import name_validator
+from functions.validators import validate_name
 
 
 @handle_error
@@ -47,10 +47,11 @@ def build_function_callack(
 def function_name_callback(
     ctx: typer.Context, param: typer.CallbackParam, value: str
 ) -> Optional[str]:
-
+    # TODO: Add a check to see if the function name is already taken
     try:
-        name_validator(value)
+        validate_name(value)
     except ValueError:
+        # TODO: Update this to throw a custom error
         raise typer.BadParameter(
             "Only alphabetic characters with '-' and '_' characters are allowed"
             " as function names"
@@ -104,11 +105,17 @@ def remove_function_name_callback(
 
 
 @resilient_parsing
-def function_dir_callback(
+def generate_new_function_callback(
     ctx: typer.Context, param: typer.CallbackParam, value: str
 ) -> Optional[str]:
+    """Callback for generating a new function"""
     if not value or value == ".":
         confirm_abort("Are you sure you want to use the current directory?")
         value = "."
 
+    return value
+
+
+def add_callback(ctx: typer.Context, param: typer.CallbackParam, value: str) -> str:
+    """Validates a call to the `add` command"""
     return value

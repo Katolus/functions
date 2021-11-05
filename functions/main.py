@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from typing import Optional
 
@@ -8,20 +9,21 @@ from functions import styles
 from functions import user
 from functions.autocomplete import autocomplete_function_names
 from functions.autocomplete import autocomplete_running_function_names
+from functions.callbacks import add_callback
 from functions.callbacks import build_function_callack
 from functions.callbacks import function_name_autocomplete_callback
 from functions.callbacks import remove_function_name_callback
 from functions.callbacks import running_functions_autocomplete_callback
 from functions.callbacks import version_callback
-from functions.commands import gcp
-from functions.commands import new
 from functions.config import remove_function_from_registry
 from functions.config import store_function_info_to_registry
 from functions.config.files import FunctionRegistry
 from functions.config.models import FunctionConfig
+from functions.config.models import FunctionRecord
 from functions.constants import FunctionStatus
+from functions.constants import FunctionType
 from functions.constants import LoggingLevel
-from functions.core import Functions
+from functions.core import FunctionsCli
 from functions.docker.helpers import all_functions
 from functions.docker.helpers import get_config_from_image
 from functions.docker.tools import build_image
@@ -30,18 +32,11 @@ from functions.docker.tools import remove_image
 from functions.docker.tools import run_container
 from functions.docker.tools import stop_container
 from functions.gcp.cloud_function.errors import GCPCommandError
-from functions.gcp.helpers import check_if_gcloud_cmd_installed
 from functions.logs import set_console_debug_level
 from functions.styles import green
 from functions.system import construct_abs_path
 
-subcommands = [(new.app, "new")]
-
-# Only add gcp commands if gcloud is installed
-if check_if_gcloud_cmd_installed():
-    subcommands.append((gcp.app, "gcp"))
-
-app = Functions(subcommands=subcommands)
+app = FunctionsCli()
 
 
 @app.callback()
@@ -100,8 +95,10 @@ def build(
     _ = build_image(config, show_logs)
 
     function_name = config.run_variables.name
+
+    function = FunctionRecord(name=function_name, config=config)
     # store the function details in the config
-    store_function_info_to_registry(function_name, config, FunctionStatus.BUILT)
+    store_function_info_to_registry(function, status=FunctionStatus.BUILT)
 
     user.inform(
         f"{styles.green('Successfully')} build a function's image."
@@ -202,3 +199,63 @@ def rebuild(
             raise typer.Exit()
 
     user.inform("No functions found")
+
+
+@app.command()
+def add(
+    function_dir: Path = typer.Argument(
+        ...,
+        help="Path to a function's directory you want to add",
+        exists=True,
+        file_okay=False,
+        resolve_path=True,
+        callback=add_callback,
+    ),
+) -> None:
+    """Adds a function to the registry"""
+    # Get the absolute path
+    abs_path = construct_abs_path(function_dir)
+    dir_name = os.path.basename(abs_path)
+
+    # Ask the user for a function name if not provided and present a default
+    function_name = user.ask(
+        "What should be the name of the function?",
+        default=dir_name,
+    )
+
+    # Check if the config file exists
+    if FunctionConfig.check_config_file_exists(abs_path):
+        # Load the config file
+        config = FunctionConfig.load(abs_path)
+    else:
+        # Ask what type of function it is
+        function_type = user.ask(
+            "What type of function is this?",
+            default=FunctionType.HTTP.value,
+            options=FunctionType.options(),
+        )
+        # Generate a config instance
+        config = FunctionConfig.generate(
+            function_name, FunctionType(function_type), abs_path
+        )
+
+    # Check if the function is already in the registry based on the name
+
+    if FunctionRegistry.check_if_function_name_in_registry(function_name):
+        user.warn(f"A function with the name {function_name} already exists")
+        user.confirm_abort(
+            f"Hala, it looks like a function with the name '{function_name}' already exists. Do you want to overwrite?"
+        )
+
+    function = FunctionRecord(name=function_name, config=config)
+    store_function_info_to_registry(function, status=FunctionStatus.ADDED)
+
+    # Ask if user wants to store the configuration file in the directory
+    user.prompt_to_save_config(config)
+
+    # Maybe: Check if the function is already in the registry based on the path
+
+    user.inform(
+        f"{styles.green('Successfully')} added a function to the registry."
+        f" The name of the functions is -> {function_name}"
+    )

@@ -3,14 +3,13 @@ from pathlib import Path
 
 import typer
 
-from functions import defaults
 from functions import user
 from functions.arguments import FunctionNameArgument
-from functions.callbacks import function_dir_callback
+from functions.callbacks import generate_new_function_callback
 from functions.config import store_function_info_to_registry
+from functions.config.models import FunctionRecord
 from functions.constants import FunctionStatus
-from functions.constants import SignatureType
-from functions.system import add_required_files
+from functions.defaults import Defaults
 
 app = typer.Typer(help="Factory method for creating new functions")
 
@@ -18,27 +17,38 @@ app = typer.Typer(help="Factory method for creating new functions")
 @app.command()
 def pubsub(
     function_name: str = FunctionNameArgument(...),
-    function_dir: str = typer.Option(
+    function_dir: Path = typer.Option(
         None,
         "--dir",
-        callback=function_dir_callback,
+        exists=True,
+        file_okay=False,
+        resolve_path=True,
+        callback=generate_new_function_callback,
         help="Directory that will be used as a root of the new function",
     ),
 ) -> None:
-    """Creates a new pubsub directory"""
-    function_path = os.path.join(function_dir, function_name)
+    """Generates a directory with a pubsub template for a cloud function"""
+    full_function_path = os.path.join(function_dir, function_name)
 
-    config = add_required_files(
-        function_name,
-        function_path,
-        main_content=defaults.default_entry_hello_pubsub,
-        signature_type=SignatureType.PUBSUB,
-    )
+    # Get the default class for this type of function
+    pubsub = Defaults.GCP.CloudFunction.PubSub
 
-    # Add function to functions' function registry
-    store_function_info_to_registry(function_name, config, FunctionStatus.NEW)
+    # Generate the config instance
+    pubsub_config = pubsub.config()
 
-    user.inform(f"Added a new pubsub function -> {function_path}")
+    # Create a function record
+    f_record = FunctionRecord(name=function_name, config=pubsub_config)
+
+    # Generate required files
+    pubsub.generate_required_files(f_record)
+
+    # Prompt about saving the config file inside the function's directory
+    user.prompt_to_save_config(pubsub_config)
+
+    # Add function to the function registry
+    store_function_info_to_registry(f_record, status=FunctionStatus.NEW)
+
+    user.inform(f"Added a new pubsub function -> {full_function_path}")
 
 
 @app.command()
@@ -47,20 +57,32 @@ def http(
     function_dir: Path = typer.Option(
         None,
         "--dir",
-        callback=function_dir_callback,
+        exists=True,
+        file_okay=False,
+        resolve_path=True,
+        callback=generate_new_function_callback,
         help="Directory that will be used as a root of the new function",
     ),
 ) -> None:
-    """Creates a new http directory"""
-    function_path = os.path.join(function_dir, function_name)
+    """Generates a directory with a http template for a cloud function"""
+    full_function_path = os.path.join(function_dir, function_name)
 
-    config = add_required_files(
-        function_name,
-        function_path,
-        main_content=defaults.default_entry_hello_http,
-        signature_type=SignatureType.HTTP,
-    )
+    # Get the default class for this type of function
+    http = Defaults.GCP.CloudFunction.HTTP
 
-    store_function_info_to_registry(function_name, config, FunctionStatus.NEW)
+    # Generate the config instance
+    http_config = http.config()
 
-    user.inform(f"Added a new http function to -> {function_path}")
+    # Create a function record
+    f_record = FunctionRecord(name=function_name, config=http_config)
+
+    # Generate required files
+    http.generate_required_files(f_record)
+
+    # Prompt about saving the config file inside the function's directory
+    user.prompt_to_save_config(http_config)
+
+    # Add function to the function registry
+    store_function_info_to_registry(f_record, status=FunctionStatus.NEW)
+
+    user.inform(f"Added a new http function to -> {full_function_path}")
