@@ -1,25 +1,22 @@
 """Top level module for all configuration related"""
+from functions import logs
 from functions.constants import FunctionStatus
-from functions.logs import debug
 
 from .files import FunctionRegistry
-from .models import FunctionConfig
 from .models import FunctionRecord
 
 
 def store_function_info_to_registry(
-    function_name: str, function_config: FunctionConfig, status: FunctionStatus
+    function: FunctionRecord, *, status: FunctionStatus
 ) -> None:
     """Add a function to the registry"""
-    if FunctionRegistry.check_if_function_name_in_registry(function_name):
-        debug(f"FunctionRegistry: Updating function {function_name}")
-        FunctionRegistry.update_function(
-            FunctionRecord(name=function_name, config=function_config, status=status)
-        )
+    function.status = status
+    if FunctionRegistry.check_if_function_name_in_registry(function.name):
+        logs.debug(f"FunctionRegistry: Updating function {function.name} ({status})")
+        FunctionRegistry.update_function(function)
     else:
-        FunctionRegistry.add_function(
-            FunctionRecord(name=function_name, config=function_config, status=status)
-        )
+        logs.debug(f"FunctionRegistry: Adding function {function.name} ({status})")
+        FunctionRegistry.add_function(function)
 
 
 def remove_function_from_registry(function_name: str) -> None:

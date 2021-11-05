@@ -5,7 +5,8 @@ import typer
 from functions.callbacks import function_name_callback
 
 
-# Not the best cause we are loosing types
+# Perhaps there will be a better way to do this, but I'm not sure how.
+# Maybe I can use a decorator?
 def FunctionNameArgument(
     default: Optional[Any],
     *,

@@ -70,7 +70,3 @@ class FunctionsCli(BaseModel):
     class Config:
         # typer.Typer
         arbitrary_types_allowed = True
-
-
-# class
-#

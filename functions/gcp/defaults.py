@@ -5,9 +5,13 @@ from .cloud_function.defaults import PubSub
 
 
 class CloudFunctionDefaults(BaseModel):
+    """Links cloud function defaults together"""
+
     HTTP = HTTP()
     PubSub = PubSub()
 
 
 class GCPDefaults(BaseModel):
+    """Links GCP defaults together"""
+
     CloudFunction = CloudFunctionDefaults()

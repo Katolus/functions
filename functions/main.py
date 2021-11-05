@@ -19,6 +19,7 @@ from functions.config import remove_function_from_registry
 from functions.config import store_function_info_to_registry
 from functions.config.files import FunctionRegistry
 from functions.config.models import FunctionConfig
+from functions.config.models import FunctionRecord
 from functions.constants import FunctionStatus
 from functions.constants import FunctionType
 from functions.constants import LoggingLevel
@@ -94,8 +95,10 @@ def build(
     _ = build_image(config, show_logs)
 
     function_name = config.run_variables.name
+
+    function = FunctionRecord(name=function_name, config=config)
     # store the function details in the config
-    store_function_info_to_registry(function_name, config, FunctionStatus.BUILT)
+    store_function_info_to_registry(function, status=FunctionStatus.BUILT)
 
     user.inform(
         f"{styles.green('Successfully')} build a function's image."
@@ -232,7 +235,9 @@ def add(
             options=FunctionType.options(),
         )
         # Generate a config instance
-        config = FunctionConfig.generate(function_name, function_type, abs_path)
+        config = FunctionConfig.generate(
+            function_name, FunctionType(function_type), abs_path
+        )
 
     # Check if the function is already in the registry based on the name
 
@@ -241,16 +246,12 @@ def add(
         user.confirm_abort(
             f"Hala, it looks like a function with the name '{function_name}' already exists. Do you want to overwrite?"
         )
-        store_function_info_to_registry(function_name, config, FunctionStatus.ADDED)
+
+    function = FunctionRecord(name=function_name, config=config)
+    store_function_info_to_registry(function, status=FunctionStatus.ADDED)
 
     # Ask if user wants to store the configuration file in the directory
-    store_config_file = user.confirm(
-        f"Do you want to store the configuration file in the function directory ({abs_path})?",
-        default=True,
-    )
-
-    if store_config_file:
-        config.save()
+    user.prompt_to_save_config(config)
 
     # Maybe: Check if the function is already in the registry based on the path
 

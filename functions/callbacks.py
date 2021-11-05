@@ -47,10 +47,11 @@ def build_function_callack(
 def function_name_callback(
     ctx: typer.Context, param: typer.CallbackParam, value: str
 ) -> Optional[str]:
-
+    # TODO: Add a check to see if the function name is already taken
     try:
         validate_name(value)
     except ValueError:
+        # TODO: Update this to throw a custom error
         raise typer.BadParameter(
             "Only alphabetic characters with '-' and '_' characters are allowed"
             " as function names"
@@ -104,7 +105,7 @@ def remove_function_name_callback(
 
 
 @resilient_parsing
-def function_dir_callback(
+def generate_new_function_callback(
     ctx: typer.Context, param: typer.CallbackParam, value: str
 ) -> Optional[str]:
     if not value or value == ".":
