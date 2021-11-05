@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from typing import Optional
 
@@ -8,6 +9,7 @@ from functions import styles
 from functions import user
 from functions.autocomplete import autocomplete_function_names
 from functions.autocomplete import autocomplete_running_function_names
+from functions.callbacks import add_callback
 from functions.callbacks import build_function_callack
 from functions.callbacks import function_name_autocomplete_callback
 from functions.callbacks import remove_function_name_callback
@@ -20,6 +22,7 @@ from functions.config import store_function_info_to_registry
 from functions.config.files import FunctionRegistry
 from functions.config.models import FunctionConfig
 from functions.constants import FunctionStatus
+from functions.constants import FunctionType
 from functions.constants import LoggingLevel
 from functions.core import Functions
 from functions.docker.helpers import all_functions
@@ -202,3 +205,61 @@ def rebuild(
             raise typer.Exit()
 
     user.inform("No functions found")
+
+
+@app.command()
+def add(
+    function_dir: Path = typer.Argument(
+        ...,
+        help="Path to a function's directory you want to add",
+        exists=True,
+        file_okay=False,
+        resolve_path=True,
+        callback=add_callback,
+    ),
+) -> None:
+    """Adds a function to the registry"""
+    # Get the absolute path
+    abs_path = construct_abs_path(function_dir)
+    dir_name = os.path.basename(abs_path)
+
+    # Ask the user for a function name if not provided and present a default
+    function_name = user.ask(
+        "What should be the name of the function?",
+        default=dir_name,
+    )
+
+    # Check if the config file exists
+    if FunctionConfig.check_config_file_exists(abs_path):
+        # Load the config file
+        config = FunctionConfig.load(abs_path)
+    else:
+        # Ask what type of function it is
+        function_type = user.ask(
+            "What type of function is this?",
+            default=FunctionType.HTTP,
+            options=FunctionType.options(),
+        )
+        # Generate a config instance
+        config = FunctionConfig.generate(function_type, abs_path)
+
+    # Load the config file if exists otherwise generate a new one
+
+    # Check if the function is already in the registry based on the name
+
+    # Check if the function is already in the registry based on the path
+
+    # If it does not exist, add it to the registry
+
+    # If it does exist, ask the user if he wants to overwrite it
+
+    # Load configuration
+    config = FunctionConfig.load(abs_path)
+
+    # store the function details in the config
+    store_function_info_to_registry(function_name, config, FunctionStatus.ADDED)
+
+    user.inform(
+        f"{styles.green('Successfully')} added a function to the registry."
+        f" The name of the functions is -> {function_name}"
+    )

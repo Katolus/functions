@@ -9,11 +9,13 @@ from pydantic.error_wrappers import ValidationError
 from functions import styles
 from functions.config.errors import ConfigValidationError
 from functions.constants import CloudProvider
+from functions.constants import CloudServiceType
 from functions.constants import ConfigName
 from functions.constants import DEFAULT_LOG_FILE
 from functions.constants import FunctionStatus
 from functions.types import DictStrAny
 from functions.types import PathStr
+from functions.validators import validate_name
 from functions.validators import validate_path
 
 
@@ -59,6 +61,46 @@ class FunctionConfig(BaseModel):
     @property
     def config_path(self) -> str:
         return os.path.join(self.path, self.config_name)
+
+    @classmethod
+    def default(
+        cls,
+        cloud_provider: CloudProvider,
+        cloud_service_type: CloudServiceType,
+        function_dir: str,
+        function_name: str,
+        port: int,
+        region: str,
+        runtime: str,
+        signature_type: str,
+        trigger: str,
+    ) -> FunctionConfig:
+        """Returns a default function config"""
+        validate_name(function_name)
+
+        return cls.parse_obj(
+            {
+                "description": str(
+                    f"Default functions template generated for '{function_name}' of '{signature_type}' type",
+                ),
+                "path": function_dir,
+                "run_variables": {
+                    "entry_point": "main",
+                    "name": function_name,
+                    "port": port,
+                    "signature_type": signature_type,
+                    "source": "main.py",
+                },
+                "env_variables": {},
+                "deploy_variables": {
+                    "provider": cloud_provider,
+                    "region": region,
+                    "runtime": runtime,
+                    "service": cloud_service_type,
+                    "trigger": trigger,
+                },
+            }
+        )
 
     @classmethod
     def fetch(cls, function_name: str, /) -> FunctionConfig:

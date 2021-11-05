@@ -13,7 +13,7 @@ from functions.decorators import resilient_parsing
 from functions.docker.helpers import all_functions
 from functions.errors import FunctionNameTaken
 from functions.user import confirm_abort
-from functions.validators import name_validator
+from functions.validators import validate_name
 
 
 @handle_error
@@ -49,7 +49,7 @@ def function_name_callback(
 ) -> Optional[str]:
 
     try:
-        name_validator(value)
+        validate_name(value)
     except ValueError:
         raise typer.BadParameter(
             "Only alphabetic characters with '-' and '_' characters are allowed"
