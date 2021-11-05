@@ -184,7 +184,7 @@ class FunctionRecord(BaseModel):
 
     name: str
     config: FunctionConfig
-    status: FunctionStatus
+    status: FunctionStatus = FunctionStatus.UNKNOWN
 
     def __str__(self) -> str:
         return " | ".join(
