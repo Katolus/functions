@@ -64,3 +64,8 @@ class CloudFunctionLabel(str, Enum):
     FUNCTION_MARK = "functions-cli_function-mark"
     FUNCTION_NAME = "functions-cli_function-name"
     FUNCTION_VERSION = "functions-cli_function-version"
+
+
+class SignatureType(str, Enum):
+    PUBSUB = "event"
+    HTTP = "http"

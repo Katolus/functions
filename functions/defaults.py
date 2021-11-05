@@ -1,46 +1,12 @@
-from functions.config.models import FunctionConfig
-from functions.constants import CloudProvider
-from functions.constants import CloudServiceType
-from functions.constants import SignatureType
-from functions.gcp.cloud_function.constants import Runtime as GCP_Runtime
-from functions.gcp.cloud_function.constants import Trigger
-from functions.gcp.constants import DEFAULT_GCP_REGION
-from functions.validators import name_validator
+from pydantic.main import BaseModel
+
+from functions.gcp.defaults import GCPFunctionConfig
 
 
-def default_config(
-    function_name: str, function_dir: str, signature_type: SignatureType
-) -> FunctionConfig:
-    name_validator(function_name)
+class ConfigDefaults(BaseModel):
+    """Links to together all the default objects"""
 
-    config = FunctionConfig(
-        **{
-            "description": str(
-                f"Generated functions template called '{function_name}'"
-                f" of '{signature_type}' type",
-            ),
-            "path": function_dir,
-            "run_variables": {
-                "source": "main.py",
-                "entry_point": "main",
-                "signature_type": signature_type,
-                "name": function_name,
-                "port": 8080,
-            },
-            "env_variables": {},
-            "deploy_variables": {
-                "provider": CloudProvider.GCP,
-                "runtime": GCP_Runtime.PYTHON37,
-                "service": CloudServiceType.CLOUD_FUNCTION,
-                "region": DEFAULT_GCP_REGION,
-                "trigger": Trigger.HTTP,
-            },
-        }
-    )
-    if signature_type == SignatureType.HTTP:
-        config.deploy_variables.allow_unauthenticated = False
-
-    return config
+    GCP = GCPFunctionConfig()
 
 
 default_entry_hello_pubsub = """
