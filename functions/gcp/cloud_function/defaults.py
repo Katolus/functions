@@ -1,3 +1,5 @@
+"""Stores default classes for the Cloud Function service"""
+
 from typing import ClassVar
 
 from pydantic.main import BaseModel

@@ -1,3 +1,5 @@
+"""Stores default classes for GCP"""
+
 from pydantic.main import BaseModel
 
 from .cloud_function.defaults import HTTP
