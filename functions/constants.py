@@ -30,11 +30,6 @@ class ConfigName(str, Enum):
     BASE = "config.json"
 
 
-class SignatureType(str, Enum):
-    PUBSUB = "event"
-    HTTP = "http"
-
-
 class DockerLabel(str, Enum):
     """Stores constants under which variables are stored"""
 
@@ -50,6 +45,18 @@ class LoggingLevel(str, Enum):
     ERROR = "error"
     INFO = "info"
     WARNING = "warning"
+
+
+class FunctionType(str, Enum):
+    """Represents the various types of functions that can be run"""
+
+    HTTP = "http"
+    PUBSUB = "pubsub"
+
+    @classmethod
+    def options(cls) -> List[str]:
+        """Returns a list of all the function types"""
+        return [enum.value for enum in cls]
 
 
 class FunctionStatus(str, Enum):

@@ -6,8 +6,8 @@ import typer
 from functions import logs
 
 
-def ask(question: str) -> str:
-    return typer.prompt(question)
+def ask(question: str, default: str = None) -> str:
+    return typer.prompt(question, default=default)
 
 
 def confirm(question: str) -> bool:

@@ -12,6 +12,7 @@ from functions.constants import CloudProvider
 from functions.constants import ConfigName
 from functions.constants import DEFAULT_LOG_FILE
 from functions.constants import FunctionStatus
+from functions.constants import FunctionType
 from functions.types import DictStrAny
 from functions.types import PathStr
 from functions.validators import validate_path
@@ -91,6 +92,32 @@ class FunctionConfig(BaseModel):
         # Update the path in config in case changed
         config.path = str(valid_path)
         return config
+
+    @classmethod
+    def check_config_file_exists(cls, path: PathStr, /) -> bool:
+        """
+        Check if the config file exists.
+        """
+        return os.path.isfile(os.path.join(path, ConfigName.BASE))
+
+    @classmethod
+    def load_default_config(cls, function_type: FunctionType, /) -> FunctionConfig:
+        """Loads a specific type of a config"""
+        if function_type == FunctionType.HTTP:
+            # Load the default HTTP config
+            ...
+            # return Defaults.HTTP.config()
+
+    @classmethod
+    def generate(cls, *, type: FunctionType, path: PathStr) -> FunctionConfig:
+        """
+        Generate a function's configuration file.
+        """
+        # Validate the path
+        valid_path = validate_path(path)
+
+        # Load a default config based on a function type
+        config = cls.load_default_config(type)
 
 
 class FunctionRecord(BaseModel):

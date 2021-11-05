@@ -112,3 +112,8 @@ def function_dir_callback(
         value = "."
 
     return value
+
+
+def add_callback(ctx: typer.Context, param: typer.CallbackParam, value: str) -> str:
+    """Validates a call to the `add` command"""
+    return value
