@@ -61,10 +61,14 @@ CMD exec functions-framework --source=${FUNC_SOURCE}\
 
 
 class HTTP(Default, BaseModel):
+    """Default implementation of the Cloud Function HTTP function type"""
+
     DEFAULT_PORT: ClassVar[int] = 8080
 
     @classmethod
     def config(cls, f_name: str, f_dir: PathStr) -> FunctionConfig:
+        """Instantiate a default function config for the HTTP function type"""
+
         signature_type = SignatureType.HTTP
         config = FunctionConfig.default(
             cloud_provider=CloudProvider.GCP,
@@ -85,11 +89,15 @@ class HTTP(Default, BaseModel):
 
     @classmethod
     def generate_dockerfile(cls, function: FunctionRecord) -> None:
+        """Generates a Dockerfile"""
+
         content = generate_dockerfile_content(function)
         add_file(function.config.path, RequiredFile.DOCKERFILE, content)
 
     @classmethod
     def generate_entry_point(cls, function: FunctionRecord) -> None:
+        """Generates an entry point script with a default http example content"""
+
         content = """
 def main(request):
     \"""HTTP Cloud Function.
@@ -116,10 +124,14 @@ def main(request):
 
 
 class PubSub(Default, BaseModel):
+    """Default implementation of the Cloud Function PubSub function type"""
+
     DEFAULT_PORT: ClassVar[int] = 8090
 
     @classmethod
     def config(cls, f_name: str, f_dir: PathStr) -> FunctionConfig:
+        """Instantiate a default function config for the Pubsub function type"""
+
         signature_type = SignatureType.PUBSUB
         config = FunctionConfig.default(
             cloud_provider=CloudProvider.GCP,
@@ -138,11 +150,15 @@ class PubSub(Default, BaseModel):
 
     @classmethod
     def generate_dockerfile(cls, function: FunctionRecord) -> None:
+        """Generates a Dockerfile"""
+
         content = generate_dockerfile_content(function)
         add_file(function.config.path, RequiredFile.DOCKERFILE, content)
 
     @classmethod
     def generate_entry_point(cls, function: FunctionRecord) -> None:
+        """Generates an entry point script with a default pubsub example content"""
+
         content = """
 def main(event, context):
     \"""Background Cloud Function to be triggered by Pub/Sub.

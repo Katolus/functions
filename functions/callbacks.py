@@ -108,6 +108,7 @@ def remove_function_name_callback(
 def generate_new_function_callback(
     ctx: typer.Context, param: typer.CallbackParam, value: str
 ) -> Optional[str]:
+    """Callback for generating a new function"""
     if not value or value == ".":
         confirm_abort("Are you sure you want to use the current directory?")
         value = "."

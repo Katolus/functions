@@ -67,5 +67,7 @@ class CloudFunctionLabel(str, Enum):
 
 
 class SignatureType(str, Enum):
+    """Cloud function signature types"""
+
     PUBSUB = "event"
     HTTP = "http"
