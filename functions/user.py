@@ -10,6 +10,7 @@ from functions.config.models import FunctionConfig
 
 
 def ask(question: str, default: str = None, options: List[str] = None) -> str:
+    """A string user prompt of the user in the console"""
     if options:
         question += f"{styles.yellow(' Options')}[{', '.join(options)}]"
 
@@ -20,15 +21,17 @@ def ask(question: str, default: str = None, options: List[str] = None) -> str:
 
 
 def confirm(question: str, default: bool = False) -> bool:
+    """A boolean confirm prompt of the user in the console"""
     return typer.confirm(question, default=default)
 
 
 def confirm_abort(question: str) -> bool:
+    """A boolean confirm prompt of the user in the console with a default abort action"""
     return typer.confirm(question, abort=True)
 
 
 def inform(msg: str, log=True) -> None:
-    """Informs a user about something."""
+    """Informs a user with a message"""
     if log:
         logs.info(logs.remove_empty_lines_from_string(msg))
     else:
@@ -36,7 +39,7 @@ def inform(msg: str, log=True) -> None:
 
 
 def warn(msg: str, log=True) -> None:
-    """Warning to a user about something."""
+    """Warning a user with message"""
     if log:
         logs.warning(logs.remove_empty_lines_from_string(msg))
     else:
