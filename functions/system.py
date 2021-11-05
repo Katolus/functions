@@ -45,7 +45,7 @@ def link_common(function_dir: str):
     os.symlink(src_path, dst_path, target_is_directory=False)
 
 
-# TODO: Update this method
+# Piotr: Update this method
 def add_required_files(
     function_name: str,
     function_dir: str,

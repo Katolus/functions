@@ -33,7 +33,6 @@ from functions.docker.tools import remove_image
 from functions.docker.tools import run_container
 from functions.docker.tools import stop_container
 from functions.gcp.cloud_function.errors import GCPCommandError
-from functions.gcp.helpers import check_if_gcloud_cmd_installed
 from functions.logs import set_console_debug_level
 from functions.styles import green
 from functions.system import construct_abs_path
@@ -41,8 +40,9 @@ from functions.system import construct_abs_path
 subcommands = [(new.app, "new")]
 
 # Only add gcp commands if gcloud is installed
-if check_if_gcloud_cmd_installed():
-    subcommands.append((gcp.app, "gcp"))
+# Disable for now as it is taking too long to execute scripts
+# if check_if_gcloud_cmd_installed():
+subcommands.append((gcp.app, "gcp"))
 
 app = Functions(subcommands=subcommands)
 
@@ -237,7 +237,7 @@ def add(
         # Ask what type of function it is
         function_type = user.ask(
             "What type of function is this?",
-            default=FunctionType.HTTP,
+            default=FunctionType.HTTP.value,
             options=FunctionType.options(),
         )
         # Generate a config instance

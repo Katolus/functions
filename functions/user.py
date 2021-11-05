@@ -10,7 +10,7 @@ from functions import styles
 
 def ask(question: str, default: str = None, options: List[str] = None) -> str:
     if options:
-        question += f" ({', '.join(options)})"
+        question += f"{styles.yellow(' Options')}[{', '.join(options)}]"
 
     return typer.prompt(
         question,

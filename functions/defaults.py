@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from pydantic.main import BaseModel
 
 from functions.gcp.defaults import GCPDefaults
@@ -6,7 +8,8 @@ from functions.gcp.defaults import GCPDefaults
 class Defaults(BaseModel):
     """Links to together all the default classes"""
 
-    GCP = GCPDefaults()
+    # TODO: Update this to be more comprehensive, feels a bit dirty
+    GCP: ClassVar = GCPDefaults()
 
 
 default_entry_hello_pubsub = """

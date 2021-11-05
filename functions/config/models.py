@@ -173,9 +173,6 @@ class FunctionConfig(BaseModel):
         """
         Generate a function's configuration file.
         """
-        # Validate the path
-        validate_path(f_path)
-
         # Load a default config based on a function type
         return cls.load_default_config(f_name, f_type, f_path)
 

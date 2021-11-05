@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from pydantic.main import BaseModel
 
 from functions.config.models import FunctionConfig
@@ -11,7 +13,7 @@ from functions.types import PathStr
 
 
 class HTTP(BaseModel):
-    DEFAULT_PORT: int = 8080
+    DEFAULT_PORT: ClassVar[int] = 8080
 
     @classmethod
     def config(cls, function_name: str, function_dir: PathStr) -> FunctionConfig:
@@ -19,7 +21,7 @@ class HTTP(BaseModel):
         config = FunctionConfig.default(
             cloud_provider=CloudProvider.GCP,
             cloud_service_type=CloudServiceType.CLOUD_FUNCTION,
-            function_dir=function_dir,
+            function_dir=str(function_dir),
             function_name=function_name,
             port=cls.DEFAULT_PORT,
             runtime=Runtime.PYTHON39,
@@ -33,7 +35,7 @@ class HTTP(BaseModel):
 
 
 class PubSub(BaseModel):
-    DEFAULT_PORT: int = 8090
+    DEFAULT_PORT: ClassVar[int] = 8090
 
     @classmethod
     def config(cls, function_name: str, function_dir: PathStr) -> FunctionConfig:
@@ -41,7 +43,7 @@ class PubSub(BaseModel):
         return FunctionConfig.default(
             cloud_provider=CloudProvider.GCP,
             cloud_service_type=CloudServiceType.CLOUD_FUNCTION,
-            function_dir=function_dir,
+            function_dir=str(function_dir),
             function_name=function_name,
             port=cls.DEFAULT_PORT,
             runtime=Runtime.PYTHON39,
