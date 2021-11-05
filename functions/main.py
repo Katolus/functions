@@ -15,8 +15,6 @@ from functions.callbacks import function_name_autocomplete_callback
 from functions.callbacks import remove_function_name_callback
 from functions.callbacks import running_functions_autocomplete_callback
 from functions.callbacks import version_callback
-from functions.commands import gcp
-from functions.commands import new
 from functions.config import remove_function_from_registry
 from functions.config import store_function_info_to_registry
 from functions.config.files import FunctionRegistry
@@ -24,7 +22,7 @@ from functions.config.models import FunctionConfig
 from functions.constants import FunctionStatus
 from functions.constants import FunctionType
 from functions.constants import LoggingLevel
-from functions.core import Functions
+from functions.core import FunctionsCli
 from functions.docker.helpers import all_functions
 from functions.docker.helpers import get_config_from_image
 from functions.docker.tools import build_image
@@ -37,14 +35,7 @@ from functions.logs import set_console_debug_level
 from functions.styles import green
 from functions.system import construct_abs_path
 
-subcommands = [(new.app, "new")]
-
-# Only add gcp commands if gcloud is installed
-# Disable for now as it is taking too long to execute scripts
-# if check_if_gcloud_cmd_installed():
-subcommands.append((gcp.app, "gcp"))
-
-app = Functions(subcommands=subcommands)
+app = FunctionsCli()
 
 
 @app.callback()
