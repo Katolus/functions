@@ -12,7 +12,7 @@ from pydantic.types import Json
 from functions import logs
 from functions.config.managers import FunctionRegistry
 from functions.config.models import FunctionRecord
-from functions.constants import FunctionStatus
+from functions.constants import CloudStatus
 from functions.gcp.cloud_function.constants import CloudFunctionLabel
 from functions.gcp.cloud_function.constants import Runtime
 from functions.gcp.cloud_function.constants import Trigger
@@ -142,7 +142,7 @@ def deploy_function(function: FunctionRecord, *, new_name: str = None):
         + add_trigger_arguments(function.config.deploy_variables.trigger)
     )
 
-    function.status = FunctionStatus.DEPLOYED
+    function.status.GCP = CloudStatus.DEPLOYED
     FunctionRegistry.update_function(function)
     logs.debug(f"Successfully deployed {cloud_function_name}")
 

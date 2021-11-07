@@ -6,9 +6,8 @@ import typer
 from functions import user
 from functions.arguments import FunctionNameArgument
 from functions.callbacks import generate_new_function_callback
-from functions.config import store_function_info_to_registry
 from functions.config.models import FunctionRecord
-from functions.constants import FunctionStatus
+from functions.constants import LocalStatus
 from functions.defaults import Defaults
 
 app = typer.Typer(help="Factory method for creating new functions")
@@ -46,7 +45,8 @@ def pubsub(
     user.prompt_to_save_config(pubsub_config)
 
     # Add function to the function registry
-    store_function_info_to_registry(f_record, status=FunctionStatus.NEW)
+    f_record.set_local_status(LocalStatus.NEW)
+    f_record.update_registry()
 
     user.inform(f"Added a new pubsub function -> {full_function_path}")
 
@@ -83,6 +83,7 @@ def http(
     user.prompt_to_save_config(http_config)
 
     # Add function to the function registry
-    store_function_info_to_registry(f_record, status=FunctionStatus.NEW)
+    f_record.set_local_status(LocalStatus.NEW)
+    f_record.update_registry()
 
     user.inform(f"Added a new http function to -> {full_function_path}")

@@ -10,10 +10,11 @@ from functions import styles
 from functions.config.errors import ConfigValidationError
 from functions.constants import CloudProvider
 from functions.constants import CloudServiceType
+from functions.constants import CloudStatus
 from functions.constants import ConfigName
 from functions.constants import DEFAULT_LOG_FILE
-from functions.constants import FunctionStatus
 from functions.constants import FunctionType
+from functions.constants import LocalStatus
 from functions.errors import InvalidFunctionTypeError
 from functions.types import DictStrAny
 from functions.types import PathStr
@@ -177,6 +178,13 @@ class FunctionConfig(BaseModel):
         return cls.load_default_config(f_name, f_type, f_path)
 
 
+class FunctionStatus(BaseModel):
+    """A class representing the status of a function"""
+
+    LOCAL: Optional[LocalStatus] = None
+    GCP: Optional[CloudStatus] = None
+
+
 class FunctionRecord(BaseModel):
     """
     Represents a function record.
@@ -184,16 +192,43 @@ class FunctionRecord(BaseModel):
 
     name: str
     config: FunctionConfig
-    status: FunctionStatus = FunctionStatus.UNKNOWN
+    status: FunctionStatus = FunctionStatus()
 
     def __str__(self) -> str:
-        return " | ".join(
-            [
-                f"Function - {styles.red(self.name)}",
-                f"Local - {styles.blue(self.status.upper())}",
-                f"GCP - {styles.blue(self.status.upper())}",
-            ]
-        )
+        message_chunks = [
+            f"Function - {styles.red(self.name)}",
+        ]
+        if self.status.LOCAL:
+            message_chunks.append(
+                f"Local - {styles.blue(self.status.LOCAL.upper())}",
+            )
+
+        if self.status.GCP:
+            message_chunks.append(
+                f"GCP - {styles.blue(self.status.GCP.upper())}",
+            )
+
+        return " | ".join(message_chunks)
+
+    def set_local_status(self, status: LocalStatus) -> None:
+        """
+        Set the local status of the function.
+        """
+        self.status.LOCAL = status
+
+    def set_gcp_status(self, status: CloudStatus) -> None:
+        """
+        Set the GCP status of the function.
+        """
+        self.status.GCP = status
+
+    def update_registry(self) -> None:
+        """
+        Update the function registry with the current function record.
+        """
+        from functions.config.files import FunctionRegistry
+
+        FunctionRegistry.store_function(self)
 
 
 class AppLogging(BaseModel):

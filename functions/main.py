@@ -15,13 +15,11 @@ from functions.callbacks import function_name_autocomplete_callback
 from functions.callbacks import remove_function_name_callback
 from functions.callbacks import running_functions_autocomplete_callback
 from functions.callbacks import version_callback
-from functions.config import remove_function_from_registry
-from functions.config import store_function_info_to_registry
 from functions.config.files import FunctionRegistry
 from functions.config.models import FunctionConfig
 from functions.config.models import FunctionRecord
-from functions.constants import FunctionStatus
 from functions.constants import FunctionType
+from functions.constants import LocalStatus
 from functions.constants import LoggingLevel
 from functions.core import FunctionsCli
 from functions.docker.helpers import all_functions
@@ -97,8 +95,8 @@ def build(
     function_name = config.run_variables.name
 
     function = FunctionRecord(name=function_name, config=config)
-    # store the function details in the config
-    store_function_info_to_registry(function, status=FunctionStatus.BUILT)
+    function.set_local_status(LocalStatus.BUILT)
+    function.update_registry
 
     user.inform(
         f"{styles.green('Successfully')} build a function's image."
@@ -171,7 +169,7 @@ def remove(
 ) -> None:
     """Removes an image of a functions from the local registry"""
     remove_image(function_name)
-    remove_function_from_registry(function_name)
+    FunctionRegistry.remove_function(function_name)
     user.inform(f"Function ({function_name}) has been removed")
 
 
@@ -248,7 +246,8 @@ def add(
         )
 
     function = FunctionRecord(name=function_name, config=config)
-    store_function_info_to_registry(function, status=FunctionStatus.ADDED)
+    function.set_local_status(LocalStatus.ADDED)
+    function.update_registry()
 
     # Ask if user wants to store the configuration file in the directory
     user.prompt_to_save_config(config)

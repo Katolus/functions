@@ -69,17 +69,23 @@ class FunctionType(str, Enum):
         return [enum.value for enum in cls]
 
 
-class FunctionStatus(str, Enum):
-    """Represents the status of a function"""
+class LocalStatus(str, Enum):
+    """Represents the status of a function locally"""
 
     ADDED = "added"
     BUILT = "built"
-    DEPLOYED = "deployed"
     INVALID = "invalid"
     NEW = "new"
     REMOVED = "removed"
     RUNNING = "running"
     STOPPED = "stopped"
+    UNKNOWN = "unknown"
+
+
+class CloudStatus(str, Enum):
+    """Represents the status of a function on the cloud"""
+
+    DEPLOYED = "deployed"
     UNKNOWN = "unknown"
 
 
