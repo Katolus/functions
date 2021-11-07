@@ -115,6 +115,14 @@ class FunctionRegistry(BaseModel, File):
         logs.debug(f"Updated function {function.name} in registry")
 
     @classmethod
+    def store_function(cls, function: FunctionRecord) -> None:
+        """Stores a function in the registry"""
+        if cls.check_if_function_name_in_registry(function.name):
+            cls.update_function(function)
+        else:
+            cls.add_function(function)
+
+    @classmethod
     def remove_function(cls, function_name: str) -> None:
         """Removes a function from the registry"""
 
