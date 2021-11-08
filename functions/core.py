@@ -37,6 +37,7 @@ class FunctionsCli(BaseModel):
         subcommands = (
             (commands.new, "new"),
             (commands.gcp, "gcp"),
+            (commands.sync, "sync"),
         )
         super().__init__(subcommands=subcommands, **data)
 
