@@ -238,7 +238,7 @@ class DockerContainer:
         """
         Run the container.
         """
-        container = run_container(image, name, port)
+        container = run_container(image._image, name, port)
         return cls(container)
 
     @classmethod

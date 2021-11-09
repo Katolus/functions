@@ -7,14 +7,13 @@ import typer
 from functions import logs
 from functions import styles
 from functions import user
-from functions.autocomplete import autocomplete_function_names
+from functions.autocomplete import autocomplete_built_names
 from functions.autocomplete import autocomplete_registry_function_names
 from functions.autocomplete import autocomplete_running_function_names
-from functions.callbacks import add_callback
+from functions.callbacks import check_if_dir_is_a_valid_function_path
 from functions.callbacks import check_if_function_is_built
 from functions.callbacks import check_if_function_is_running
-from functions.callbacks import remove_function_name_callback
-from functions.callbacks import version_callback
+from functions.callbacks import print_out_the_version
 from functions.config.files import FunctionRegistry
 from functions.config.models import FunctionConfig
 from functions.config.models import FunctionRecord
@@ -42,7 +41,7 @@ def main(
         None,
         "--version",
         help="Prints out the version of the package",
-        callback=version_callback,
+        callback=print_out_the_version,
         is_eager=True,
     ),
 ) -> None:
@@ -90,7 +89,7 @@ def run(
     function_name: str = typer.Argument(
         ...,
         help="Name of the function you want to run",
-        autocompletion=autocomplete_function_names,
+        autocompletion=autocomplete_built_names,
         callback=check_if_function_is_built,
     ),
 ) -> None:
@@ -147,8 +146,8 @@ def remove(
     function_name: str = typer.Argument(
         ...,
         help="Name of the function you want to remove",
-        autocompletion=autocomplete_function_names,
-        callback=remove_function_name_callback,
+        autocompletion=autocomplete_built_names,
+        callback=check_if_function_is_built,
     )
 ) -> None:
     """Removes a local image of a functions"""
@@ -193,7 +192,7 @@ def add(
         exists=True,
         file_okay=False,
         resolve_path=True,
-        callback=add_callback,
+        callback=check_if_dir_is_a_valid_function_path,
     ),
 ) -> None:
     """Adds a function to the registry"""

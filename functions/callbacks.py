@@ -5,22 +5,20 @@ import typer
 from functions import __project_name__
 from functions import __version__
 from functions import styles
-from functions.autocomplete import autocomplete_function_names
-from functions.autocomplete import autocomplete_running_function_names
-from functions.config.models import FunctionConfig
+from functions import user
+from functions.config.files import FunctionRegistry
+from functions.constants import LocalStatus
 from functions.decorators import handle_error
 from functions.decorators import resilient_parsing
-from functions.docker.helpers import all_functions
-from functions.errors import FunctionNameTaken
 from functions.user import confirm_abort
 from functions.validators import validate_name
 
 
 @handle_error
-def version_callback(value: bool) -> None:
+def print_out_the_version(value: bool) -> None:
     """Prints out the version of the package and exists"""
     if value:
-        typer.echo(
+        user.inform(
             f"You are using {styles.bold(__version__)} version of the "
             f"{styles.bold(__project_name__)} package"
         )
@@ -48,7 +46,9 @@ def check_if_function_is_built(
     ctx: typer.Context, param: typer.CallbackParam, value: str
 ) -> Optional[str]:
 
-    build_functions = list(autocomplete_function_names(""))
+    build_functions = FunctionRegistry.fetch_local_function_names(
+        status=LocalStatus.BUILT
+    )
     if build_functions and value not in build_functions:
         raise typer.BadParameter(
             f"You can only run build functions {build_functions}."
@@ -62,26 +62,12 @@ def check_if_function_is_built(
 def check_if_function_is_running(
     ctx: typer.Context, param: typer.CallbackParam, value: str
 ) -> Optional[str]:
-    if (
-        running_functions := list(autocomplete_running_function_names(""))
-    ) and value not in running_functions:
+    running_functions = FunctionRegistry.fetch_local_function_names(
+        status=LocalStatus.RUNNING
+    )
+    if running_functions and value not in running_functions:
         raise typer.BadParameter(
             f"You can only stop already running functions {running_functions}."
-            " Use autocomplete the pass a valid name."
-        )
-
-    return value
-
-
-@resilient_parsing
-def remove_function_name_callback(
-    ctx: typer.Context, param: typer.CallbackParam, value: str
-) -> Optional[str]:
-    if (
-        running_functions := list(autocomplete_running_function_names(""))
-    ) and value not in running_functions:
-        raise typer.BadParameter(
-            f"You can only remove existing functions {running_functions}."
             " Use autocomplete the pass a valid name."
         )
 
@@ -100,7 +86,10 @@ def confirm_current_directory_as_target(
     return value
 
 
-def add_callback(ctx: typer.Context, param: typer.CallbackParam, value: str) -> str:
-    """Validates a call to the `add` command"""
-    # Check if the path is a valid path
+def check_if_dir_is_a_valid_function_path(
+    ctx: typer.Context, param: typer.CallbackParam, value: str
+) -> str:
+    """Callback that validates a target directory"""
+    # TODO: Add a check to see if the function name is already taken
+    # TODO: Check if the path is a valid path
     return value

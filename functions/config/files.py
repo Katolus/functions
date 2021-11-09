@@ -10,6 +10,8 @@ from functions.config.interfaces import TOML
 from functions.config.models import AppLogging
 from functions.config.models import FunctionRecord
 from functions.config.types import FunctionsMap
+from functions.constants import CloudStatus
+from functions.constants import LocalStatus
 from functions.errors import FunctionNotFoundError
 from functions.system import check_if_file_exists
 from functions.system import write_to_file
@@ -89,6 +91,26 @@ class FunctionRegistry(BaseModel, File):
     def fetch_function_names(cls) -> List[str]:
         """Returns a list of all function names"""
         return list(cls.load().functions.keys())
+
+    @classmethod
+    def fetch_local_function_names(cls, status: LocalStatus) -> List[str]:
+        """Returns a list of all built function names"""
+        all_functions = cls.fetch_all_functions()
+        return [
+            function.name
+            for function in all_functions
+            if function.status.LOCAL == status
+        ]
+
+    @classmethod
+    def fetch_gcp_function_names(
+        cls, status: CloudStatus = CloudStatus.DEPLOYED
+    ) -> List[str]:
+        """Returns a list of function names deployed to GCP"""
+        all_functions = cls.fetch_all_functions()
+        return [
+            function.name for function in all_functions if function.status.GCP == status
+        ]
 
     @classmethod
     def add_function(cls, function: FunctionRecord) -> None:
