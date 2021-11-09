@@ -2,11 +2,11 @@ from typing import List, Optional
 
 # Add stubs for docker-py
 from functions.config.models import FunctionConfig
-from functions.constants import DockerLabel
 from functions.docker.classes import DockerContainer
 from functions.docker.classes import DockerFunction
 from functions.docker.classes import DockerImage
 from functions.docker.client import docker_client
+from functions.docker.enums import DockerLabel
 
 
 def get_config_from_image(image: DockerImage) -> FunctionConfig:

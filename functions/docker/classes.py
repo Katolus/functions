@@ -6,8 +6,8 @@ from pydantic import BaseModel
 from pydantic import PrivateAttr
 
 from functions.config.models import FunctionConfig
-from functions.constants import DockerLabel
 from functions.constants import LocalStatus
+from functions.docker.enums import DockerLabel
 
 DockerImageType = TypeVar("DockerImageType", bound=Image)
 
@@ -27,6 +27,7 @@ class DockerContainer(BaseModel, Container):
         raise NotImplementedError()
 
 
+# Try to merry this with FunctionRecord class
 class DockerFunction(BaseModel):
     """Base class for representing docker functions."""
 

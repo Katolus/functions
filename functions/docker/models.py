@@ -1,4 +1,5 @@
 """Set of typed models for managing docker processes and manipulation docker objects"""
+
 from typing import Dict
 
 from pydantic import BaseModel
@@ -17,15 +18,3 @@ class BuildVariables(BaseModel):
     tag: str
     buildargs: BuildArgs
     labels: Dict[DockerLabel, str]
-
-
-class DockerImage:
-    """
-    DockerImage is a class that represents a docker image.
-    """
-
-    labels: Dict[DockerLabel, str] = {}
-
-
-class DockerContainer:
-    ...

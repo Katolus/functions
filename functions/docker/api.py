@@ -1,10 +1,13 @@
 """Functional approach towards managing docker objects and processes"""
+from __future__ import annotations
 
 import json
 import re
 from typing import List
 
 import docker
+from docker.models.containers import Container
+from docker.models.images import Image
 from docker.utils.json_stream import json_stream
 
 from functions import logs
@@ -12,8 +15,6 @@ from functions import user
 from functions.config.models import FunctionRecord
 from functions.docker.enums import DockerLabel
 from functions.docker.models import BuildVariables
-from functions.docker.models import DockerContainer
-from functions.docker.models import DockerImage
 from functions.docker.types import DockerBuildAPIGenerator
 from functions.errors import FunctionBuildError
 
@@ -83,14 +84,14 @@ def _call_build_api(function: FunctionRecord) -> DockerBuildAPIGenerator:
         yield image_id, last_event.get("stream")
 
 
-def get_image(image_id: str) -> DockerImage:
+def get_image(image_id: str) -> Image:
     """
     Returns an image by id
     """
     return client.images.get(image_id)
 
 
-def build_image(function: FunctionRecord, show_logs: bool) -> DockerImage:
+def build_image(function: FunctionRecord, show_logs: bool) -> Image:
     """
     Builds the image for the function
     """
@@ -121,24 +122,16 @@ def build_image(function: FunctionRecord, show_logs: bool) -> DockerImage:
     return image
 
 
-def remove_image(image: DockerImage) -> None:
-    """
-    Removes an image
-    """
-    # TODO: Validate if this works
-    logs.debug(f"Removing image {image.id}")
-    image.remove()
-
-
 def remove_image_by_name(name: str) -> None:
     """
     Removes an image by name
     """
+    # TODO: Validate if name is id
     logs.debug(f"Removing image {name}")
-    client.images.remove(name)
+    client.images.remove(name)  # type: ignore
 
 
-def get_container(name: str):
+def get_container(name: str) -> Container:
     """
     Returns a container by name
     """
@@ -147,34 +140,101 @@ def get_container(name: str):
 
 
 def run_container(
-    image: DockerImage,
-    function: FunctionRecord,
-) -> DockerContainer:
+    image: Image,
+    function_name: str,
+    port: int,
+) -> Container:
     """
     Runs a container from an image
     """
-    logs.debug(f"Running container for {function.name}")
+    logs.debug(f"Running container for {function_name}")
 
     return client.containers.run(
         image,
-        ports={"8080": function.config.run_variables.port},
+        ports={"8080": port},
         remove=True,
-        name=function.config.run_variables.name,
+        name=function_name,
         detach=True,
     )
 
 
-def stop_container(container: DockerContainer) -> None:
+def stop_container(name: str) -> None:
     """
     Stops a container
     """
-    logs.debug(f"Stopping container {container.name}")
-    container.stop()
+    container = get_container(name)
+    logs.debug(f"Stopping container {name}")
+    container.stop()  # type: ignore
 
 
-def get_containers(self) -> List:
+def get_containers() -> List[Container]:
     """
     Returns a list of all the containers
     """
-    # TODO: Validate this works
-    return client.containers.list()
+    client.containers.list()
+
+
+class DockerImage:
+    """
+    A wrapper class around the docker Image class.
+    """
+
+    _image: Image
+
+    def __init__(self, image: Image, /) -> None:
+        self._image = image
+
+    # labels: Dict[DockerLabel, str] = {}
+
+    @property
+    def id(self) -> str:
+        return self._image.id
+
+    # @property
+    # def labels(self) -> Dict[DockerLabel, str]:
+    #     return super().labels
+
+    def remove(self) -> None:
+        """
+        Remove the image from the docker daemon.
+        """
+        remove_image_by_name(self._image.id)
+
+    @classmethod
+    def get(cls, image_id: str) -> DockerImage:
+        """
+        Get an image from the docker daemon.
+        """
+        # TODO: Validate the format of the image_id
+        return cls(get_image(image_id))
+
+
+class DockerContainer:
+    """
+    A wrapper class around the docker Container class.
+    """
+
+    _container: Container
+
+    def __init__(self, container: Container, /) -> None:
+        self._container = container
+
+    @classmethod
+    def run(cls, image: DockerImage, name: str, port: int) -> DockerContainer:
+        """
+        Run the container.
+        """
+        container = run_container(image, name, port)
+        return cls(container)
+
+    @classmethod
+    def stop(cls, container_id: str) -> None:
+        """Stops a running container"""
+        stop_container(container_id)
+
+    @classmethod
+    def get(cls, container_id: str) -> DockerContainer:
+        """
+        Get a container from the docker daemon.
+        """
+        return cls(get_container(container_id))

@@ -23,14 +23,9 @@ from functions.constants import LocalStatus
 from functions.constants import LoggingLevel
 from functions.core import FunctionsCli
 from functions.docker.helpers import all_functions
-from functions.docker.helpers import get_config_from_image
-from functions.docker.tools import build_image
-from functions.docker.tools import get_image
-from functions.docker.tools import remove_image
-from functions.docker.tools import run_container
-from functions.docker.tools import stop_container
 from functions.gcp.cloud_function.errors import GCPCommandError
 from functions.logs import set_console_debug_level
+from functions.models import Function
 from functions.styles import green
 from functions.system import construct_abs_path
 
@@ -114,13 +109,13 @@ def run(
     ),
 ) -> None:
     """Start a container for a given function"""
+    # Guaranteed to exist because of the autocomplete + callback
+    function = Function(function_name)
 
-    function_image = get_image(function_name)
-    config = get_config_from_image(function_image)
-    container = run_container(function_image, config)
+    function.run()
 
     user.inform(
-        f"Function ({container.name}) has {green('started')}."
+        f"Function ({function.name}) has {green('started')}."
         f" Visit -> http://localhost:{config.run_variables.port}"
     )
 
@@ -135,7 +130,10 @@ def stop(
     ),
 ) -> None:
     """Stops a running function"""
-    stop_container(function_name)
+    function = Function(function_name)
+
+    function.stop()
+
     user.inform(f"Function ({function_name}) has been stopped.")
 
 
