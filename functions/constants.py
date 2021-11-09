@@ -71,6 +71,15 @@ class LocalStatus(str, Enum):
     STOPPED = "stopped"
     UNKNOWN = "unknown"
 
+    @classmethod
+    def build_statuses(cls) -> List[str]:
+        """Returns a list of statuses that in"""
+        return [
+            cls.BUILT,
+            cls.RUNNING,
+            cls.STOPPED,
+        ]
+
 
 class CloudStatus(str, Enum):
     """Represents the status of a function on the cloud"""

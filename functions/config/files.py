@@ -75,7 +75,7 @@ class FunctionRegistry(BaseModel, File):
 
     @classmethod
     def fetch_function(cls, function_name: str) -> FunctionRecord:
-        """Returns the function record for a function"""
+        """Returns a function record for a function"""
         functions = cls.load().functions
         try:
             return functions[function_name]
@@ -91,6 +91,17 @@ class FunctionRegistry(BaseModel, File):
     def fetch_function_names(cls) -> List[str]:
         """Returns a list of all function names"""
         return list(cls.load().functions.keys())
+
+    @classmethod
+    def fetch_built_function_names(cls) -> List[str]:
+        """Returns a list of all built function names"""
+        all_functions = cls.fetch_all_functions()
+
+        return [
+            function.name
+            for function in all_functions
+            if function.status.LOCAL in LocalStatus.build_statuses()
+        ]
 
     @classmethod
     def fetch_local_function_names(cls, status: LocalStatus) -> List[str]:

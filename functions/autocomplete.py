@@ -13,7 +13,7 @@ def autocomplete_registry_function_names(incomplete: str) -> Iterator[str]:
 
 def autocomplete_built_names(incomplete: str) -> Iterator[str]:
     """Autocompletes a list of matching functions"""
-    for function_name in FunctionRegistry.fetch_local_function_names(LocalStatus.BUILT):
+    for function_name in FunctionRegistry.fetch_built_function_names():
         if function_name.startswith(incomplete):
             yield function_name
 

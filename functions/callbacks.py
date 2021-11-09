@@ -46,9 +46,7 @@ def check_if_function_is_built(
     ctx: typer.Context, param: typer.CallbackParam, value: str
 ) -> Optional[str]:
 
-    build_functions = FunctionRegistry.fetch_local_function_names(
-        status=LocalStatus.BUILT
-    )
+    build_functions = FunctionRegistry.fetch_built_function_names()
     if build_functions and value not in build_functions:
         raise typer.BadParameter(
             f"You can only run build functions {build_functions}."

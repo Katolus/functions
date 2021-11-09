@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import json
 import re
-from typing import List
+from typing import Dict, List
 
 import docker
 from docker.models.containers import Container
@@ -14,6 +14,7 @@ from functions import logs
 from functions import user
 from functions.config.models import FunctionRecord
 from functions.docker.enums import DockerLabel
+from functions.docker.helpers import get_function_name_from_labels
 from functions.docker.models import BuildVariables
 from functions.docker.types import DockerBuildAPIGenerator
 from functions.errors import FunctionBuildError
@@ -169,11 +170,10 @@ def stop_container(name: str) -> None:
     container.stop()  # type: ignore
 
 
-def get_containers() -> List[Container]:
-    """
-    Returns a list of all the containers
-    """
-    client.containers.list()
+def get_all_images() -> List[Image]:
+    """Returns all functions created by this package"""
+    # TODO: Update the filters and labels to be generated in a template
+    return client.images.list(filters={"label": f"{DockerLabel.ORGANISATION}=Ventress"})
 
 
 class DockerImage:
@@ -186,15 +186,17 @@ class DockerImage:
     def __init__(self, image: Image, /) -> None:
         self._image = image
 
-    # labels: Dict[DockerLabel, str] = {}
-
     @property
     def id(self) -> str:
         return self._image.id
 
-    # @property
-    # def labels(self) -> Dict[DockerLabel, str]:
-    #     return super().labels
+    @property
+    def name(self) -> str:
+        return get_function_name_from_labels(self._image.labels)
+
+    @property
+    def labels(self) -> Dict[DockerLabel, str]:
+        return self._image.labels
 
     def remove(self) -> None:
         """
@@ -217,6 +219,20 @@ class DockerImage:
         """
         # TODO: Validate the format of the image_id
         return cls(get_image(image_id))
+
+    @classmethod
+    def get_all(cls) -> List[DockerImage]:
+        """
+        Returns all the images
+        """
+        return [cls(image) for image in get_all_images()]
+
+    @classmethod
+    def get_all_names(cls) -> List[str]:
+        """
+        Return a list of all the image names
+        """
+        return [image.name for image in cls.get_all()]
 
 
 class DockerContainer:
