@@ -73,7 +73,7 @@ class LocalStatus(str, Enum):
 
     @classmethod
     def build_statuses(cls) -> List[str]:
-        """Returns a list of statuses that in"""
+        """Returns a list of statuses which mean that the image is built"""
         return [
             cls.BUILT,
             cls.RUNNING,
