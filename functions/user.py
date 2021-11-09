@@ -30,7 +30,7 @@ def confirm_abort(question: str) -> bool:
     return typer.confirm(question, abort=True)
 
 
-def inform(msg: str, log=True) -> None:
+def inform(msg: str, log: bool = True) -> None:
     """Informs a user with a message"""
     if log:
         logs.info(logs.remove_empty_lines_from_string(msg))
@@ -38,7 +38,7 @@ def inform(msg: str, log=True) -> None:
         typer.echo(msg)
 
 
-def warn(msg: str, log=True) -> None:
+def warn(msg: str, log: bool = True) -> None:
     """Warning a user with message"""
     if log:
         logs.warning(logs.remove_empty_lines_from_string(msg))
@@ -46,7 +46,7 @@ def warn(msg: str, log=True) -> None:
         warnings.warn(f"{styles.yellow('WARNING: ')}{msg}")
 
 
-def fail(msg: str, log=True) -> None:
+def fail(msg: str, log: bool = True) -> None:
     """Inform a user about a failed execution"""
     if log:
         logs.error(logs.remove_empty_lines_from_string(msg))
