@@ -54,6 +54,7 @@ class FunctionRegistry(BaseModel, File):
         logs.debug(f"Writing function registry to file: {cls.filepath()}")
         write_to_file(cls.filepath(), content.json())
 
+    # TODO: Add caching to this functions or it will be too slow
     @classmethod
     def load(cls) -> FunctionRegistry:
         """Loads the main configuration from file"""

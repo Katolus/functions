@@ -82,6 +82,11 @@ class FunctionNotFoundError(FunctionBaseError):
     msg_template = "Function '{name}' not found in registry. Try running `functions sync local` to synchronize built functions"
 
 
+class FunctionImageNotFoundError(FunctionBaseError):
+    code = "functions.image_not_found"
+    msg_template = "Function's image ({image_id}) not found"
+
+
 class InvalidFunctionTypeError(FunctionBaseError):
     code = "functions.invalid_type"
     msg_template = "Function type ({type}) is not valid nor supported"

@@ -63,7 +63,7 @@ class FunctionConfig(BaseModel):
 
     @property
     def config_path(self) -> str:
-        return os.path.join(self.path, self.config_name)
+        return str(os.path.join(self.path, self.config_name))
 
     def save(self) -> None:
         """

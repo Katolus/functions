@@ -37,6 +37,7 @@ class Function:
         """
         if not self._image:
             self._image = DockerImage.get(self.name)
+
         return self._image
 
     @property
@@ -48,6 +49,16 @@ class Function:
             self._container = DockerContainer.get(self.name)
         return self._container
 
+    def build(self, show_logs: bool = False) -> None:
+        """
+        Builds the function's image.
+        """
+        self._image = DockerImage.build(self._record, show_logs)
+
+        # Set built status
+        self._record.set_local_status(LocalStatus.BUILT)
+        self._record.update_registry()
+
     def run(self) -> None:
         """
         Run the function locally
@@ -57,6 +68,7 @@ class Function:
         )
         # Set running status
         self._record.set_local_status(LocalStatus.RUNNING)
+        self._record.update_registry()
 
     def stop(self) -> None:
         """
@@ -66,5 +78,31 @@ class Function:
             container.stop()
             # Set stopped status
             self._record.set_local_status(LocalStatus.STOPPED)
+            self._record.update_registry()
         else:
             raise FunctionNotRunningError(name=self.name)
+
+    def remove(self) -> None:
+        """
+        Removes the function's image
+        """
+        if self.image:
+            self.image.remove()
+
+        # Set removed status
+        self._record.set_local_status(LocalStatus.REMOVED)
+        self._record.update_registry()
+
+    def delete_all(self) -> None:
+        """
+        Deletes all the function's resources
+        """
+        # Stop the container from running
+        if self.container:
+            self.container.stop()
+        # Remove the image of the function
+        if self.image:
+            self.image.remove()
+
+        # Remvoe from the registry
+        FunctionRegistry.remove_function(self.name)

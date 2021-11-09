@@ -27,24 +27,8 @@ def version_callback(value: bool) -> None:
         raise typer.Exit()
 
 
-@handle_error
-def build_function_callack(
-    ctx: typer.Context, param: typer.CallbackParam, function_path: str
-):
-    """
-    Check if a function name is already an existing function image. Throw an error if so
-    """
-    config = FunctionConfig.load(function_path)
-    built_function_names = [function.name for function in all_functions()]
-
-    if config.run_variables.name in built_function_names:
-        raise FunctionNameTaken(name=config.run_variables.name)
-
-    return function_path
-
-
 @resilient_parsing
-def function_name_callback(
+def check_if_name_is_a_valid_string(
     ctx: typer.Context, param: typer.CallbackParam, value: str
 ) -> Optional[str]:
     # TODO: Add a check to see if the function name is already taken
@@ -60,7 +44,7 @@ def function_name_callback(
 
 
 @resilient_parsing
-def function_name_autocomplete_callback(
+def check_if_function_is_built(
     ctx: typer.Context, param: typer.CallbackParam, value: str
 ) -> Optional[str]:
 
@@ -75,7 +59,7 @@ def function_name_autocomplete_callback(
 
 
 @resilient_parsing
-def running_functions_autocomplete_callback(
+def check_if_function_is_running(
     ctx: typer.Context, param: typer.CallbackParam, value: str
 ) -> Optional[str]:
     if (
@@ -105,7 +89,7 @@ def remove_function_name_callback(
 
 
 @resilient_parsing
-def generate_new_function_callback(
+def confirm_current_directory_as_target(
     ctx: typer.Context, param: typer.CallbackParam, value: str
 ) -> Optional[str]:
     """Callback for generating a new function"""
@@ -118,4 +102,5 @@ def generate_new_function_callback(
 
 def add_callback(ctx: typer.Context, param: typer.CallbackParam, value: str) -> str:
     """Validates a call to the `add` command"""
+    # Check if the path is a valid path
     return value

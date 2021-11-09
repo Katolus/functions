@@ -17,6 +17,7 @@ from functions.docker.enums import DockerLabel
 from functions.docker.models import BuildVariables
 from functions.docker.types import DockerBuildAPIGenerator
 from functions.errors import FunctionBuildError
+from functions.errors import FunctionImageNotFoundError
 
 client: docker.client.DockerClient = docker.from_env()
 
@@ -29,22 +30,20 @@ def _construct_build_variables(function: FunctionRecord) -> BuildVariables:
     config = function.config
     return BuildVariables.parse_obj(
         {
-            {
-                "path": config.path,
-                "tag": function.name,
-                "buildargs": {
-                    "TARGET": config.run_variables.entry_point,
-                    "SOURCE": config.run_variables.source,
-                    "SIGNATURE_TYPE": config.run_variables.signature_type,
-                },
-                "labels": {
-                    DockerLabel.FUNCTION_NAME: function.name,
-                    DockerLabel.FUNCTION_PATH: config.path,
-                    DockerLabel.CONFIG_PATH: config.config_path,
-                    DockerLabel.CONFIG: json.dumps(config.json()),
-                    DockerLabel.ORGANISATION: "Ventress",
-                },
-            }
+            "path": config.path,
+            "tag": function.name,
+            "buildargs": {
+                "TARGET": config.run_variables.entry_point,
+                "SOURCE": config.run_variables.source,
+                "SIGNATURE_TYPE": config.run_variables.signature_type,
+            },
+            "labels": {
+                DockerLabel.FUNCTION_NAME: function.name,
+                DockerLabel.FUNCTION_PATH: config.path,
+                DockerLabel.CONFIG_PATH: config.config_path,
+                DockerLabel.CONFIG: json.dumps(config.json()),
+                DockerLabel.ORGANISATION: "Ventress",
+            },
         }
     )
 
@@ -86,9 +85,13 @@ def _call_build_api(function: FunctionRecord) -> DockerBuildAPIGenerator:
 
 def get_image(image_id: str) -> Image:
     """
-    Returns an image by id
+    Returns an image by id.
     """
-    return client.images.get(image_id)
+    try:
+        # Takes in both the function's name and the image id.
+        return client.images.get(image_id)
+    except docker.errors.ImageNotFound:
+        raise FunctionImageNotFoundError(image_id=image_id)
 
 
 def build_image(function: FunctionRecord, show_logs: bool) -> Image:
@@ -99,7 +102,6 @@ def build_image(function: FunctionRecord, show_logs: bool) -> Image:
 
     # TODO: Try to include this in
     image = None
-    image_id = ""
 
     for image_id_chunk, log_chunk in _call_build_api(function):
         if show_logs and log_chunk and log_chunk != "\n":
@@ -108,7 +110,7 @@ def build_image(function: FunctionRecord, show_logs: bool) -> Image:
         if image_id_chunk:
             # If the chunk is present that means the build has
             # been successful and an id been render to output
-            image = get_image(image_id)
+            image = get_image(image_id_chunk)
 
     if not image:
         raise FunctionBuildError(
@@ -117,7 +119,7 @@ def build_image(function: FunctionRecord, show_logs: bool) -> Image:
             build_log=None,
         )
 
-    logs.debug(f"Built image {image.id} for {function.name}")
+    logs.debug(f"Built image {image.id} for the '{function.name}' function")
 
     return image
 
@@ -201,6 +203,14 @@ class DockerImage:
         remove_image_by_name(self._image.id)
 
     @classmethod
+    def build(cls, function: FunctionRecord, show_logs: bool = False) -> DockerImage:
+        """
+        Builds the image
+        """
+
+        return cls(build_image(function, show_logs))
+
+    @classmethod
     def get(cls, image_id: str) -> DockerImage:
         """
         Get an image from the docker daemon.
@@ -219,6 +229,10 @@ class DockerContainer:
     def __init__(self, container: Container, /) -> None:
         self._container = container
 
+    def stop(self) -> None:
+        """Stops a running container"""
+        stop_container(self._container.id)
+
     @classmethod
     def run(cls, image: DockerImage, name: str, port: int) -> DockerContainer:
         """
@@ -226,11 +240,6 @@ class DockerContainer:
         """
         container = run_container(image, name, port)
         return cls(container)
-
-    @classmethod
-    def stop(cls, container_id: str) -> None:
-        """Stops a running container"""
-        stop_container(container_id)
 
     @classmethod
     def get(cls, container_id: str) -> DockerContainer:

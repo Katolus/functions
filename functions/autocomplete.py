@@ -1,12 +1,17 @@
 from typing import Iterator
 
 from functions import user
+from functions.config.files import FunctionRegistry
 from functions.docker.helpers import all_functions
 from functions.docker.helpers import all_running_functions
 
 
-def complete_services():
-    return ["cloud_function", "cloud_run"]
+def autocomplete_registry_function_names(incomplete: str) -> Iterator[str]:
+    """Autocompletes a list of matching functions within registry"""
+    functions = FunctionRegistry.fetch_function_names()
+    for function in functions:
+        if function.startswith(incomplete):
+            yield function
 
 
 def autocomplete_function_names(incomplete: str) -> Iterator[str]:
