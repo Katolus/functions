@@ -10,6 +10,7 @@ from functions.config.interfaces import TOML
 from functions.config.models import AppLogging
 from functions.config.models import FunctionRecord
 from functions.config.types import FunctionsMap
+from functions.errors import FunctionNotFoundError
 from functions.system import check_if_file_exists
 from functions.system import write_to_file
 
@@ -72,7 +73,11 @@ class FunctionRegistry(BaseModel, File):
     @classmethod
     def fetch_function(cls, function_name: str) -> FunctionRecord:
         """Returns the function record for a function"""
-        return cls.load().functions[function_name]
+        functions = cls.load().functions
+        try:
+            return functions[function_name]
+        except KeyError:
+            raise FunctionNotFoundError(name=function_name)
 
     @classmethod
     def fetch_all_functions(cls) -> List[FunctionRecord]:
