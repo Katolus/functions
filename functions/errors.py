@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any, Generator, Optional
 
 from click.exceptions import UsageError as ClickUsageError
 
@@ -49,8 +49,22 @@ class PathNotADirectoryError(FunctionBaseError):
 
 
 class FunctionBuildError(FunctionBaseError):
-    code = "build.error"
-    msg_template = "Function build has field with the following error -> {error}"
+    reason: str
+    build_log: Generator
+    code = "functions.build_error"
+    msg_template = "Function ({name}) build failed"
+
+    def __init__(
+        self,
+        *,
+        reason: str,
+        build_log: Generator,
+        error: ExceptionClass = None,
+        **kwargs: Any,
+    ) -> None:
+        self.reason = reason
+        self.build_log = build_log
+        super().__init__(error=error, **kwargs)
 
 
 class FunctionNameTaken(FunctionBaseError):

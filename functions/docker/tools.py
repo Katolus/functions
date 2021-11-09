@@ -1,7 +1,7 @@
 """Set of functions meant for building, manipulating docker objects."""
 import json
 import re
-from typing import Dict, Generator, Optional, Tuple
+
 
 import docker
 from docker.utils.json_stream import json_stream
@@ -16,45 +16,6 @@ from functions.docker.classes import DockerImage
 from functions.docker.client import docker_client
 from functions.errors import FunctionBuildError
 
-
-class BuildArgs(BaseModel):
-    TARGET: str
-    SOURCE: str
-    SIGNATURE_TYPE: str
-
-
-class BuildVariables(BaseModel):
-    path: str
-    tag: str
-    buildargs: BuildArgs
-    labels: Dict[DockerLabel, str]
-
-
-def construct_build_variables(config: FunctionConfig) -> BuildVariables:
-    """Constructs build variables for a docker build process"""
-    function_name = config.run_variables.name
-
-    return BuildVariables(
-        **{
-            "path": config.path,
-            "tag": function_name,
-            "buildargs": {
-                "TARGET": config.run_variables.entry_point,
-                "SOURCE": config.run_variables.source,
-                "SIGNATURE_TYPE": config.run_variables.signature_type,
-            },
-            "labels": {
-                DockerLabel.FUNCTION_NAME: function_name,
-                DockerLabel.FUNCTION_PATH: config.path,
-                DockerLabel.CONFIG_PATH: config.config_path,
-                DockerLabel.CONFIG: json.dumps(config.json()),
-                DockerLabel.ORGANISATION: "Ventress",
-            },
-        }
-    )
-
-
-DockerBuildAPIGenerator = Generator[Tuple[Optional[str], Optional[str]], None, None]
 
 
 def call_build_api(build_variables: BuildVariables) -> DockerBuildAPIGenerator:
