@@ -1,7 +1,8 @@
 from typing import Callable, Dict, NoReturn
 
 from functions import logs
-from functions.errors import FunctionBaseError, FunctionBuildError
+from functions.errors import FunctionBaseError
+from functions.errors import FunctionBuildError
 from functions.errors import UsageError
 from functions.types import AnyCallable
 from functions.types import ExceptionClass

@@ -28,7 +28,7 @@ class FunctionsCli(BaseModel):
     subcommands: Sequence[Tuple[typer.Typer, str]]
     state: FunctionsState = FunctionsState()
 
-    def __init__(self, **data) -> None:
+    def __init__(self, **data: Any) -> None:
         self._main = typer.Typer(
             name="functions-cli",
             help="Run script to executing, testing and deploying included functions.",
@@ -48,7 +48,7 @@ class FunctionsCli(BaseModel):
         command = handle_error(get_command(self._main))
         return command(*args, **kwargs)
 
-    def callback(self, *args, **kwargs):
+    def callback(self, *args: Any, **kwargs: Any):
         decorator = self._main.callback(*args, **kwargs)
 
         @functools.wraps(decorator)
@@ -58,7 +58,7 @@ class FunctionsCli(BaseModel):
 
         return wrapper
 
-    def command(self, *args, **kwargs):
+    def command(self, *args: Any, **kwargs: Any):
         decorator = self._main.command(*args, **kwargs)
 
         @functools.wraps(decorator)
