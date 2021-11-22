@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import json
 import re
-from typing import Dict, List
+from typing import List
 
 import docker
 from docker.models.containers import Container
@@ -17,6 +17,7 @@ from functions.docker.enums import DockerLabel
 from functions.docker.helpers import get_function_name_from_labels
 from functions.docker.models import BuildVariables
 from functions.docker.types import DockerBuildAPIGenerator
+from functions.docker.types import DockerLabelsDict
 from functions.errors import FunctionBuildError
 from functions.errors import FunctionImageNotFoundError
 
@@ -68,7 +69,7 @@ def _call_build_api(function: FunctionRecord) -> DockerBuildAPIGenerator:
     last_event = None
     image_id = None
 
-    # TODO: Revisit this to check if the build stream needs to be split
+    # There is a way to push results in to another stream and return for things like logs
     for chunk in result_stream:
         if "error" in chunk:
             raise FunctionBuildError(
@@ -101,7 +102,6 @@ def build_image(function: FunctionRecord, show_logs: bool) -> Image:
     """
     logs.debug(f"Building image for {function.name}")
 
-    # TODO: Try to include this in
     image = None
 
     for image_id_chunk, log_chunk in _call_build_api(function):
@@ -129,7 +129,6 @@ def remove_image_by_name(name: str) -> None:
     """
     Removes an image by name
     """
-    # TODO: Validate if name is id
     logs.debug(f"Removing image {name}")
     client.images.remove(name)  # type: ignore
 
@@ -172,7 +171,6 @@ def stop_container(name: str) -> None:
 
 def get_all_images() -> List[Image]:
     """Returns all functions created by this package"""
-    # TODO: Update the filters and labels to be generated in a template
     return client.images.list(filters={"label": f"{DockerLabel.ORGANISATION}=Ventress"})
 
 
@@ -195,7 +193,7 @@ class DockerImage:
         return get_function_name_from_labels(self._image.labels)
 
     @property
-    def labels(self) -> Dict[DockerLabel, str]:
+    def labels(self) -> DockerLabelsDict:
         return self._image.labels
 
     def remove(self) -> None:
@@ -217,7 +215,7 @@ class DockerImage:
         """
         Get an image from the docker daemon.
         """
-        # TODO: Validate the format of the image_id
+        # `image_id` can be either the image name or the image id.
         return cls(get_image(image_id))
 
     @classmethod
