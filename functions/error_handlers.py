@@ -2,6 +2,7 @@ from typing import Callable, Dict, NoReturn
 
 from functions import logs
 from functions.errors import FunctionBaseError
+from functions.errors import FunctionBuildError
 from functions.errors import UsageError
 from functions.types import AnyCallable
 from functions.types import ExceptionClass
@@ -36,3 +37,12 @@ def handle_function_all_errors(error: FunctionBaseError) -> NoReturn:
     """Handles the base case for all the function errors"""
     logs.exception(error)
     raise UsageError(error.message)
+
+
+@error_handler(error=FunctionBuildError)
+def handle_function_build_errors(error: FunctionBuildError) -> NoReturn:
+    """Handles the base case for all the function errors"""
+    # Log the build logs
+    logs.debug(error.build_log)  # TODO: Figure out the correct types for this
+    logs.exception(error)
+    raise UsageError(f"{error.message}. Reason: {error.reason}")

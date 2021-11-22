@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any, Generator, Iterable, Optional
 
 from click.exceptions import UsageError as ClickUsageError
 
@@ -49,13 +49,42 @@ class PathNotADirectoryError(FunctionBaseError):
 
 
 class FunctionBuildError(FunctionBaseError):
-    code = "build.error"
-    msg_template = "Function build has field with the following error -> {error}"
+    reason: str
+    build_log: Iterable[str]  # For storing the build log in log files
+    code = "functions.build_error"
+    msg_template = "Function ({name}) build failed"
+
+    def __init__(
+        self,
+        *,
+        reason: str,
+        build_log: Iterable[str],
+        error: ExceptionClass = None,
+        **kwargs: Any,
+    ) -> None:
+        self.reason = reason
+        self.build_log = build_log
+        super().__init__(error=error, **kwargs)
 
 
 class FunctionNameTaken(FunctionBaseError):
     code = "functions.name_taken"
     msg_template = "Function with that name ('{name}') already exists"
+
+
+class FunctionNotRunningError(FunctionBaseError):
+    code = "functions.not_running"
+    msg_template = "Function '{name}' is not running"
+
+
+class FunctionNotFoundError(FunctionBaseError):
+    code = "functions.not_found"
+    msg_template = "Function '{name}' not found in registry. Try running `functions sync local` to synchronize built functions"
+
+
+class FunctionImageNotFoundError(FunctionBaseError):
+    code = "functions.image_not_found"
+    msg_template = "Function's image ({image_id}) not found"
 
 
 class InvalidFunctionTypeError(FunctionBaseError):

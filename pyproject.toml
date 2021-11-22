@@ -52,7 +52,7 @@ gcp = [
 ]
 
 [tool.mypy]
-# mypy_path = "~/stubs/"
+mypy_path = "~/stubs/"
 
 [tool.black]
 line-length = 88
@@ -92,19 +92,20 @@ skip_gitignore = true
 [tool.pyright]
 # This is for pylance/pyright extension of vscode. Remove me if you're not intented to use vscode.
 # include = ["src"]
-# exclude = [
-#   ".git",
-#   ".eggs",
-#   ".github",
-#   ".history",
-#   ".idea",
-#   ".tox",
-#   ".vscode",
-#   "docs",
-#   "**/__pycache__",
-# ] # Commented out due to its influence on performance
+exclude = [
+  ".git",
+  ".eggs",
+  ".github",
+  ".history",
+  ".idea",
+  ".tox",
+  ".vscode",
+  "docs",
+  ".venv",
+  "**/__pycache__",
+] # Commented out due to its influence on performance
 # ignore = ["src/oldstuff"]
-stubPath = "~/stubs/"
+stubPath = "/home/katolus/stubs/"
 venv = ".venv"
 
 reportGeneralTypeIssues = false

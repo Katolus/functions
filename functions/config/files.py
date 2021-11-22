@@ -10,6 +10,9 @@ from functions.config.interfaces import TOML
 from functions.config.models import AppLogging
 from functions.config.models import FunctionRecord
 from functions.config.types import FunctionsMap
+from functions.constants import CloudStatus
+from functions.constants import LocalStatus
+from functions.errors import FunctionNotFoundError
 from functions.system import check_if_file_exists
 from functions.system import write_to_file
 
@@ -53,6 +56,7 @@ class FunctionRegistry(BaseModel, File):
         logs.debug(f"Writing function registry to file: {cls.filepath()}")
         write_to_file(cls.filepath(), content.json())
 
+    # TODO: Add caching to this functions or it will be too slow
     @classmethod
     def load(cls) -> FunctionRegistry:
         """Loads the main configuration from file"""
@@ -71,8 +75,12 @@ class FunctionRegistry(BaseModel, File):
 
     @classmethod
     def fetch_function(cls, function_name: str) -> FunctionRecord:
-        """Returns the function record for a function"""
-        return cls.load().functions[function_name]
+        """Returns a function record for a function"""
+        functions = cls.load().functions
+        try:
+            return functions[function_name]
+        except KeyError:
+            raise FunctionNotFoundError(name=function_name)
 
     @classmethod
     def fetch_all_functions(cls) -> List[FunctionRecord]:
@@ -83,6 +91,37 @@ class FunctionRegistry(BaseModel, File):
     def fetch_function_names(cls) -> List[str]:
         """Returns a list of all function names"""
         return list(cls.load().functions.keys())
+
+    @classmethod
+    def fetch_built_function_names(cls) -> List[str]:
+        """Returns a list of all built function names"""
+        all_functions = cls.fetch_all_functions()
+
+        return [
+            function.name
+            for function in all_functions
+            if function.status.LOCAL in LocalStatus.build_statuses()
+        ]
+
+    @classmethod
+    def fetch_local_function_names(cls, status: LocalStatus) -> List[str]:
+        """Returns a list of all built function names"""
+        all_functions = cls.fetch_all_functions()
+        return [
+            function.name
+            for function in all_functions
+            if function.status.LOCAL == status
+        ]
+
+    @classmethod
+    def fetch_gcp_function_names(
+        cls, status: CloudStatus = CloudStatus.DEPLOYED
+    ) -> List[str]:
+        """Returns a list of function names deployed to GCP"""
+        all_functions = cls.fetch_all_functions()
+        return [
+            function.name for function in all_functions if function.status.GCP == status
+        ]
 
     @classmethod
     def add_function(cls, function: FunctionRecord) -> None:

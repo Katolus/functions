@@ -3,3 +3,4 @@
 # Not sure if an anti-pattern or not
 from .gcp import app as gcp
 from .new import app as new
+from .sync import app as sync

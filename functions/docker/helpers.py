@@ -1,56 +1,9 @@
-from typing import List, Optional
+from typing import Optional
 
-# Add stubs for docker-py
-from functions.config.models import FunctionConfig
-from functions.constants import DockerLabel
-from functions.docker.classes import DockerContainer
-from functions.docker.classes import DockerFunction
-from functions.docker.classes import DockerImage
-from functions.docker.client import docker_client
+from functions.docker.enums import DockerLabel
 
 
-def get_config_from_image(image: DockerImage) -> FunctionConfig:
-    """Returns a function config from a given function image"""
-    config_path = image.labels.get(DockerLabel.FUNCTION_PATH)
-    return FunctionConfig.load(config_path)
-
-
+# TODO: Update types and more robust definition
 def get_function_name_from_labels(labels: dict) -> Optional[str]:
     """Returns a function name from docker labels"""
     return labels.get(DockerLabel.FUNCTION_NAME)
-
-
-def all_images() -> List[DockerImage]:
-    """Returns all functions created by this package"""
-    return docker_client.images.list(
-        filters={"label": f"{DockerLabel.ORGANISATION}=Ventress"}
-    )
-
-
-def all_functions() -> List[DockerFunction]:
-    """Returns the names of functions that are workable"""
-    functions = []
-    for image in all_images():
-        function_name = get_function_name_from_labels(image.labels)
-        if function_name:
-            function = DockerFunction(name=function_name, image=image)
-            functions.append(function)
-    return functions
-
-
-def all_running_containers() -> List[DockerContainer]:
-    """Returns all containers"""
-    return docker_client.containers.list(
-        filters={"label": f"{DockerLabel.ORGANISATION}=Ventress"}
-    )
-
-
-def all_running_functions() -> List[DockerFunction]:
-    """Returns a list of all running functions"""
-    functions = []
-    for container in all_running_containers():
-        function_name = get_function_name_from_labels(container.labels)
-        if function_name:
-            function = DockerFunction(name=function_name, container=container)
-            functions.append(function)
-    return functions

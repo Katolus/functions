@@ -4,8 +4,8 @@ from pathlib import Path
 import typer
 
 from functions import user
-from functions.arguments import FunctionNameArgument
-from functions.callbacks import generate_new_function_callback
+from functions.callbacks import check_if_name_is_a_valid_string
+from functions.callbacks import confirm_current_directory_as_target
 from functions.config.models import FunctionRecord
 from functions.constants import LocalStatus
 from functions.defaults import Defaults
@@ -15,14 +15,18 @@ app = typer.Typer(help="Factory method for creating new functions")
 
 @app.command()
 def pubsub(
-    function_name: str = FunctionNameArgument(...),
+    function_name: str = typer.Argument(
+        ...,
+        help="Name of the function",
+        callback=check_if_name_is_a_valid_string,
+    ),
     function_dir: Path = typer.Option(
         None,
         "--dir",
         exists=True,
         file_okay=False,
         resolve_path=True,
-        callback=generate_new_function_callback,
+        callback=confirm_current_directory_as_target,
         help="Directory that will be used as a root of the new function",
     ),
 ) -> None:
@@ -53,14 +57,18 @@ def pubsub(
 
 @app.command()
 def http(
-    function_name: str = FunctionNameArgument(...),
+    function_name: str = typer.Argument(
+        ...,
+        help="Name of the function",
+        callback=check_if_name_is_a_valid_string,
+    ),
     function_dir: Path = typer.Option(
         None,
         "--dir",
         exists=True,
         file_okay=False,
         resolve_path=True,
-        callback=generate_new_function_callback,
+        callback=confirm_current_directory_as_target,
         help="Directory that will be used as a root of the new function",
     ),
 ) -> None:

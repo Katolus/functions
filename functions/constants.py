@@ -40,16 +40,6 @@ class RequiredFile(str, Enum):
     REQUIREMENTS = "requirements.txt"
 
 
-class DockerLabel(str, Enum):
-    """Stores constants under which variables are stored"""
-
-    CONFIG: str = "package.functions.config"
-    CONFIG_PATH: str = "package.functions.config_path"
-    FUNCTION_NAME: str = "package.functions.function_name"
-    FUNCTION_PATH: str = "package.functions.function_path"
-    ORGANISATION: str = "package.functions.organisation"
-
-
 class LoggingLevel(str, Enum):
     DEBUG = "debug"
     ERROR = "error"
@@ -80,6 +70,15 @@ class LocalStatus(str, Enum):
     RUNNING = "running"
     STOPPED = "stopped"
     UNKNOWN = "unknown"
+
+    @classmethod
+    def build_statuses(cls) -> List[str]:
+        """Returns a list of statuses which mean that the image is built"""
+        return [
+            cls.BUILT,
+            cls.RUNNING,
+            cls.STOPPED,
+        ]
 
 
 class CloudStatus(str, Enum):
