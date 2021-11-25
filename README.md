@@ -14,30 +14,55 @@
 * PyPI: <https://pypi.org/project/functions-cli/>
 * Free software: MIT
 
+
+**Please read the documentation carefully so there are not surprises to state of this project.**
+
 **Outstanding items before the first release**:
 - Add the ability to deploy functions in languages other than just Python.
 - Ability to run the package with configuration on other OS than Linux
 
 
 
-`functions-cli` is a utility package written in Python. It is built to help the developer code, test and deploy FaaS (Function as a Service) resources.
+`functions-cli` is a utility package written in Python. It is built to help the developer run, test and deploy FaaS (Function as a Service) resources. It has a gaol of combining and simplifying the effort required for local and cloud development. Its purpose is to provide a single point of entry for all FaaS related.
 
 It is using `docker` to build and orchestrate the functions locally. To deploy them to any of the cloud providers you need to have relevant software installed and appropriate authorization to deploy them.
 
 
 ## Features
 
+The project is still under deep development, and there is still a lot of work to be done even to reach the primary quality.
+Nonetheless, we believe there is value in using it as it is if it fits your needs and requirements (Python + Linux).
+
+Feedback, issues and request are more than welcome. See how you can [contribute](CONTRIBUTING.md).
+
+See the road map document to view the vision and if it fits your interest.
+
+Here is a list of functionalities that the package is capable of.
+
 ### Locally
-- Build a **locally** stored cloud function using Docker.
-- Generate a new directory for starting new cloud functions. Two types `http`/`pubsub`.
-- Log the interaction with the cloud functions in a locally stored log file.
+
+- Generate a new template function directories for starting new functions. Two types GCP `http`/`pubsub`. - [tutorial](docs/examples/new_gcp_functions.md).
+- Add an existing function to the function registry to be run and deployed as functions native to the package - [tutorial](docs/examples/add_existing_function.md).
+- Build pre-generated, validated and **locally** existing functions using Docker **link to api document**.
+- Operate (Run/Stop) GCP-Python functions on a local machine - [tutorial](docs/examples/http_function.md).
+- Store the information on the built, running and deployed functions locally for reference and configuration - [proposal](docs/proposals/function_registry.md).
+- Print out a [list](**link to api document**) of functions and their statuses (Build/Deployed/Running).
+- Keep track of any interactions with the functions using a handy log file for storage on your local device - [proposal](docs/proposals/logging.md).
+
 
 ### GCP
-- Deploy functions to GCP as cloud functions.
+
+- Deployed a locally existing function as cloud functions of two types - `http` and `pubsub`.
+- Delete functions deployed to GCP using this package.
 
 ## Compatibility
 
 - Currently the project has been developed and tested only on a Linux OS with **Python 3.9** as the deployment environment.
+
+More testing to be done:
+- MacOS
+- Windows
+- Different Python versions
 
 ## Requirement
 
