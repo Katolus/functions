@@ -14,19 +14,16 @@
 * PyPI: <https://pypi.org/project/functions-cli/>
 * Free software: MIT
 
-
 **Please read the documentation carefully so there are not surprises to state of this project.**
 
 **Outstanding items before the first release**:
-- Add the ability to deploy functions in languages other than just Python.
-- Ability to run the package with configuration on other OS than Linux
 
-
+* Add the ability to deploy functions in languages other than just Python.
+* Ability to run the package with configuration on other OS than Linux
 
 `functions-cli` is a utility package written in Python. It is built to help the developer run, test and deploy FaaS (Function as a Service) resources. It has a gaol of combining and simplifying the effort required for local and cloud development. Its purpose is to provide a single point of entry for all FaaS related.
 
 It is using `docker` to build and orchestrate the functions locally. To deploy them to any of the cloud providers you need to have relevant software installed and appropriate authorization to deploy them.
-
 
 ## Features
 
@@ -41,47 +38,54 @@ Here is a list of functionalities that the package is capable of.
 
 ### Locally
 
-- Generate a new template function directories for starting new functions. Two types GCP `http`/`pubsub`. - [tutorial](docs/examples/new_gcp_functions.md).
-- Add an existing function to the function registry to be run and deployed as functions native to the package - [tutorial](docs/examples/add_existing_function.md).
-- Build pre-generated, validated and **locally** existing functions using Docker **link to api document**.
-- Operate (Run/Stop) GCP-Python functions on a local machine - [tutorial](docs/examples/http_function.md).
-- Store the information on the built, running and deployed functions locally for reference and configuration - [proposal](docs/proposals/function_registry.md).
-- Print out a [list](**link to api document**) of functions and their statuses (Build/Deployed/Running).
-- Keep track of any interactions with the functions using a handy log file for storage on your local device - [proposal](docs/proposals/logging.md).
-
+* Generate a new template function directories for starting new functions. Two types GCP `http`/`pubsub`. - [tutorial](docs/examples/new_gcp_functions.md).
+* Add an existing function to the function registry to be run and deployed as functions native to the package - [tutorial](docs/examples/add_existing_function.md).
+* Build pre-generated, validated and **locally** existing functions using Docker **link to api document**.
+* Operate (Run/Stop) GCP-Python functions on a local machine - [tutorial](docs/examples/http_function.md).
+* Store the information on the built, running and deployed functions locally for reference and configuration - [proposal](docs/proposals/function_registry.md).
+* Print out a [list](**link to api document**) of functions and their statuses (Build/Deployed/Running).
+* Keep track of any interactions with the functions using a handy log file for storage on your local device - [proposal](docs/proposals/logging.md).
 
 ### GCP
 
-- Deployed a locally existing function as cloud functions of two types - `http` and `pubsub`.
-- Delete functions deployed to GCP using this package.
+* Deployed a locally existing function as cloud functions of two types - `http` and `pubsub`.
+* Delete functions deployed to GCP using this package.
 
 ## Compatibility
 
-- Currently the project has been developed and tested only on a Linux OS with **Python 3.9** as the deployment environment.
+* Currently the project has been developed and tested only on a Linux OS with **Python 3.9** as the deployment environment.
 
 More testing to be done:
-- MacOS
-- Windows
-- Different Python versions
+
+* MacOS
+* Windows
+* Different Python versions
 
 ## Requirement
 
 The package is a utility one and it requires underlying software for specific function to be available.
 
-- Python >= 3.9 - for the functioning of the package. Min - `3.6.2` - to enhance support of types
-- `gcloud` - for deploying to the GCP environment.
-- `docker` - for running any of the functions locally.
-- `poetry` - for running the source code locally.
+* Python >= 3.9 - for the functioning of the package. Min - `3.6.2` - to enhance support of types
+* `gcloud` - for deploying to the GCP environment.
+* `docker` - for running any of the functions locally.
+* `poetry` - for running the source code locally.
 
-## Installation
+## Install
 
-Since it is a regular Python package you can start using it simply by installing the package in your Python environment by running
+### For use
 
-```console
+It is recommended that for regular use, you install the package from pypi.
+Since it is a regular Python package, available in the main pypi repository you can start using it simply by installing the package in your Python environment by running
+
+```bash
 pip install functions-cli
 ```
 
-in your console.
+in your terminal.
+
+### For development
+
+Check out the local development document for instructions on how get set up.
 
 ### Running from source code
 
@@ -92,7 +96,7 @@ To operate the package from the source code.
 3. Run `poetry shell` to enter the scope of the package.
 4. Execute or invoke the commands like you would normally, by running `functions [OPTIONS] COMMAND [ARGS] ...` in the invoked shell.
 
-**Additionally** you can install the package from source code by building a wheel and installing it manually in your environment's scope.
+    **Additionally** you can install the package from source code by building a wheel and installing it manually in your environment's scope.
 
 5. Run `poetry build` and you should see a `dist` folder appear in the root directory of the code (assuming you are running the command from there).
 6. Install the package directly by the while specifying a path to the source - `pip install /home/{your_user}/{project_root_path}/dist/functions_cli-0.1.0a2-py3-none-any.whl`.
@@ -109,7 +113,7 @@ Keep in mind that the package is in development and all of its structure is a su
 
 The tool allows you to quickly generate a template of a function that you can the modify to quicken your efforts in producing code.
 
-```console
+```bash
 functions new http {name_of_the_function}
 ```
 
@@ -129,7 +133,7 @@ will start a docker container and expose it to your locally network on a availab
 
 Please remember that the container will run as long as you leave it for, so make sure to take it down once you have done all your testing. Running...
 
-```
+```bash
 functions stop {name_of_the_function}
 ```
 
@@ -143,32 +147,29 @@ Depending whether you have a configuration set up you will be able to deploy you
 
 For example to deploy a function quickly to GCP as a cloud function you want to run...
 
-```console
+```bash
 functions gcp deploy {path_to_the_function}
 ```
 
 With the correct setup and permissions this should allow you to the deploy a function to the GCP directly from the `functions` cli.
 
-
 ## Clearing out resources
 
 ### Remove a function
 
-```
+```bash
 functions remove {name_of_the_function}
 ```
 
-
-
 ## Installing autocompletion
-TBU
 
+TBU
 
 ## Getting help
 
 The tool is built on brilliant software of others. One of them being `typer`. This allows you to query the CLI for any useful information by adding `--help` to any of your commands (useful tip to all your future work).
 
-```console
+```bash
 functions run --help
 ```
 
