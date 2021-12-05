@@ -61,21 +61,29 @@ More testing to be done:
 * Windows
 * Different Python versions
 
-## Requirement
+## Requirements
 
 The package is a utility one and it requires underlying software for specific function to be available.
 
 * Python >= 3.9 - for the functioning of the package. Min - `3.6.2` - to enhance support of types
-* `gcloud` - for deploying to the GCP environment.
-* `docker` - for running any of the functions locally.
-* `poetry` - for running the source code locally.
+* `gcloud` - for deploying to the GCP environment. [Install gcloud].
+* `docker` - for running any of the functions locally. [Install docker engine].
+
+    ```bash
+    sudo chmod 666 /var/run/docker.sock
+    ```
+
+* `poetry` - for running the source code locally. [Installing poetry].
 
 ## Install
 
+Depending on your use case there are option on how to proceed with installing the package.
+It is recommended that for regular use, you install the package from `pypi` following the `For use` section.
+If you plan of developing or adjust the code or underlying structures make sure to check out the `For development` section.
+
 ### For use
 
-It is recommended that for regular use, you install the package from pypi.
-Since it is a regular Python package, available in the main pypi repository you can start using it simply by installing the package in your Python environment by running
+Since it is a regular Python package, available in the main `pypi` repository you can start using it simply by installing the package in your Python environment by running
 
 ```bash
 pip install functions-cli
@@ -85,23 +93,7 @@ in your terminal.
 
 ### For development
 
-Check out the local development document for instructions on how get set up.
-
-### Running from source code
-
-To operate the package from the source code.
-
-1. Download the repository.
-2. Using `poetry`, install all the dependencies by running `poetry install`.
-3. Run `poetry shell` to enter the scope of the package.
-4. Execute or invoke the commands like you would normally, by running `functions [OPTIONS] COMMAND [ARGS] ...` in the invoked shell.
-
-    **Additionally** you can install the package from source code by building a wheel and installing it manually in your environment's scope.
-
-5. Run `poetry build` and you should see a `dist` folder appear in the root directory of the code (assuming you are running the command from there).
-6. Install the package directly by the while specifying a path to the source - `pip install /home/{your_user}/{project_root_path}/dist/functions_cli-0.1.0a2-py3-none-any.whl`.
-
-Handy tutorial in the scope of the `typer` package, that could help with this -> [here](https://typer.tiangolo.com/tutorial/package/).
+Check out the [local development document](docs/local_development.md) for instructions on how get set up.
 
 ## Usage
 
