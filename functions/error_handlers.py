@@ -2,10 +2,10 @@ import sys
 from typing import Callable, Dict, NoReturn
 
 import docker
+import typer
 
 from functions import logs
 from functions import styles
-from functions import user
 from functions.errors import FunctionBaseError
 from functions.errors import FunctionBuildError
 from functions.errors import UsageError
@@ -59,6 +59,6 @@ def handle_docker_exception(error: docker.errors.DockerException) -> NoReturn:
     logs.exception(error)
     # A temporary solution of handling docker exceptions until we figure out
     # how to handle them in the CLI with different cases.
-    user.fail(f"{styles.red('Unexpected docker error occurred')}: {error}.\n")
-    user.fail("Please make sure your `docker` is correctly installed.")
+    typer.echo(f"{styles.red('Unexpected docker error occurred')}: {error}.\n")
+    typer.echo("Please make sure your `docker` is correctly installed.")
     sys.exit(1)
