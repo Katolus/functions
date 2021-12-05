@@ -13,6 +13,7 @@ from docker.utils.json_stream import json_stream
 from functions import logs
 from functions import user
 from functions.config.models import FunctionRecord
+from functions.decorators import handle_error
 from functions.docker.enums import DockerLabel
 from functions.docker.helpers import get_function_name_from_labels
 from functions.docker.models import BuildVariables
@@ -21,7 +22,8 @@ from functions.docker.types import DockerLabelsDict
 from functions.errors import FunctionBuildError
 from functions.errors import FunctionImageNotFoundError
 
-client: docker.client.DockerClient = docker.from_env()
+# Handle fetching the docker client to handle errors from lack of docker connection
+client: docker.client.DockerClient = handle_error(docker.from_env)()
 
 
 def _construct_build_variables(function: FunctionRecord) -> BuildVariables:

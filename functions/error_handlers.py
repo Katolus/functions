@@ -1,6 +1,11 @@
+import sys
 from typing import Callable, Dict, NoReturn
 
+import docker
+
 from functions import logs
+from functions import styles
+from functions import user
 from functions.errors import FunctionBaseError
 from functions.errors import FunctionBuildError
 from functions.errors import UsageError
@@ -46,3 +51,14 @@ def handle_function_build_errors(error: FunctionBuildError) -> NoReturn:
     logs.debug(error.build_log)  # TODO: Figure out the correct types for this
     logs.exception(error)
     raise UsageError(f"{error.message}. Reason: {error.reason}")
+
+
+@error_handler(error=docker.errors.DockerException)
+def handle_docker_exception(error: docker.errors.DockerException) -> NoReturn:
+    """Handles the base case for all the function errors"""
+    logs.exception(error)
+    # A temporary solution of handling docker exceptions until we figure out
+    # how to handle them in the CLI with different cases.
+    user.fail(f"{styles.red('Unexpected docker error occurred')}: {error}.\n")
+    user.fail("Please make sure your `docker` is correctly installed.")
+    sys.exit(1)
