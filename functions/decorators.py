@@ -46,6 +46,8 @@ def handle_error(
                 # If no handler is found, raise the error
                 raise err
 
+        return command
+
     # Handles a case where the decorator is used with arguments and without
     # @handle_error(error_class=FunctionError)
     # @handle_error
