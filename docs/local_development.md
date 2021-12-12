@@ -47,9 +47,13 @@ To operate the package from the source code.
 
 If you want to install package from the repository as a local package (available outside of the `poetry shell` scope), then you might want to build and install following these steps:
 
-Handy tutorial in the scope of the `typer` package, that could help with this -> [here](https://typer.tiangolo.com/tutorial/package/).
-
 1. Run `poetry build` and you should see a `dist` folder appear in the root directory of the code (assuming you are running the command from there).
 2. Install the package directly by the while specifying a path to the source - `pip install /home/{your_user}/{project_root_path}/dist/functions_cli-0.1.0a2-py3-none-any.whl`.
 
+Handy tutorial in the scope of the `typer` package, that could help with this -> [here](https://typer.tiangolo.com/tutorial/package/).
+
+Alternatively there run the [`install_locally.sh`](/scripts/install_locally.sh) script.
+
 ## Preparing for a new version release
+
+TBU
