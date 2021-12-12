@@ -37,7 +37,7 @@ def pubsub(
     pubsub = Defaults.GCP.CloudFunction.PubSub
 
     # Generate the config instance
-    pubsub_config = pubsub.config()
+    pubsub_config = pubsub.config(function_name, function_dir)
 
     # Create a function record
     f_record = FunctionRecord(name=function_name, config=pubsub_config)
@@ -79,7 +79,7 @@ def http(
     http = Defaults.GCP.CloudFunction.HTTP
 
     # Generate the config instance
-    http_config = http.config()
+    http_config = http.config(function_name, function_dir)
 
     # Create a function record
     f_record = FunctionRecord(name=function_name, config=http_config)
