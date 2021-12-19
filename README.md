@@ -14,12 +14,6 @@
 * PyPI: <https://pypi.org/project/functions-cli/>
 * Free software: MIT
 
-
-**Outstanding items before the first release**:
-
-* Add the ability to deploy functions in languages other than just Python.
-* Ability to run the package with configuration on other OS than Linux
-
 `functions-cli` is a utility package written in Python. It is built to help the developer run, test and deploy FaaS (Function as a Service) resources. Project's goal is to combine and simplify the efforts required for local and cloud development. Its purpose is to provide a single point of entry for all FaaS related.
 
 It is using `docker` as a primary technology to build and orchestrate the functions locally. To deploy them to any of the cloud providers you need to have relevant software installed and appropriate authorization to deploy them.
@@ -52,27 +46,32 @@ Here is a list of functionalities that the package is capable of.
 
 ## Compatibility
 
-* Currently the project has been developed and tested only on a Linux OS with **Python 3.9** as the deployment environment.
+Currently the project has been developed and tested only on a Ubuntu OS with **Python 3.9** as the deployment environment.
+
+**Outstanding items before the first release can be viewed under [this](https://github.com/users/Katolus/projects/1) project.**
 
 More testing to be done:
 
-* MacOS
-* Windows
-* Different Python versions
+* MacOS (Work in Progress)
+* Windows (Work in Progress)
+* Different Python versions (Confirmed that the lowest version possible is `3.8`).
 
 ## Requirements
 
 The package is a utility one and it requires underlying software for specific function to be available.
 
-* Python >= 3.9 - for the functioning of the package. Min - `3.6.2` - to enhance support of types
-* `gcloud` - for deploying to the GCP environment. [Install gcloud].
-* `docker` - for running any of the functions locally. [Install docker engine].
+* Python >= `3.8` - for the functioning of the package.
+* `docker` - for running any of the functions locally, you will need to [install docker](https://docs.docker.com/engine/install/).
 
     ```bash
     sudo chmod 666 /var/run/docker.sock
     ```
 
-* `poetry` - for running the source code locally. [Installing poetry].
+* [`poetry`](https://python-poetry.org/docs/#installation) - for running the source code locally and code development you need to have this package in the scope.
+
+For GCP:
+
+* `gcloud` - for deploying to the GCP environment, [install gcloud](https://cloud.google.com/sdk/docs/install).
 
 ## Installation
 
@@ -115,7 +114,7 @@ will generate you a new http like template for your FaaS function in your curren
 Before you start working with a function you need make sure it is built and available as a docker image. To so, run
 
 ```bash
-functions build {}
+functions build {name_of_the_function}
 ```
 
 ## Running a function locally
@@ -152,9 +151,7 @@ functions gcp deploy {path_to_the_function}
 
 With the correct setup and permissions this should allow you to the deploy a function to the GCP directly from the `functions` cli.
 
-## Clearing out resources
-
-### Remove a function
+## Remove a function
 
 This command will remove a function from the local storage, but will not remove the code from the disk.
 
@@ -167,8 +164,10 @@ functions remove {name_of_the_function}
 Core CLI functionality is built on top of [`Typer`](https://github.com/tiangolo/typer) which means that if you want autocompletion in your scripts follow the instructions derived from there.
 
 ```bash
-
+functions --install-completion bash
 ```
+
+With respect to the version of shell you are using.
 
 ## Getting help
 
