@@ -4,7 +4,7 @@
 
 > This package that will get you working with FaaS.
 
-|   !   | This package is not anywhere near being ready. It hasn't been released in any major or minor versions of it yet as it is constant development. Use it at your own risk and pleasure. |
+|   !   | This package is not ready for `production` use. The API is unstabble as it hasn't been released in any major or minor versions of it yet and is constant development. Use it at your own risk and pleasure. <br><br> **Please read the documentation carefully so there are not surprises to state of this project.** |
 | :---: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
 <!-- ![Logo]() -->
@@ -14,16 +14,15 @@
 * PyPI: <https://pypi.org/project/functions-cli/>
 * Free software: MIT
 
-**Please read the documentation carefully so there are not surprises to state of this project.**
 
 **Outstanding items before the first release**:
 
 * Add the ability to deploy functions in languages other than just Python.
 * Ability to run the package with configuration on other OS than Linux
 
-`functions-cli` is a utility package written in Python. It is built to help the developer run, test and deploy FaaS (Function as a Service) resources. It has a gaol of combining and simplifying the effort required for local and cloud development. Its purpose is to provide a single point of entry for all FaaS related.
+`functions-cli` is a utility package written in Python. It is built to help the developer run, test and deploy FaaS (Function as a Service) resources. Project's goal is to combine and simplify the efforts required for local and cloud development. Its purpose is to provide a single point of entry for all FaaS related.
 
-It is using `docker` to build and orchestrate the functions locally. To deploy them to any of the cloud providers you need to have relevant software installed and appropriate authorization to deploy them.
+It is using `docker` as a primary technology to build and orchestrate the functions locally. To deploy them to any of the cloud providers you need to have relevant software installed and appropriate authorization to deploy them.
 
 ## Features
 
@@ -75,7 +74,7 @@ The package is a utility one and it requires underlying software for specific fu
 
 * `poetry` - for running the source code locally. [Installing poetry].
 
-## Install
+## Installation
 
 Depending on your use case there are option on how to proceed with installing the package.
 It is recommended that for regular use, you install the package from `pypi` following the `For use` section.
@@ -111,11 +110,19 @@ functions new http {name_of_the_function}
 
 will generate you a new http like template for your FaaS function in your current directory.
 
+## Building a function
+
+Before you start working with a function you need make sure it is built and available as a docker image. To so, run
+
+```bash
+functions build {}
+```
+
 ## Running a function locally
 
 A lot of us want to see and feel what we have created working first before we deploy it to the world. Running...
 
-```console
+```bash
 functions run {name_of_the_function}
 ```
 
@@ -149,13 +156,19 @@ With the correct setup and permissions this should allow you to the deploy a fun
 
 ### Remove a function
 
+This command will remove a function from the local storage, but will not remove the code from the disk.
+
 ```bash
 functions remove {name_of_the_function}
 ```
 
 ## Installing autocompletion
 
-TBU
+Core CLI functionality is built on top of [`Typer`](https://github.com/tiangolo/typer) which means that if you want autocompletion in your scripts follow the instructions derived from there.
+
+```bash
+
+```
 
 ## Getting help
 
@@ -166,3 +179,7 @@ functions run --help
 ```
 
 If you stumble in to any major issue that is not described in the documentation, send me a message. I will try to assist when possible.
+
+## Contributing
+
+If you are interested in helping out check out the [contributing](./CONTRIBUTING.md) document.
