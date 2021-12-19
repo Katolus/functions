@@ -183,7 +183,7 @@ def fetch_function_logs(function: FunctionRecord):
     )
 
 
-@functools.cache
+@functools.lru_cache
 def fetch_functions_in_json() -> List[Json]:
     """Runs a gcloud command to list all functions"""
     logs.debug("Fetching cloud functions")
@@ -192,7 +192,7 @@ def fetch_functions_in_json() -> List[Json]:
     return json.loads(cmd_result)
 
 
-@functools.cache
+@functools.lru_cache
 def fetch_function_names() -> str:
     """Returns a list of cloud function names"""
     functions = fetch_functions_in_json()
@@ -200,7 +200,7 @@ def fetch_function_names() -> str:
     return "Temp holder until I figure out how to get a function's name"
 
 
-@functools.cache
+@functools.lru_cache
 def fetch_deployed_function_names() -> List[str]:
     """Returns a list of cloud function names"""
     logs.debug("Fetching deployed cloud function names")
