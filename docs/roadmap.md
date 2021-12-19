@@ -8,8 +8,9 @@ These are the other topics/features in the future scope:
 
 - Add AWS support.
 - Add support for github URL as source of a function.
-- Initialise and lead test coverage.
 - Enhance support for runtimes other than python.
+- Custom commands and scripts. 
+- Initialise and lead test coverage.
 
 With more to come as the project starts getting ground in real implementations.
 
