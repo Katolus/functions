@@ -28,18 +28,23 @@ def handle_error(
         def command(*args: Any, **kwargs: Any) -> Any:
             try:
                 return _func(*args, **kwargs)
-            except FunctionBaseError as err:
+            except Exception as err:
 
-                # Check initial params for handlers
+                # Check for cases defined as error_classes
                 if error_class and isinstance(err, error_class):
                     message = message_tmp.format(error=err, **kwargs)
                     raise typer.BadParameter(message)
 
-                # Check registry for handlers
+                # Check for cases handled in the registry
                 if handler := ERROR_REGISTRY.get(err.__class__):
                     return handler(err)
 
-                handle_function_all_errors(err)
+                # Handle if it is a functions error
+                if isinstance(err, FunctionBaseError):
+                    return handle_function_all_errors(err)
+
+                # If no handler is found, raise the error
+                raise err
 
         return command
 

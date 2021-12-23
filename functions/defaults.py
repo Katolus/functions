@@ -9,3 +9,7 @@ class Defaults(BaseModel):
     # Not sure if this is the best way to do this
     # but it works for now and it is convient
     GCP = GCPDefaults()
+
+
+# Validate as being a good solution...
+Defaults = Defaults()
