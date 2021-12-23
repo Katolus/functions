@@ -24,6 +24,10 @@ Decisions made to the flow should take into the account a user stories of:
 
 ## Goals
 
+### Seamless installation
+
+TBU
+
 ### Hight modularity
 
 **Problem**: We want to allow user to decide which parts of the package are required and which one's are not.
@@ -66,8 +70,9 @@ No constrains at the moment.
 
 [Can be either a list of options or in complicated scenarios, a reference to sub documents]
 
-* initial idea
 * subcommand components
+* sync subcommand
+* `init` command
 
 ## Decision Outcome
 
