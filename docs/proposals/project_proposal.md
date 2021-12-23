@@ -1,4 +1,4 @@
-## Project proposal for making `functions-cli`
+# Project proposal for making `functions-cli`
 
 In this document I discuss the purpose behind making the project and some of its criteria, expectations and scopes.
 
@@ -19,7 +19,7 @@ In this document I discuss the purpose behind making the project and some of its
 
 ## Title
 
-  * `functions-cli` - a command line tool that helps with functions as a service (FaaS) components.
+* `functions-cli` - a command line tool that helps with functions as a service (FaaS) components.
 
 ## Status
 
