@@ -135,6 +135,9 @@ It is bound to the first release.
 
 ## Links <!-- optional -->
 
-* [Piotr](https://github.com/Katolus)
 * [Link type] [Link to ADR] <!-- example: Refined by [ADR-0005](0005-example.md) -->
 * … <!-- numbers of links can vary -->
+
+<!-- Identifiers, in alphabetical order -->
+
+[Piotr]: https://github.com/Katolus
