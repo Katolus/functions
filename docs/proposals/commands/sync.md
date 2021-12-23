@@ -4,7 +4,7 @@ We are trying to figure out how to efficiently sync different components with in
 
 Update the registry will be done by running sub-commands like
 
-```
+```bash
 functions sync local
 ```
 
@@ -12,7 +12,7 @@ that will update the registry against the currently built and running `docker` c
 
 Similarly a cloud component can be synced by running
 
-```
+```bash
 functions sync gcp
 ```
 
