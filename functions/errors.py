@@ -1,4 +1,4 @@
-from typing import Any, Generator, Iterable, Optional
+from typing import Any, Iterable, Optional
 
 from click.exceptions import UsageError as ClickUsageError
 

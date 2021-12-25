@@ -38,6 +38,7 @@ class FunctionsCli(BaseModel):
             (commands.new, "new"),
             (commands.gcp, "gcp"),
             (commands.sync, "sync"),
+            (commands.components, "components"),
         )
         super().__init__(subcommands=subcommands, **data)
 

@@ -6,26 +6,24 @@ from functions.commands.components.errors import (
 from functions.components import Component
 from functions.processes import check_output
 
-# Add a constant that pins a docker's version to a minimum one
-MAJOR = "20"
-MINOR = "10"
-PATCH = "10"
-MIN_DOCKER_VERSION = f"{MAJOR}.{MINOR}.{PATCH}"
+# Add a constant that pins a gcloud's version to a minimum one
+MAJOR = "367"
+MINOR = "0"
+PATCH = "0"
+MIN_GCP_VERSION = f"{MAJOR}.{MINOR}.{PATCH}"
 
 
 # Add a function that returns a version of the docker command
-def get_docker_version() -> str:
+def get_gcloud_version() -> str:
     """Returns the version of the docker command"""
-    return check_output(
-        ["docker", "version", "--format", "{{.Server.Version}}"]
-    ).strip()
+    return check_output(["gcloud", "version"]).strip().split("\n")[0].split(" ")[-1]
 
 
-class DockerComponent(Component):
+class GCPComponent(Component):
 
-    NAME = "docker"
-    DESCRIPTION = "Docker engine"
-    TYPE = "docker"
+    NAME = "gcp"
+    DESCRIPTION = "GCP's cloud SDK - CLI tool"
+    TYPE = "gcp"
 
     @classmethod
     def is_available(cls) -> bool:
@@ -33,12 +31,14 @@ class DockerComponent(Component):
         Returns True if the component is available for the current platform.
         """
         try:
-            docker_version = get_docker_version()
+            gcloud_version = get_gcloud_version()
         except FileNotFoundError as error:
             raise ComponentMissingError(component=cls.TYPE, error=error)
 
-        if docker_version.split(".")[0] < MAJOR:
-            raise ComponentVersionError(component=cls.TYPE, version=docker_version)
+        if gcloud_version.split(".")[0] < MAJOR:
+            raise ComponentVersionError(
+                component=cls.TYPE, version=gcloud_version
+            )
 
         return True
 
@@ -48,8 +48,8 @@ class DockerComponent(Component):
         Prints the instructions for installing the component.
         """
         user.inform(
-            f"A minium version '{MIN_DOCKER_VERSION}' of `docker` is required to run the functions locally."
+            f"A minium version '{MIN_GCP_VERSION}' of `gcp` is required for interactions with GCP."
         )
         user.inform(
-            "Check out the instructions for installing docker: https://docs.docker.com/engine/install/ ."
+            "Check out the instructions for installing the tool: https://cloud.google.com/sdk/docs/install ."
         )
