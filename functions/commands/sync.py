@@ -4,7 +4,7 @@ from functions import logs
 from functions.config.files import FunctionRegistry
 from functions.docker.api import DockerImage
 
-app = typer.Typer(help="Sync components")
+app = typer.Typer(help="Sync components with the registry")
 
 
 @app.command()

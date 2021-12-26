@@ -71,7 +71,6 @@ Maybe:
 
 * `registry`
 
-
 ## Common functions
 
 The common denominator of the component category allows us to factor out some of the common functionalities into shared commands.
