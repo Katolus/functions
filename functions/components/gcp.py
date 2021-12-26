@@ -1,5 +1,5 @@
 from functions import user
-from functions.commands.components.errors import (
+from functions.components.errors import (
     ComponentVersionError,
     ComponentMissingError,
 )
