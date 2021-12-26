@@ -36,9 +36,7 @@ class GCPComponent(Component):
             raise ComponentMissingError(component=cls.TYPE, error=error)
 
         if gcloud_version.split(".")[0] < MAJOR:
-            raise ComponentVersionError(
-                component=cls.TYPE, version=gcloud_version
-            )
+            raise ComponentVersionError(component=cls.TYPE, version=gcloud_version)
 
         return True
 

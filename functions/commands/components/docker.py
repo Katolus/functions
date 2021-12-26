@@ -3,7 +3,7 @@ import typer
 
 from functions import user
 from functions import styles
-from functions.components.docker import  DockerComponent
+from functions.components.docker import DockerComponent
 
 app = typer.Typer(help="Manage `docker` component")
 
