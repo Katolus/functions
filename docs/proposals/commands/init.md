@@ -1,6 +1,6 @@
 # `init` command
 
-* Status: Accepted
+* Status: Proposed
 * Deciders: [Piotr]
 * Date: [2021-12-23]
 
