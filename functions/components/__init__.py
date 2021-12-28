@@ -1,7 +1,18 @@
 from abc import ABC
-from typing import List, Literal
+from enum import Enum
+from typing import List, Literal, Type
 
-ComponentType = Literal["docker", "gcp"]
+
+class ComponentEnum(str, Enum):
+    """
+    Enum for all available components.
+    """
+
+    DOCKER = "docker"
+    GCP = "gcp"
+
+
+ComponentType = Literal[ComponentEnum.DOCKER, ComponentEnum.GCP]
 
 
 class Component(ABC):
@@ -42,7 +53,7 @@ class Component(ABC):
         raise NotImplementedError()
 
 
-def get_all_available_components() -> List[Component]:
+def get_all_available_components() -> List[Type[Component]]:
     """
     Returns a list of all available components.
     """
