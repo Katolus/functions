@@ -1,10 +1,12 @@
 from __future__ import annotations
 
-from typing import ClassVar, List
+from typing import ClassVar, List, Sequence
 
 from pydantic import BaseModel
 
 from functions import logs
+from functions.components import ComponentType
+from functions.components import get_all_available_components
 from functions.config.interfaces import File
 from functions.config.interfaces import TOML
 from functions.config.models import AppLogging
@@ -22,8 +24,14 @@ class AppConfig(BaseModel, File, TOML):
 
     DEFAULT_FILENAME: ClassVar[str] = "config.toml"
 
+    components: Sequence[ComponentType] = []
     default_region: str = ""
     logging: AppLogging = AppLogging()
+
+    @classmethod
+    def check_components(cls) -> Sequence[ComponentType]:
+        """Checks the components and returns a list of the components"""
+        return [component.NAME for component in get_all_available_components()]
 
     @classmethod
     def write_to_file(cls, content: AppConfig) -> None:
@@ -40,7 +48,16 @@ class AppConfig(BaseModel, File, TOML):
             logs.debug(f"Config file not found: {filepath}")
             cls.create()
             logs.debug(f"Config file created: {filepath}")
-        return cls.parse_obj(cls.from_toml(filepath))
+
+        config = cls.parse_obj(cls.from_toml(filepath))
+
+        # If componenets are not present (to not load them every time)
+        if not config.components:
+            # Load component availability
+            config.components = cls.check_components()
+            cls.write_to_file(config)
+
+        return config
 
 
 class FunctionRegistry(BaseModel, File):
