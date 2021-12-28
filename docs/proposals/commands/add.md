@@ -19,13 +19,18 @@ We suggest adding an `add` command that would take a path, run validations, add 
 ### Details
 
 1. Add function will be component independent, root command that takes a single file path argument and options as find fitted.
-2. Loads the directory given by the path and makes sure that:
+2. Ask about details of the functions:
+   * name of the function.
+   * type of a function.
+   * language of execution.
+3. Loads the directory given by the path and makes sure that:
    * a `Dockerfile` is not present.
    * a default language can be derived or must be specified.
    * function language is supported.
    * an entry file is present.
-3. If missing the necessary files need to be generated.
-4. Add the new function into the registry.
+   * validate the the name of the function is not already used.
+4. If missing the necessary files need to be generated.
+5. Add the new function into the registry.
 
 ### Potential problems
 
