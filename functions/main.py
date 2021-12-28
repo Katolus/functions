@@ -1,3 +1,4 @@
+"""Main script for CLI entry point"""
 import os
 from pathlib import Path
 from typing import Optional
@@ -48,6 +49,7 @@ def main(
     """
     Manage users in the awesome CLI app.
     """
+    # Set logging level
     log_level = LoggingLevel.INFO
     if verbose:
         app.state.verbose = True
