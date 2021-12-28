@@ -63,7 +63,7 @@ class LocalStatus(str, Enum):
     """Represents the status of a function locally"""
 
     ADDED = "added"
-    BUILT = "built"
+    BUILT = "new build"
     INVALID = "invalid"
     NEW = "new"
     REMOVED = "removed"

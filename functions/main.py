@@ -250,4 +250,7 @@ def add(
 @app.command()
 def config() -> None:
     """Renders function's configuration file into the command line"""
+    # Print the config if no arguments are provided
+
+    # Remove the config file if --reset flag is passed in
     raise NotImplementedError()
