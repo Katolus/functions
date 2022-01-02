@@ -27,16 +27,15 @@ body:
       render: markdown
     validations:
       required: true
-  # - type: textarea
-  #   id: proposal
-  #   attributes:
-  #     label: The Alternatives
-  #     description: |
-  #       ## Describe alternatives you've considered.
-
-  #       A clear and concise description of any alternative solutions or features you've considered.      render: markdown
-  #   validations:
-  #     required: false
+  - type: textarea
+    id: proposal
+    attributes:
+      label: The Alternatives
+      description: Describe alternatives you've considered.
+      placeholder: A clear and concise description of any alternative solutions or features you've considered.
+      render: markdown
+    validations:
+      required: false
   - type: textarea
     id: value
     attributes:
