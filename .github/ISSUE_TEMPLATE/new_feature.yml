@@ -3,12 +3,12 @@ description: If you are thinking about a new feature prospect.
 title: "[Feature]: ..."
 labels: ["feature", "triage"]
 body:
-  - type: markdown
-    attributes:
-      value: |
-        ## Thanks for taking the time to fill out this feature request.
+  # - type: markdown
+  #   attributes:
+  #     value: |
+  #       ## Thanks for taking the time to fill out this feature request.
 
-        Please make sure that you run your idea through the [community](https://github.com/Katolus/functions/discussions/categories/ideas).
+  #       Please make sure that you run your idea through the [community](https://github.com/Katolus/functions/discussions/categories/ideas).
   - type: textarea
     id: problem
     attributes:
@@ -25,30 +25,31 @@ body:
     attributes:
       label: The Proposal
       description: |
-        ## Describe the solution you'd like. Don't spare your vision.
+          ## Describe the solution you'd like. Don't spare your vision.
 
-        A clear and concise description of what you want to happen.
+          A clear and concise description of what you want to happen.
       render: markdown
     validations:
       required: true
-  - type: textarea
-    id: proposal
-    attributes:
-      label: The Alternatives
-      description: |
-        ## Describe alternatives you've considered.
+  # - type: textarea
+  #   id: proposal
+  #   attributes:
+  #     label: The Alternatives
+  #     description: |
+  #       ## Describe alternatives you've considered.
 
-        A clear and concise description of any alternative solutions or features you've considered.      render: markdown
-    validations:
-      required: false
+  #       A clear and concise description of any alternative solutions or features you've considered.      render: markdown
+  #   validations:
+  #     required: false
   - type: textarea
     id: value
     attributes:
       label: The Value
       description: |
-        ## Describe what value this feature brings to the project.
+          ## Describe what value this feature brings to the project.
 
-        Try to enumerate the values that the change will bring to the project.
+          Try to enumerate the values that the change will bring to the project.
+      render: markdown
     validations:
       required: true
   - type: textarea
