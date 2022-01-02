@@ -3,12 +3,12 @@ description: If you are thinking about a new feature prospect.
 title: "[Feature]: ..."
 labels: ["feature", "triage"]
 body:
-  # - type: markdown
-  #   attributes:
-  #     value: |
-  #       ## Thanks for taking the time to fill out this feature request.
+  - type: markdown
+    attributes:
+      value: |
+        ## Thanks for taking the time to fill out this feature request.
 
-  #       Please make sure that you run your idea through the [community](https://github.com/Katolus/functions/discussions/categories/ideas).
+        Please make sure that you run your idea through the [community](https://github.com/Katolus/functions/discussions/categories/ideas).
   - type: textarea
     id: problem
     attributes:
