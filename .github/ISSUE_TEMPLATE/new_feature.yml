@@ -8,15 +8,13 @@ body:
       value: |
         ## Thanks for taking the time to fill out this feature request.
 
-        Please make sure that you run your idea through the [community](https://github.com/Katolus/functions/discussions/categories/ideas).
+        It is highly advised to run your idea through our [community](https://github.com/Katolus/functions/discussions/categories/ideas).
   - type: textarea
     id: problem
     attributes:
       label: The Problem
-      description: |
-        ## Is your feature request related to a problem? Please describe.
-
-        A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+      description: Is your feature request related to a problem? Please describe.
+      placeholder: A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
       render: markdown
     validations:
       required: true
