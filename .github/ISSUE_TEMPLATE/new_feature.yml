@@ -22,10 +22,8 @@ body:
     id: proposal
     attributes:
       label: The Proposal
-      description: |
-          ## Describe the solution you'd like. Don't spare your vision.
-
-          A clear and concise description of what you want to happen.
+      description: Describe the solution you'd like. Don't spare your vision.
+      placeholder: A clear and concise description of what you want to happen.
       render: markdown
     validations:
       required: true
@@ -43,10 +41,8 @@ body:
     id: value
     attributes:
       label: The Value
-      description: |
-          ## Describe what value this feature brings to the project.
-
-          Try to enumerate the values that the change will bring to the project.
+      description: Describe what value this feature brings to the project.
+      placeholder: Try to enumerate the values that the change will bring to the project.
       render: markdown
     validations:
       required: true
