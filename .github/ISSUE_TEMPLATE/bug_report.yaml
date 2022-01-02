@@ -66,7 +66,7 @@ body:
             - Poetry:
         render: markdown
     validations:
-        required: false
+        required: true
   - type: checkboxes
     attributes:
         label: Is there an existing issue for this?
