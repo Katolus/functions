@@ -1,5 +1,5 @@
-name: 🖨 Documentation update
-description: Suggest an update for missing or invalid documentation
+name: 🖨 Documentation
+description: Suggest an update for missing or invalid documentation.
 title: "[Documentation]: "
 labels: ["documentation", "triage"]
 body:
