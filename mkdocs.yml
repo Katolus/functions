@@ -1,7 +1,7 @@
 # Project information
-site_name: functions-cli
+site_name: functions
 site_description: >-
-  A documentation hosted for the `functions-cli` FaaS open source Github project.
+  A documentation hosted for the `functions` FaaS open source Github project.
 site_author: Piotr Katolik
 
 # Repository
@@ -85,12 +85,10 @@ extra:
 
 # Page tree
 nav:
-  - Introduction: roadmap.md
-  - Idea: project_proposal.md
-  - Features: features.md
+  - Introduction: index.md
+  - Idea: idea.md
   - CLI docs: cli.md
-  - Local development: local_development.md
+  - Local Development: local_development.md
   - Examples: examples.md
   - Roadmap: roadmap.md
   - Glossary: glossary.md
-  # - Project Plan:
