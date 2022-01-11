@@ -14,7 +14,7 @@ Not an easy task and it is not even close to being fast. Usually you need to dep
 
 All this is, combined with automations you build will be highly specific to the provider you are using by which point you are locked in.
 
-One of the things that made HashiCorp products so great is that they allow for flexibility. That becoming far more important nowadays that it ever was.
+One of the things that made [HashiCorp](https://www.hashicorp.com/) products so great is that they allow for flexibility. That becoming far more important nowadays that it ever was.
 
 In order to tackle all these pain-points and made any serverless task a much more fun experience, we propose building a software tool that takes care of all the local environment, deployment, tracking, logging and provider specific logic and gives developer a homogenus(check) CLI interface to interact with their FaaS components. It will take away the complexity and give back a modular and intuitive work tool for everyone to use.
 

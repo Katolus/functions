@@ -2,7 +2,7 @@
 title: functions
 ---
 
-Welcome to the `functions` project. An open source, curiosity driven and Github hosted playground for optimizing function as a service (FaaS) technologies. Our purpose is to make it easier to build, maintain and deploy serverless functions.
+Welcome to the `functions` project, an open source, curiosity-driven tool for optimizing the administration of function as a service (FaaS) technologies. Our purpose is to make it easier to build, maintain and deploy serverless functions.
 
 ## Resources
 
@@ -12,19 +12,18 @@ Welcome to the `functions` project. An open source, curiosity driven and Github 
 
 ## Features
 
-The project is still under deep development, and there is still a lot of work to be done even to reach the base quality.
-Nonetheless, we believe there is value in using it as it is if it fits your needs and requirements (Python + Linux).
+The project is still under deep development, and there is still much work to be done even to reach the base quality. Nonetheless, we believe there is value in using it as it is if it fits your needs and requirements (Python + Linux).
 
 Feedback, issues and request are more than welcome.
 
-See the road map [document](roadmap.md) to see how our vision might need your future interest.
+See the [road map](roadmap.md) to see how our vision might need your future interest.
 
-Here is a list of functionalities that the package is capable of.
+In the following sections, we list a summary of the functionalities that the tool can perform.
 
 ### Locally
 
-* Generate a new template function directories for starting new functions. Two types GCP `http`/`pubsub`.
-* Add an existing function to the function registry to be run and deployed as functions native to the package.
+* Generate new template function directories for starting new functions. Two types GCP `http`/`pubsub`.
+* Add an existing **function** to the function registry to be run and deployed as functions native to the package.
 * Build pre-generated, validated and **locally** existing functions using Docker.
 * Operate (`deploy`/`remove`) Google Cloud Platform functions from a local machine.
 * Store information about the built, run and deployed functions locally for reference and configuration.
@@ -33,7 +32,7 @@ Here is a list of functionalities that the package is capable of.
 
 ### GCP
 
-* Deploy locally existing function as cloud functions. Limited to two types - `http` and `pubsub`.
+* Deploy locally existing functions as cloud functions. Limited to two types - `http` and `pubsub`.
 * Delete functions deployed to GCP using this package.
 
 ## Additional Context

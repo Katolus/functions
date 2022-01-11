@@ -4,6 +4,9 @@ site_description: >-
   A documentation hosted for the `functions` FaaS open source Github project.
 site_author: Piotr Katolik
 
+# Structure
+docs_dir: docs_mk
+
 # Repository
 repo_url: https://github.com/Katolus/functions
 repo_name: Katolus/functions
@@ -87,8 +90,16 @@ extra:
 nav:
   - Introduction: index.md
   - Idea: idea.md
-  - CLI docs: cli.md
-  - Local Development: local_development.md
-  - Examples: examples.md
+  # - How it works: how_it_works.md
+  # - Usage (CLI): usage.md
+    # - Working locally:
+    # - Working with GCP:
+  # - CLI docs: cli.md
+  # - Developing functions:
+  # - Local Development: local_development.md
+  # - Releases:
+  # - Examples: examples.md
+  # - Configuration Guides:
+  # - Contributing:
   - Roadmap: roadmap.md
-  - Glossary: glossary.md
+  # - Glossary: glossary.md
