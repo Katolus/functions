@@ -1,13 +1,11 @@
-To get an understanding of what this project is meant to achive look into the [project proposal](./docs/proposal/) document. As of current, the `functions-cli` project is driven by me and only me, however more contributions are welcomed.
+To understand what this project is about, check out the idea section. Currently, the `functions` project is curated by the author, so please consider contributing. All input is welcomed.
+The main goal is to provide a valuable, tested, and robust tool that others can use to their benefit. You can follow a more detailed, documented path via the project [page](https://github.com/users/Katolus/projects/1).
 
-Main goal at the moment is to provide a vialable, tested, and robust software project that other can use to their benefit. This effort is summarised under the project name of ["Primary"](https://github.com/users/Katolus/projects/1).
+Once we reach the base quality and the project gets traction, we plan to grow its capabilities. Topics/features include:
+Add AWS support.
+Add support for GitHub URL as a source path for a function.
+Enhance support for runtimes other than python.
+Custom commands and scripts.
+Initialise and lead test coverage.
 
-These are the other topics/features in the future scope:
-
-- Add AWS support.
-- Add support for github URL as source of a function.
-- Enhance support for runtimes other than python.
-- Custom commands and scripts.
-- Initialise and lead test coverage.
-
-With more to come as the project starts getting ground in real implementations.
+And more to come as the tool starts to get used in actual implementations.
