@@ -2,10 +2,11 @@ To understand what this project is about, check out the idea section. Currently,
 The main goal is to provide a valuable, tested, and robust tool that others can use to their benefit. You can follow a more detailed, documented path via the project [page](https://github.com/users/Katolus/projects/1).
 
 Once we reach the base quality and the project gets traction, we plan to grow its capabilities. Topics/features include:
-Add AWS support.
-Add support for GitHub URL as a source path for a function.
-Enhance support for runtimes other than python.
-Custom commands and scripts.
-Initialise and lead test coverage.
+
+* Add AWS support.
+* Add support for GitHub URL as a source path for a function.
+* Enhance support for runtimes other than python.
+* Custom commands and scripts.
+* Initialise and lead test coverage.
 
 And more to come as the tool starts to get used in actual implementations.
