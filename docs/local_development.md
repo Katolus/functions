@@ -57,3 +57,17 @@ Alternatively there run the [`install_locally.sh`](/scripts/install_locally.sh) 
 ## Preparing for a new version release
 
 TBU
+
+## Setting up local environment in VSCode
+
+Make poetry build the virtual env locally.
+
+```bash
+poetry config virtualenvs.in-project true
+```
+
+to set the virtual env folder to be created in the current directory.
+
+This is mainly to enable working with the context in VSCode.
+
+TBU...
