@@ -43,6 +43,10 @@ pytest = "^5.2"
 pytest-cov = "^3.0.0"
 tox = "^3.24.4"
 types-toml = "^0.10.1"
+mkdocs = "^1.2.3"
+mkdocs-material = "^8.1.4"
+mkdocs-include-markdown-plugin = "^3.2.3"
+mkdocs-material-extensions = "^1.0.3"
 
 [tool.poetry.extras]
 gcp = [
