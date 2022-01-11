@@ -1,26 +1,25 @@
-In this document we discuss the purpose behind making this project and some of its criteria, expectations and scope.
+Here you can find additional context on purpose behind making this project and some of its criteria, expectations and scope.
 
-## Pitch
+## Quick Pitch
 
-`functions` - a command line tool that helps with managing functions as a service (FaaS) components locally and remotely.
+`functions` - a command line tool that helps manage functions as a service (FaaS) components locally and remotely.
 
 ## Background
 
-Across the recent years and even more so in the future ones, every a developer would have worked with a serverless function. We use it to power our logic that can filtered down to a single action. Building a single point API. Building a triggered pipeline. We choose this technique for its merits in scaling and decoupling from any other part of the system. One thing goes in and something happens or is returns as a result.
+If you are a developer working with any cloud providers, the chance is, you would have heard about serverless functions. You can use them to run small, independent components that can scale on demand. Their scope is usually that of a single task. Examples include: building a single point API, building a triggered pipeline, connecting to a resource etc... It is a fantastic piece of technology that can decouple large systems and support a wide variety of cases.
 
-It is easy to deploy a slighly tailor version of a templated function to fit your basics needs. It gets a little bit more complicated if you are facing a task that is out of ordinery. How do you keep track of your work? How do you deploy the function? How do you test it?
+Generally, it is easy to deploy a simple serverless function as a template version to fit your basic needs. It gets a little more complicated if you face a task that is out of the ordinary. Questions emerge. How do you keep track of your work? What was deployed or what was run. How do you deploy the function? How do you test it?
+It is not easy to handle all that using a standard tool like the `gcloud` command-line tool, and it is not even close to being fast. Usually, you need to deploy the function to see any results. Some providers offer helpful libraries/tools that allow you to run your serverless functions locally, but even that quickly gets complicated and requires you to learn another repository and its documentation.
 
-Not an easy task and it is not even close to being fast. Usually you need to deploy the function to see any results. Some of the providers offer helpful libraries/tools that allow you to run your serverless functions locally, but even that gets a bit complicated and requires you to spend time on learning another repository.
+Even if you pass through, the automations you built will be highly specific to the provider you are using by which you are locked in.
 
-All this is, combined with automations you build will be highly specific to the provider you are using by which point you are locked in.
+One of the things that made [HashiCorp](https://www.hashicorp.com/) products so great is that they allow for flexibility. Flexibility and modularity are becoming far more important nowadays than it ever was.
 
-One of the things that made [HashiCorp](https://www.hashicorp.com/) products so great is that they allow for flexibility. That becoming far more important nowadays that it ever was.
-
-In order to tackle all these pain-points and made any serverless task a much more fun experience, we propose building a software tool that takes care of all the local environment, deployment, tracking, logging and provider specific logic and gives developer a homogenus(check) CLI interface to interact with their FaaS components. It will take away the complexity and give back a modular and intuitive work tool for everyone to use.
+In an attempt to tackle all these pain-points and make any serverless task a much more fun experience, we propose building a software tool that takes care of all the local environment, deployment, tracking, logging and provider-specific logic and gives a developer a homogeneous CLI interface to interact with their FaaS components. A tool that takes away the complexity and gives back an intuitive work tool for everyone to use.
 
 ## Progress so far
 
-The projects started as a solo project in between job. The scope was massively undercut from the start. It is a battleground for growing developer skills and it has been treated like that, still yet to see it's first release.
+The project started as a solo project in between jobs. It's scope was massively undercut from the start, but with time and experience, the spectrum became something that we can track with much higher confidence. The project is a battleground for growing developer skills, and it has been treated like that, still yet to see its first release.
 
 ## Objectives
 
@@ -31,15 +30,15 @@ The projects started as a solo project in between job. The scope was massively u
 
 ## Principle Values
 
-- Easy to Use
-- Safe
-- Simple
+- Easy to Use.
+- Safe.
+- Simple.
 
 ## Timeframe
 
 | Stage         | Summary                                                                                                      | Delivery                    |
 | ------------- | ------------------------------------------------------------------------------------------------------------ | --------------------------- |
-| First Release | First release targets a somehow stable alpha version with enough functionalities to test the idea in action. | Planned for the end of 2021 |
+| First Release | The first release targets a stable alpha version with enough functionalities to test the idea in action. | Planned for the end of 2021 |
 
 
 ## Engineering budget
@@ -51,7 +50,7 @@ So if you believe in this project, the repository is set up to support community
 
 ## Monitoring and Evaluation
 
-Project is being reviewed at lest every month to reevaluate timeframes, view project interactions and adjust documentation accordingly.
+The project is being reviewed at least every month to reevaluate timeframes, view project interactions and adjust documentation accordingly.
 
 ## Lessons learned
 
@@ -62,15 +61,3 @@ Beyond elemental learnings such as how to pick a suitable license or which tool 
 - It is vital to build and bring tools to the project.
 - Planning out the scope and writing a comprehensive overview is reasonably the most crucial step. Otherwise, you are unsure what you are trying to do or how the project should be structured. **It is worth the effort**.
 - Documentation is as important if not more important than code.
-
-
-## Changelog
-
-<br>
-<!-- pagebreak -->
-
-**30/11/2021**
-- Added the project proposal document.
-
-**08/01/2021**
-- Update the content to have a more holistic view.
