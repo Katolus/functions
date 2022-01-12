@@ -1,4 +1,4 @@
-# How the get started with running `functions-cli` locally
+# How the get started with running `functions` locally
 
 If you want to run code locally for development, contributions or simply want to adjust a few lines of code here are a few instructions on how to get setup.
 

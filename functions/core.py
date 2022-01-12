@@ -9,9 +9,10 @@ from pydantic import PrivateAttr
 from typer.main import get_command
 
 from functions import commands
+from functions.components import ComponentEnum
+from functions.components import ComponentType
 from functions.config.files import AppConfig
 from functions.config.managers import AppConfigManager
-from functions.components import ComponentEnum, ComponentType
 from functions.decorators import handle_error
 
 
@@ -48,7 +49,7 @@ class FunctionsCli(BaseModel):
 
     def __init__(self, **data: Any) -> None:
         self._main = typer.Typer(
-            name="functions-cli",
+            name="functions",
             help="Run script to executing, testing and deploying included functions.",
         )
 

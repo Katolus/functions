@@ -1,4 +1,4 @@
-# `functions-cli` high level flow
+# `functions` high level flow
 
 * Status: Proposed
 * Deciders: [Piotr] <!-- optional -->
