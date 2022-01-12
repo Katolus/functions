@@ -10,6 +10,4 @@ class ComponentMissingError(FunctionBaseError):
 
 class ComponentVersionError(FunctionBaseError):
     code = "docker.engine_version_error"
-    msg_template = (
-        "It looks like `{component}'s` version is too old ({version}). Please update."
-    )
+    msg_template = "It looks like `{component}'s` version is too old ({version}). Please update to - {min_version} minimum."
