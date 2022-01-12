@@ -62,3 +62,10 @@ def handle_docker_exception(error: docker.errors.DockerException) -> NoReturn:
     typer.echo(f"{styles.red('Unexpected docker error occurred')}: {error}.\n")
     typer.echo("Please make sure your `docker` is correctly installed.")
     sys.exit(1)
+
+
+@error_handler(error=NotImplementedError)
+def handle_not_implemented_errors(error: NotImplementedError) -> NoReturn:
+    """Handles the base case for all the function errors"""
+    logs.exception(error)
+    raise UsageError("This feature is not yet implemented.")

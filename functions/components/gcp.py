@@ -1,9 +1,7 @@
 from functions import user
-from functions.components.errors import (
-    ComponentVersionError,
-    ComponentMissingError,
-)
 from functions.components import Component
+from functions.components.errors import ComponentMissingError
+from functions.components.errors import ComponentVersionError
 from functions.processes import check_output
 
 # Add a constant that pins a gcloud's version to a minimum one
@@ -36,7 +34,9 @@ class GCPComponent(Component):
             raise ComponentMissingError(component=cls.TYPE, error=error)
 
         if gcloud_version.split(".")[0] < MAJOR:
-            raise ComponentVersionError(component=cls.TYPE, version=gcloud_version)
+            raise ComponentVersionError(
+                component=cls.TYPE, version=gcloud_version, min_version=MIN_GCP_VERSION
+            )
 
         return True
 
