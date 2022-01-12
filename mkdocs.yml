@@ -1,7 +1,7 @@
 # Project information
 site_name: functions
 site_description: >-
-  A documentation hosted for the `functions` FaaS open source Github project.
+  CLI tool which drastically improves standards of work for serverless functions.
 site_author: Piotr Katolik
 
 # Structure
@@ -102,4 +102,6 @@ nav:
   # - Configuration Guides:
   # - Contributing:
   - Roadmap: roadmap.md
+  # - Environment support: environment_support.md
+  # - Releases: releases.md
   # - Glossary: glossary.md
