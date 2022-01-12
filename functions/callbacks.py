@@ -2,7 +2,7 @@ from typing import Optional
 
 import typer
 
-from functions import __project_name__
+from functions import __package_name__
 from functions import __version__
 from functions import styles
 from functions import user
@@ -20,7 +20,7 @@ def print_out_the_version(value: bool) -> None:
     if value:
         user.inform(
             f"You are using {styles.bold(__version__)} version of the "
-            f"{styles.bold(__project_name__)} package"
+            f"{styles.bold(__package_name__)} package"
         )
         raise typer.Exit()
 

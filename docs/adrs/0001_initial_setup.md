@@ -1,4 +1,4 @@
-# Initial `functions-cli` setup
+# Initial `functions` setup
 
 * Status: Proposed
 * Deciders: [Piotr] <!-- optional -->
@@ -8,7 +8,7 @@
 
 This document talks briefly about how the project was structured prior to making structured decisions and [documentations records](../adrs).
 
-`functions-cli` was initial built on top of the `typer` library to easily support CLI components.
+`functions` was initial built on top of the `typer` library to easily support CLI components.
 
 Repository had a a single subfolder (`commands`) initially that stored scripts specific to each subcommand. Later on a few other folders were added:
 

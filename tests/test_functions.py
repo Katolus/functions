@@ -1,4 +1,4 @@
-from functions import __project_name__
+from functions import __package_name__
 from functions import __version__
 
 
@@ -7,4 +7,4 @@ def test_version():
 
 
 def test_something_else():
-    assert __project_name__ == "functions-cli"
+    assert __package_name__ == "functions-cli"

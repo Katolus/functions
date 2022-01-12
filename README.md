@@ -1,4 +1,4 @@
-# `functions-cli`
+# `functions`
 
 > This package that will get you working with FaaS.
 
@@ -16,7 +16,7 @@
 * PyPI: <https://pypi.org/project/functions-cli/>
 * Free software: MIT
 
-`functions-cli` is a utility package written in Python. It is built to help the developer run, test and deploy FaaS (Function as a Service) resources. Our goal is to combine and simplify efforts required for local and cloud development.
+`functions` is a utility package written in Python. It is built to help the developer run, test and deploy FaaS (Function as a Service) resources. Our goal is to combine and simplify efforts required for local and cloud development.
 
 We are using `docker` as a primary technology to build and orchestrate the functions locally.
 
