@@ -22,7 +22,9 @@ def local() -> None:
 
     # Find the different names present in one list but not the other
     not_in_registry = list(set(images) - set(functions_names))
+    logs.debug(f"Functions not in registry: {not_in_registry}")
     not_in_docker = list(set(functions_names) - set(images))
+    logs.debug(f"Functions not in docker: {not_in_docker}")
 
     # Check functions in registry, but not in Docker
     for function_name in not_in_docker:
@@ -46,7 +48,7 @@ def local() -> None:
 
             if should_add:
                 # Add the image's source code to the registry
-
+                # TODO:
                 continue
 
         else:
@@ -61,6 +63,7 @@ def local() -> None:
                 image.remove()
                 user.inform(f"Image {image.name} has been removed.")
                 continue
+    logs.debug("Syncing local functions finished...")
 
 
 @app.command()
@@ -84,7 +87,9 @@ def gcp() -> None:
 
     # Find the different names present in one list but not the other
     not_in_registry = list(set(deployed_functions) - set(functions_names))
+    logs.debug(f"Functions not in registry: {not_in_registry}")
     not_in_deployed = list(set(functions_names) - set(deployed_functions))
+    logs.debug(f"Functions not in deployed: {not_in_deployed}")
 
     if not_in_registry == [] and not_in_deployed == []:
         user.inform("Nothing to report. All functions are in sync 🔥")
@@ -94,6 +99,9 @@ def gcp() -> None:
         function = FunctionRegistry.fetch_function(function_name)
         # Check if status is deployed to GCP
         if function.status.GCP != CloudStatus.DEPLOYED:
+            logs.debug(
+                f"Skiping function {function_name} since is not deployed to GCP."
+            )
             continue
 
         # Notify use that the function status is mismatched
@@ -108,9 +116,11 @@ def gcp() -> None:
 
         function.set_gcp_status(CloudStatus.UNKNOWN)
         function.update_registry()  # Not the most efficient way
+        logs.debug(f"Function {function_name} has been updated.")
 
     # Inform user of functions deployed to GCP and matching registry requirements
     if not_in_registry != []:
         user.inform(
             f"There are several functions deployed to GCP that matches registry requirements, but are not present in the registry : {not_in_registry}"
         )
+    logs.debug("Syncing GCP functions finished...")
