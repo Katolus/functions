@@ -21,7 +21,7 @@ We will add a `sync` command that can be called to update registry information f
 Update of the registry will be done by running sub-commands like
 
 ```bash
-functions sync docker
+functions sync local
 ```
 
 that will update the registry against the currently built and running `docker` containers.

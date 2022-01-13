@@ -45,6 +45,13 @@ class Runtime(str, Enum):
     RUBY26 = "ruby26"
     RUBY27 = "ruby27"
 
+    @classmethod
+    def validate_supported_versions(cls) -> None:
+        """
+        Fetches information about the supported versions.
+        """
+        raise NotImplementedError
+
 
 class Trigger(str, Enum):
     """

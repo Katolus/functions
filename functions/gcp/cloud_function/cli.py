@@ -150,6 +150,8 @@ def deploy_function(function: FunctionRecord, *, new_name: str = None):
 def delete_function(function_name: str):
     """Runs a gcloud command to remove a function matching a given name"""
     logs.debug(f"Deleting cloud function: {function_name}")
+
+    # Commands will error out if the function doesn't exist
     run_cmd(
         [
             "gcloud",
