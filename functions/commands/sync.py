@@ -16,15 +16,51 @@ def local() -> None:
     logs.debug("Syncing local functions")
     # Get the list of functions built or running locally from the the DockerManager
     images = DockerImage.get_all_names()
-    print(images)
+
     # Retrieve functions from the registry
     functions_names = FunctionRegistry.fetch_built_function_names()
-    print(functions_names)
-    # Compare the two lists and sync the state of the functions
 
-    # Save the results to the registry
+    # Find the different names present in one list but not the other
+    not_in_registry = list(set(images) - set(functions_names))
+    not_in_docker = list(set(functions_names) - set(images))
 
-    # Report the results to the user
+    # Check functions in registry, but not in Docker
+    for function_name in not_in_docker:
+        user.inform(f"Function '{function_name}' is not built locally.")
+
+    # Check functions in Docker, but not in registry
+    for function_name in not_in_registry:
+        user.inform(
+            f"There is a Docker function({function_name}) image that does not match a record in the registry."
+        )
+
+        # Get the docker image
+        image = DockerImage.get(function_name)
+
+        # Check if the source of the image is still valid
+        if image.is_source_valid():
+            should_add = user.confirm(
+                f"The source of the image {image.name} is still valid. "
+                f"Do you want to add it the registry?."
+            )
+
+            if should_add:
+                # Add the image's source code to the registry
+
+                continue
+
+        else:
+            # The source of the image is not valid anymore
+            should_remove = user.confirm(
+                f"The source of the image {image.name} is not valid anymore. "
+                f"Do you want to remove the image?"
+            )
+
+            if should_remove:
+                # Remove the image's source code from the registry
+                image.remove()
+                user.inform(f"Image {image.name} has been removed.")
+                continue
 
 
 @app.command()
@@ -63,7 +99,7 @@ def gcp() -> None:
         # Notify use that the function status is mismatched
         user.inform(
             f"Function - '{function_name}' - GCP status is not sync. GCP({CloudStatus.UNKNOWN}) vs Registry({function.status.GCP})"
-        )  # noqa: E501
+        )
 
         # Inform the user that function's status will be updated
         user.inform(
@@ -77,4 +113,4 @@ def gcp() -> None:
     if not_in_registry != []:
         user.inform(
             f"There are several functions deployed to GCP that matches registry requirements, but are not present in the registry : {not_in_registry}"
-        )  # noqa: E501
+        )

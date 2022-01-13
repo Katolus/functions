@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 from typing import List
 
@@ -197,6 +198,25 @@ class DockerImage:
     @property
     def labels(self) -> DockerLabelsDict:
         return self._image.labels
+
+    @property
+    def source_path(self) -> str:
+        """Path to the source code"""
+        return self.get_label(DockerLabel.FUNCTION_PATH)
+
+    def get_label(self, label: DockerLabel) -> str:
+        return self.labels.get(label)
+
+    def is_source_valid(self) -> bool:
+        """Check if the source code is valid"""
+        source_path = self.source_path
+        if source_path is None or source_path == "":
+            logs.debug(f"Source path is not set for image {self.id}")
+            return False
+        if not os.path.exists(source_path):
+            logs.debug(f"Source path {source_path} does not exist")
+            return False
+        return True
 
     def remove(self) -> None:
         """
