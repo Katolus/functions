@@ -8,4 +8,4 @@ class ConfigValidationError(FunctionBaseError):
 
 class FunctionNotInRegistryError(FunctionBaseError):
     code = "config.function_not_in_registry"
-    msg_template = "Function {function} not found in registry. Validate your setup."
+    msg_template = "Function '{function}' not found in registry. Validate your setup."
