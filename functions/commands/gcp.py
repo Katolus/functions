@@ -50,10 +50,12 @@ def delete(
         ...,
         help="Name of the function you want to remove",
         autocompletion=gcp_delete_autocomplete,
+        callback=check_if_function_name_in_registry,
     ),
 ) -> None:
     """Deletes a functions deployed to GCP"""
     provider = CloudProvider.GCP.upper()
+
     user.confirm_abort(
         f"Are you sure you want to remove '{function_name}' from {provider}?"
     )
