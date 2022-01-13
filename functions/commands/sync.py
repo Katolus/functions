@@ -48,7 +48,9 @@ def local() -> None:
 
             if should_add:
                 # Add the image's source code to the registry
-                # TODO:
+                # TODO: We need to factor out the code responsible for validating
+                # and adding function to a registry.
+                raise NotImplementedError
                 continue
 
         else:
