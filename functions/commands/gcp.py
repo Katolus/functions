@@ -3,12 +3,14 @@ from typing import Optional
 import typer
 
 from functions import cloud
+from functions import logs
 from functions import styles
 from functions import user
 from functions.cloud import deploy_function
 from functions.config.files import FunctionRegistry
 from functions.constants import CloudProvider
 from functions.constants import CloudServiceType
+from functions.gcp.autocomplete import autocomplete_deployed_function
 from functions.gcp.autocomplete import gcp_delete_autocomplete
 from functions.gcp.autocomplete import gcp_deploy_autocomplete
 from functions.gcp.callbacks import check_if_function_name_in_registry
@@ -66,14 +68,19 @@ def describe(
     function_name: str = typer.Argument(
         ...,
         help="Name of the function you want to describe",
+        autocompletion=autocomplete_deployed_function,
+        callback=check_if_function_name_in_registry,
     ),
 ) -> None:
     """Returns information about a deployed function"""
-    raise NotImplementedError
+    logs.debug(f"Fetching information about '{function_name}'")
+    function = FunctionRegistry.fetch_function(function_name)
+    cloud.describe_function(function, provider=CloudProvider.GCP)
+    logs.debug(f"Describe command for '{function_name}' has been executed")
 
 
-@app.command()
-def logs(
+@app.command("logs")
+def fetch_logs(
     function_name: str = typer.Argument(
         ...,
         help="Name of the function you want to read logs from",

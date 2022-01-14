@@ -164,9 +164,9 @@ def delete_function(function_name: str):
     logs.debug(f"Successfully deleted cloud function: {function_name}")
 
 
-def describe_function(function_name: str):
-    logs.debug(f"Reading cloud description of the function: {function_name}")
-    run_cmd(["gcloud", "functions", "describe", function_name] + add_region_argument())
+def run_describe_cmd(function: FunctionRecord) -> None:
+    logs.debug(f"Reading cloud description of the function: {function.name}")
+    run_cmd(["gcloud", "functions", "describe", function.name] + add_region_argument())
 
 
 def fetch_function_logs(function: FunctionRecord):

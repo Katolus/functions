@@ -18,3 +18,10 @@ def gcp_delete_autocomplete(incomplete: str) -> Iterable[str]:
     for name in fetch_deployed_function_names():
         if name.startswith(incomplete):
             yield name
+
+
+def autocomplete_deployed_function(incomplete: str) -> Iterable[str]:
+    """Returns a list of resources available for deletion"""
+    for name in fetch_deployed_function_names():
+        if name.startswith(incomplete):
+            yield name
