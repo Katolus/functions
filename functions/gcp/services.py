@@ -18,6 +18,17 @@ def deploy(function: FunctionRecord) -> None:
         raise errors.UnknownServiceError(service=service)
 
 
+def describe(function: FunctionRecord) -> None:
+    """Use the `describe` command to retrieve information about a function"""
+    service = function.config.deploy_variables.service
+    if service == GCPServices.CLOUD_FUNCTION:
+        from .cloud_function.cli import run_describe_cmd
+
+        return run_describe_cmd(function)
+    else:
+        raise errors.UnknownServiceError(service=service)
+
+
 def fetch_logs(function: FunctionRecord) -> None:
     """Fetches the logs for the function"""
     service = function.config.deploy_variables.service

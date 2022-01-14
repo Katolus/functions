@@ -14,7 +14,7 @@ def handle_unmatched_provider(provider: str) -> NoReturn:
         raise Exception("No such provider")
 
 
-def deploy_function(function: FunctionRecord, /, provider: CloudProvider):
+def deploy_function(function: FunctionRecord, /, provider: CloudProvider = None):
     """Deploys a function to a given provider using a defined service"""
     provider = provider or function.config.deploy_variables.provider
 
@@ -22,6 +22,19 @@ def deploy_function(function: FunctionRecord, /, provider: CloudProvider):
         from functions.gcp.services import deploy
 
         return deploy(function)
+    handle_unmatched_provider(provider)
+
+
+def describe_function(
+    function: FunctionRecord, /, provider: CloudProvider = None
+) -> None:
+    """Describes a function on a given provider using a defined service"""
+    provider = provider or function.config.deploy_variables.provider
+
+    if provider == CloudProvider.GCP:
+        from functions.gcp.services import describe
+
+        return describe(function)
     handle_unmatched_provider(provider)
 
 
