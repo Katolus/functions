@@ -99,10 +99,12 @@ def fetch_logs(
 @app.command()
 def list(
     service: Optional[CloudServiceType] = typer.Option(
-        None,
+        CloudServiceType.CLOUD_FUNCTION,
         help="Type of service you want to list resources from",
         autocompletion=CloudServiceType.all,
     ),
 ) -> None:
     """Lists functions deployed to a service on GCP"""
-    raise NotImplementedError()
+    logs.debug(f"Fetching list of functions from {service}")
+    cloud.list_functions(service=service, provider=CloudProvider.GCP)
+    logs.debug(f"List command for {service} has been executed")
