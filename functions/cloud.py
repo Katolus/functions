@@ -4,6 +4,7 @@ from typing import NoReturn
 from functions.config.files import FunctionRegistry
 from functions.config.models import FunctionRecord
 from functions.constants import CloudProvider
+from functions.constants import CloudServiceType
 
 
 def handle_unmatched_provider(provider: str) -> NoReturn:
@@ -35,6 +36,17 @@ def describe_function(
         from functions.gcp.services import describe
 
         return describe(function)
+    handle_unmatched_provider(provider)
+
+
+def list_functions(
+    *, provider: CloudProvider, service: CloudServiceType = None
+) -> None:
+    """Lists all the functions deployed to a given provider using a defined service"""
+    if provider == CloudProvider.GCP:
+        from functions.gcp.services import list_functions
+
+        return list_functions(service=service)
     handle_unmatched_provider(provider)
 
 
