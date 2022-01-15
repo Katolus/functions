@@ -78,7 +78,7 @@ def describe(
     logs.debug(f"Fetching information about '{function_name}'")
     function = FunctionRegistry.fetch_function(function_name)
     cloud.describe_function(function, provider=CloudProvider.GCP)
-    logs.debug(f"Describe command for '{function_name}' has been executed")
+    logs.debug(f"Describe command for '{function_name}' has executed")
 
 
 @app.command("logs")
@@ -86,11 +86,14 @@ def fetch_logs(
     function_name: str = typer.Argument(
         ...,
         help="Name of the function you want to read logs from",
+        autocompletion=autocomplete_deployed_function,
         callback=check_if_function_name_in_registry,
     ),
 ) -> None:
     """Reads log from a deployed function"""
+    logs.debug(f"Fetching logs for '{function_name}'")
     cloud.read_logs(function_name, provider=CloudProvider.GCP)
+    logs.debug(f"Logs command for '{function_name}' has executed")
 
 
 @app.command()
