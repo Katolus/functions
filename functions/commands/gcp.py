@@ -41,6 +41,9 @@ def deploy(
     """Deploy a functions to GCP"""
     function = FunctionRegistry.fetch_function(function_name)
 
+    if function.status.GCP.is_deployed:
+        user.confirm_abort(f"Function {function_name} is already deployed. Abort?")
+
     deploy_function(function, provider=CloudProvider.GCP)
 
     user.inform(f"'{function_name}' functions has been deployed to GCP!")

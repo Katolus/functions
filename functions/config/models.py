@@ -181,8 +181,8 @@ class FunctionConfig(BaseModel):
 class FunctionStatus(BaseModel):
     """A class representing the status of a function"""
 
-    LOCAL: Optional[LocalStatus] = None
-    GCP: Optional[CloudStatus] = None
+    LOCAL: LocalStatus = LocalStatus.UNKNOWN
+    GCP: CloudStatus = CloudStatus.UNKNOWN
 
 
 class FunctionRecord(BaseModel):
