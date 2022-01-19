@@ -6,6 +6,8 @@
 
 ## Work context
 
+Architecture and features expects a to a place to store files. File like the config file, logs, etc.... In this document we are hoping to find a
+
 ## Problem
 
 ## Research
