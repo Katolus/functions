@@ -9,7 +9,11 @@ from functions.config.models import FunctionRecord
 from functions.constants import LocalStatus
 from functions.docker.api import DockerContainer
 from functions.docker.api import DockerImage
-from functions.errors import FunctionContainerNotFoundError, FunctionImageNotFoundError, FunctionNotRunningError
+from functions.errors import (
+    FunctionContainerNotFoundError,
+    FunctionImageNotFoundError,
+    FunctionNotRunningError,
+)
 
 
 class Function:
