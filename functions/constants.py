@@ -88,6 +88,10 @@ class CloudStatus(str, Enum):
     DEPLOYED = "deployed"
     UNKNOWN = "unknown"
 
+    @property
+    def is_deployed(self) -> bool:
+        return self == CloudStatus.DEPLOYED
+
 
 @unique
 class CloudProvider(str, Enum):
