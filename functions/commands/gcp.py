@@ -26,6 +26,12 @@ def install() -> None:
 
 
 @app.command()
+def login() -> None:
+    """Install required libraries"""
+    raise NotImplementedError()
+
+
+@app.command()
 def deploy(
     function_name: str = typer.Argument(
         ...,
@@ -42,7 +48,7 @@ def deploy(
     function = FunctionRegistry.fetch_function(function_name)
 
     if function.status.GCP.is_deployed:
-        user.confirm_abort(f"Function {function_name} is already deployed. Abort?")
+        user.confirm_abort(f"Function {function_name} is already deployed. Do you want to continue?")
 
     deploy_function(function, provider=CloudProvider.GCP)
 
