@@ -11,7 +11,10 @@ from functions import user
 from functions.autocomplete import autocomplete_built_names
 from functions.autocomplete import autocomplete_registry_function_names
 from functions.autocomplete import autocomplete_running_function_names
-from functions.callbacks import check_if_dir_is_a_valid_function_path, check_if_name_is_in_registry
+from functions.callbacks import (
+    check_if_dir_is_a_valid_function_path,
+    check_if_name_is_in_registry,
+)
 from functions.callbacks import check_if_function_is_built
 from functions.callbacks import check_if_function_is_running
 from functions.callbacks import print_out_the_version
