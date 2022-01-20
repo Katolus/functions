@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 import os
 import re
-from typing import List
+from typing import List, Optional
 
 import docker
 from docker.models.containers import Container
@@ -20,7 +20,7 @@ from functions.docker.helpers import get_function_name_from_labels
 from functions.docker.models import BuildVariables
 from functions.docker.types import DockerBuildAPIGenerator
 from functions.docker.types import DockerLabelsDict
-from functions.errors import FunctionBuildError
+from functions.errors import FunctionBuildError, FunctionContainerNotFoundError
 from functions.errors import FunctionImageNotFoundError
 
 # Handle fetching the docker client to handle errors from lack of docker connection
@@ -141,7 +141,10 @@ def get_container(name: str) -> Container:
     Returns a container by name
     """
     logs.debug(f"Getting container {name}")
-    return client.containers.get(name)
+    try:
+        return client.containers.get(name)
+    except docker.errors.NotFound:
+        raise FunctionContainerNotFoundError(container_id=name)
 
 
 def run_container(
@@ -268,6 +271,15 @@ class DockerContainer:
     def stop(self) -> None:
         """Stops a running container"""
         stop_container(self._container.id)
+
+    def exists(cls, container_id: str) -> bool:
+        """
+        Checks if a container exists
+        """
+        try:
+            return bool(cls.get(container_id))
+        except FunctionContainerNotFoundError:
+            return False
 
     @classmethod
     def run(cls, image: DockerImage, name: str, port: int) -> DockerContainer:

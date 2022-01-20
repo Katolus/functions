@@ -84,6 +84,7 @@ class LocalStatus(str, Enum):
 class CloudStatus(str, Enum):
     """Represents the status of a function on the cloud"""
 
+    DELETED = "deleted"
     DEPLOYED = "deployed"
     UNKNOWN = "unknown"
 

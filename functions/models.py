@@ -1,6 +1,7 @@
 """Core function models"""
 
 from typing import Optional
+from functions import logs
 
 from functions.config.files import FunctionRegistry
 from functions.config.models import FunctionConfig
@@ -8,7 +9,7 @@ from functions.config.models import FunctionRecord
 from functions.constants import LocalStatus
 from functions.docker.api import DockerContainer
 from functions.docker.api import DockerImage
-from functions.errors import FunctionNotRunningError
+from functions.errors import FunctionContainerNotFoundError, FunctionImageNotFoundError, FunctionNotRunningError
 
 
 class Function:
@@ -31,12 +32,15 @@ class Function:
         return self._record.config
 
     @property
-    def image(self) -> DockerImage:
+    def image(self) -> Optional[DockerImage]:
         """
-        Returns the image of the function.
+        Returns the image of the function if it exists.
         """
         if not self._image:
-            self._image = DockerImage.get(self.name)
+            try:
+                self._image = DockerImage.get(self.name)
+            except FunctionImageNotFoundError:
+                logs.debug(f"Image for function {self.name} not found")
 
         return self._image
 
@@ -46,7 +50,10 @@ class Function:
         Returns the container of the function.
         """
         if not self._container:
-            self._container = DockerContainer.get(self.name)
+            try:
+                self._container = DockerContainer.get(self.name)
+            except FunctionContainerNotFoundError:
+                logs.debug(f"Container for function {self.name} not found")
         return self._container
 
     def build(self, show_logs: bool = False) -> None:

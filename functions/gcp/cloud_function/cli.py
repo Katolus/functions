@@ -163,6 +163,11 @@ def delete_function(function_name: str):
         ]
         + add_region_argument()
     )
+
+    function = FunctionRegistry.fetch_function(function_name)
+    function.status.GCP = CloudStatus.DELETED
+    FunctionRegistry.update_function(function)
+
     logs.debug(f"Successfully deleted cloud function: {function_name}")
 
 

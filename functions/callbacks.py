@@ -42,6 +42,20 @@ def check_if_name_is_a_valid_string(
 
 
 @resilient_parsing
+def check_if_name_is_in_registry(
+    ctx: typer.Context, param: typer.CallbackParam, value: str
+) -> Optional[str]:
+    """Callback that validates if a function name is in the registry"""
+    if value not in FunctionRegistry.fetch_function_names():
+        raise typer.BadParameter(
+            f"{value} is not a valid function name. "
+            "Please use one of the following: "
+            f"{', '.join(FunctionRegistry.fetch_function_names())}"
+        )
+    return value
+
+
+@resilient_parsing
 def check_if_function_is_built(
     ctx: typer.Context, param: typer.CallbackParam, value: str
 ) -> Optional[str]:

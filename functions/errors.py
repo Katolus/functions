@@ -87,6 +87,11 @@ class FunctionImageNotFoundError(FunctionBaseError):
     msg_template = "Function's image ({image_id}) not found"
 
 
+class FunctionContainerNotFoundError(FunctionBaseError):
+    code = "functions.container_not_found"
+    msg_template = "Function's container ({container_id}) not found"
+
+
 class InvalidFunctionTypeError(FunctionBaseError):
     code = "functions.invalid_type"
     msg_template = "Function type ({type}) is not valid nor supported"

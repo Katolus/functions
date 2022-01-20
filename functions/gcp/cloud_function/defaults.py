@@ -84,7 +84,7 @@ class HTTP(Default, BaseModel):
 
         config.deploy_variables.allow_unauthenticated = False
 
-        logs.debug(f"Generated a default HTTP config instance: {config}")
+        logs.debug(f"Generated a default Pubsub config instance: {config}")
         return config
 
     @classmethod
@@ -141,7 +141,7 @@ class PubSub(Default, BaseModel):
             port=cls.DEFAULT_PORT,
             runtime=Runtime.PYTHON39,
             signature_type=signature_type,
-            trigger=Trigger.HTTP,
+            trigger=Trigger.PUBSUB,
             region=DEFAULT_GCP_REGION,
         )
 
