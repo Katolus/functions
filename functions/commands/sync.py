@@ -1,13 +1,12 @@
-import typer
-
 from functions import logs
 from functions import user
 from functions.config.files import FunctionRegistry
 from functions.constants import CloudStatus
+from functions.core import FTyper
 from functions.docker.api import DockerImage
 from functions.gcp.cloud_function.cli import fetch_deployed_function_names
 
-app = typer.Typer(help="Sync components with the registry")
+app = FTyper(help="Sync components with the registry")
 
 
 @app.command()
