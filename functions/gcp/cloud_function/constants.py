@@ -53,7 +53,7 @@ class Runtime(str, Enum):
         raise NotImplementedError
 
 
-class Trigger(str, Enum):
+class TriggerType(str, Enum):
     """
     Trigger constants for Cloud Functions.
     """

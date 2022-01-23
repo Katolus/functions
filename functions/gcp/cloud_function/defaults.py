@@ -12,7 +12,7 @@ from functions.constants import CloudServiceType
 from functions.constants import RequiredFile
 from functions.gcp.cloud_function.constants import Runtime
 from functions.gcp.cloud_function.constants import SignatureType
-from functions.gcp.cloud_function.constants import Trigger
+from functions.gcp.cloud_function.constants import TriggerType
 from functions.gcp.constants import DEFAULT_GCP_REGION
 from functions.protocols import Default
 from functions.system import add_file
@@ -78,7 +78,7 @@ class HTTP(Default, BaseModel):
             port=cls.DEFAULT_PORT,
             runtime=Runtime.PYTHON39,
             signature_type=signature_type,
-            trigger=Trigger.HTTP,
+            trigger=TriggerType.HTTP,
             region=DEFAULT_GCP_REGION,
         )
 
@@ -141,7 +141,8 @@ class PubSub(Default, BaseModel):
             port=cls.DEFAULT_PORT,
             runtime=Runtime.PYTHON39,
             signature_type=signature_type,
-            trigger=Trigger.PUBSUB,
+            trigger=TriggerType.PUBSUB,
+            trigger_value="",
             region=DEFAULT_GCP_REGION,
         )
 
