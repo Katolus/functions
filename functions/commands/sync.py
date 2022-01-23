@@ -123,6 +123,6 @@ def gcp() -> None:
     # Inform user of functions deployed to GCP and matching registry requirements
     if not_in_registry != []:
         user.inform(
-            f"There are several functions deployed to GCP that matches registry requirements, but are not present in the registry : {not_in_registry}"
+            f"There are several functions deployed to GCP that matches registry requirements, but are not present in this registry : {not_in_registry}"
         )
     logs.debug("Syncing GCP functions finished...")

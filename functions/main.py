@@ -60,7 +60,7 @@ def main(
     logs.debug(f"Running application in {log_level} logging level.")
 
 
-@app.command()
+@app.command(disable=True)
 def error() -> None:
     """A command for testing error messages"""
     user.inform("Message before the error")
@@ -254,7 +254,7 @@ def add(
     )
 
 
-@app.command()
+@app.command(disable=True)
 def config() -> None:
     """Renders function's configuration file into the command line"""
     # Print the config if no arguments are provided

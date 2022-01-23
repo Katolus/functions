@@ -18,17 +18,17 @@ from functions.gcp.cloud_function.cli import delete_function
 
 app = typer.Typer(help="Deploy functions in GCP")
 
+# Comment out for the time being, util #170 resolved
+# @app.command()
+# def install() -> None:
+#     """Install required libraries"""
+#     raise NotImplementedError()
 
-@app.command()
-def install() -> None:
-    """Install required libraries"""
-    raise NotImplementedError()
 
-
-@app.command()
-def login() -> None:
-    """Install required libraries"""
-    raise NotImplementedError()
+# @app.command()
+# def login() -> None:
+#     """Install required libraries"""
+#     raise NotImplementedError()
 
 
 @app.command()
