@@ -1,19 +1,18 @@
 """Core function models"""
 
+from pathlib import Path
 from typing import Optional
-from functions import logs
 
+from functions import logs
 from functions.config.files import FunctionRegistry
 from functions.config.models import FunctionConfig
 from functions.config.models import FunctionRecord
 from functions.constants import LocalStatus
 from functions.docker.api import DockerContainer
 from functions.docker.api import DockerImage
-from functions.errors import (
-    FunctionContainerNotFoundError,
-    FunctionImageNotFoundError,
-    FunctionNotRunningError,
-)
+from functions.errors import FunctionContainerNotFoundError
+from functions.errors import FunctionImageNotFoundError
+from functions.errors import FunctionNotRunningError
 
 
 class Function:
@@ -117,3 +116,15 @@ class Function:
 
         # Remvoe from the registry
         FunctionRegistry.remove_function(self.name)
+
+    def delete_resources(self) -> None:
+        """
+        Deletes the function's resources
+        """
+        # :Trail:
+        # Remove files from the path
+        for file in Path(self.config.path).glob("*"):
+            try:
+                file.unlink()
+            except OSError as e:
+                print("Error: %s : %s" % (file, e.strerror))
