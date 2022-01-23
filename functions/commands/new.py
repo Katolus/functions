@@ -8,9 +8,10 @@ from functions.callbacks import check_if_name_is_a_valid_string
 from functions.callbacks import confirm_current_directory_as_target
 from functions.config.models import FunctionRecord
 from functions.constants import LocalStatus
+from functions.core import FTyper
 from functions.defaults import Defaults
 
-app = typer.Typer(help="Factory method for creating new functions")
+app = FTyper(help="Factory method for creating new functions")
 
 
 @app.command()

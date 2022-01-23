@@ -1,10 +1,9 @@
-import typer
-
-from functions import user
 from functions import styles
+from functions import user
 from functions.components.gcp import GCPComponent
+from functions.core import FTyper
 
-app = typer.Typer(help="Manage `GCP` component")
+app = FTyper(help="Manage `GCP` component")
 
 
 @app.command()

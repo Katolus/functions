@@ -1,11 +1,9 @@
-import typer
-
-
-from functions import user
 from functions import styles
+from functions import user
 from functions.components.docker import DockerComponent
+from functions.core import FTyper
 
-app = typer.Typer(help="Manage `docker` component")
+app = FTyper(help="Manage `docker` component")
 
 
 @app.command()

@@ -10,25 +10,26 @@ from functions.cloud import deploy_function
 from functions.config.files import FunctionRegistry
 from functions.constants import CloudProvider
 from functions.constants import CloudServiceType
+from functions.core import FTyper
 from functions.gcp.autocomplete import autocomplete_deployed_function
 from functions.gcp.autocomplete import gcp_delete_autocomplete
 from functions.gcp.autocomplete import gcp_deploy_autocomplete
 from functions.gcp.callbacks import check_if_function_name_in_registry
 from functions.gcp.cloud_function.cli import delete_function
 
-app = typer.Typer(help="Deploy functions in GCP")
-
-# Comment out for the time being, util #170 resolved
-# @app.command()
-# def install() -> None:
-#     """Install required libraries"""
-#     raise NotImplementedError()
+app = FTyper(help="Deploy functions in GCP")
 
 
-# @app.command()
-# def login() -> None:
-#     """Install required libraries"""
-#     raise NotImplementedError()
+@app.command(disable=True)
+def install() -> None:
+    """Install required libraries"""
+    raise NotImplementedError()
+
+
+@app.command(disable=True)
+def login() -> None:
+    """Install required libraries"""
+    raise NotImplementedError()
 
 
 @app.command()
