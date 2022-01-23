@@ -1,8 +1,8 @@
 from pathlib import Path
 from typing import Any, Callable, Dict, Generator, Optional, Type, Union
 
-AnyCallable = Callable[..., Any]
-CallableGenerator = Generator[AnyCallable, None, None]
+AnyCallableT = Callable[..., Any]
+CallableGenerator = Generator[AnyCallableT, None, None]
 DictStrAny = Dict[str, Any]
 NoneBytes = Optional[bytes]
 NoneStr = Optional[str]

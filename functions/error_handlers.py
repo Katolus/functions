@@ -1,5 +1,5 @@
 import sys
-from typing import Callable, Dict, NoReturn
+from typing import Dict, NoReturn
 
 import docker
 import typer
@@ -9,15 +9,15 @@ from functions import styles
 from functions.errors import FunctionBaseError
 from functions.errors import FunctionBuildError
 from functions.errors import UsageError
-from functions.types import AnyCallable
+from functions.types import AnyCallableT
 from functions.types import ExceptionClass
 
-ERROR_REGISTRY_TYPE = Dict[ExceptionClass, Callable]
+ERROR_REGISTRY_TYPE = Dict[ExceptionClass, AnyCallableT]
 
 ERROR_REGISTRY: ERROR_REGISTRY_TYPE = {}
 
 
-def error_handler(*, error: ExceptionClass) -> AnyCallable:
+def error_handler(*, error: ExceptionClass) -> AnyCallableT:
     """
     Registers a callable function as a way handling a given error class
 
@@ -26,7 +26,7 @@ def error_handler(*, error: ExceptionClass) -> AnyCallable:
         ...
     """
 
-    def handle(_func) -> AnyCallable:
+    def handle(_func) -> AnyCallableT:
         if ERROR_REGISTRY.get(error):
             raise ValueError(f"This error - {error} is already registered")
 

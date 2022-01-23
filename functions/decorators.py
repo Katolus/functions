@@ -7,8 +7,8 @@ from pydantic import validate_arguments
 from functions.error_handlers import ERROR_REGISTRY
 from functions.error_handlers import handle_function_all_errors
 from functions.errors import FunctionBaseError
+from functions.types import AnyCallableT
 
-AnyCallableT = Callable[..., Any]
 FunctionBaseErrorC = Type[FunctionBaseError]
 
 
