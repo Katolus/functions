@@ -11,12 +11,10 @@ from functions import user
 from functions.autocomplete import autocomplete_built_names
 from functions.autocomplete import autocomplete_registry_function_names
 from functions.autocomplete import autocomplete_running_function_names
-from functions.callbacks import (
-    check_if_dir_is_a_valid_function_path,
-    check_if_name_is_in_registry,
-)
+from functions.callbacks import check_if_dir_is_a_valid_function_path
 from functions.callbacks import check_if_function_is_built
 from functions.callbacks import check_if_function_is_running
+from functions.callbacks import check_if_name_is_in_registry
 from functions.callbacks import print_out_the_version
 from functions.config.files import FunctionRegistry
 from functions.config.models import FunctionConfig
@@ -187,6 +185,10 @@ def delete(
     )
 
     function.delete_all()
+
+    # Ask a user if they want to remove the underslying resources
+    if user.confirm(f"Do you want to remove the underlying resources?"):
+        function.delete_resources()
 
     user.inform(f"Function {function.name} has been deleted.")
 
