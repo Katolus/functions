@@ -15,7 +15,7 @@ from functions.config.models import FunctionRecord
 from functions.constants import CloudStatus
 from functions.gcp.cloud_function.constants import CloudFunctionLabel
 from functions.gcp.cloud_function.constants import Runtime
-from functions.gcp.cloud_function.constants import Trigger
+from functions.gcp.cloud_function.constants import TriggerType
 from functions.gcp.constants import DEFAULT_GCP_REGION
 from functions.gcp.constants import GCP_RESERVED_VARIABLES
 from functions.gcp.constants import PROJECT_FUNCTION_MARK
@@ -28,9 +28,14 @@ from functions.types import DictStrAny
 
 
 @validate_arguments
-def add_trigger_arguments(trigger: Trigger) -> List[str]:
+def add_trigger_arguments(
+    trigger_type: TriggerType, trigger_value: Optional[str] = None
+) -> List[str]:
     """Returns a list of arguments to append that denote the type of trigger applied"""
-    return [trigger]
+    if trigger_value:
+        return [trigger_type, trigger_value]
+    else:
+        return [trigger_type]
 
 
 @validate_arguments
@@ -139,7 +144,10 @@ def deploy_function(function: FunctionRecord, *, new_name: str = None):
         + add_update_labels_arguments(function)
         + add_region_argument(function.config.deploy_variables.region)
         + add_env_vars_arguments(function.config.env_variables)
-        + add_trigger_arguments(function.config.deploy_variables.trigger)
+        + add_trigger_arguments(
+            function.config.deploy_variables.trigger,
+            function.config.deploy_variables.trigger_value,
+        )
     )
 
     function.status.GCP = CloudStatus.DEPLOYED

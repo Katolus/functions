@@ -45,10 +45,11 @@ class DeployVariables(BaseModel):
 
     allow_unauthenticated: Optional[bool]
     provider: CloudProvider
-    service: str  # Add supported services
-    runtime: str  # Add supported runtimes
-    trigger: Optional[str] = None
     region: str
+    runtime: str  # Add supported runtimes
+    service: str  # Add supported services
+    trigger_value: Optional[str] = None
+    trigger: Optional[str] = None
 
 
 class FunctionConfig(BaseModel):
@@ -85,6 +86,7 @@ class FunctionConfig(BaseModel):
         runtime: str,
         signature_type: str,
         trigger: str,
+        trigger_value: str = None,
     ) -> FunctionConfig:
         """Returns a instance of class with some default values"""
         validate_name(function_name)
@@ -109,6 +111,7 @@ class FunctionConfig(BaseModel):
                     "runtime": runtime,
                     "service": cloud_service_type,
                     "trigger": trigger,
+                    "trigger_value": trigger_value,
                 },
             }
         )
