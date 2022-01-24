@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+import json
 import os
+from pathlib import Path
 from typing import ClassVar, Optional
 
 from pydantic import BaseModel
 from pydantic.error_wrappers import ValidationError
 
+from functions import logs
 from functions import styles
 from functions.config.errors import ConfigValidationError
 from functions.constants import CloudProvider
@@ -55,12 +58,36 @@ class DeployVariables(BaseModel):
 class FunctionConfig(BaseModel):
     """Represents a configuration file of a specific function"""
 
-    path: str
     config_name: ConfigName = ConfigName.BASE
-    description: str
-    run_variables: RunVariables
-    env_variables: DictStrAny
     deploy_variables: DeployVariables
+    description: str
+    env_variables: DictStrAny
+    path: str
+    run_variables: RunVariables
+
+    def __init__(self, **data: DictStrAny) -> None:
+        """Initialize function's config file from path or from data"""
+        # We accept the file to be the first source of truth
+        # If the path is not provided, we use the data as the second source of truth
+
+        # Check if config at path still exists
+        path: str = data.get("path")
+        if Path(path).exists():
+            # Load the config file data instead
+            with open(os.path.join(path, ConfigName.BASE), "r") as config_file:
+                # Load file as JSON format
+                json_data = json.loads(config_file.read())
+
+                # Initiate the class with the loaded data
+                super().__init__(**json_data)
+                logs.debug(
+                    f"Loaded config file ({self.run_variables.name}) from path: {path}"
+                )
+                return None
+
+        super().__init__(**data)
+        logs.debug(f"Loaded config file ({self.run_variables.name}) from registry")
+        return None
 
     @property
     def config_path(self) -> str:
