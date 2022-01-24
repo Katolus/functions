@@ -1,6 +1,6 @@
 """Core function models"""
 
-from pathlib import Path
+import shutil
 from typing import Optional
 
 from functions import logs
@@ -10,6 +10,7 @@ from functions.config.models import FunctionRecord
 from functions.constants import LocalStatus
 from functions.docker.api import DockerContainer
 from functions.docker.api import DockerImage
+from functions.errors import ErrorRemovingResources
 from functions.errors import FunctionContainerNotFoundError
 from functions.errors import FunctionImageNotFoundError
 from functions.errors import FunctionNotRunningError
@@ -121,10 +122,10 @@ class Function:
         """
         Deletes the function's resources
         """
-        # :Trail:
-        # Remove files from the path
-        for file in Path(self.config.path).glob("*"):
-            try:
-                file.unlink()
-            except OSError as e:
-                print("Error: %s : %s" % (file, e.strerror))
+        path = self.config.path
+        try:
+            shutil.rmtree(path, ignore_errors=False)
+            logs.debug(f"Directory {path} has been removed successfully")
+        except OSError as e:
+            logs.exception(e)
+            raise ErrorRemovingResources(error=e, name=self.name, path=path)
