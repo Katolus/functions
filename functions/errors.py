@@ -19,6 +19,7 @@ class FunctionBaseError(Exception):
     def __init__(self, *, error: ExceptionClass = None, **kwargs: Any) -> None:
         self.original_error = error
         self.__dict__ = kwargs
+        self.__dict__["error"] = str(error)
         super().__init__()
 
     def __str__(self) -> str:
@@ -95,3 +96,10 @@ class FunctionContainerNotFoundError(FunctionBaseError):
 class InvalidFunctionTypeError(FunctionBaseError):
     code = "functions.invalid_type"
     msg_template = "Function type ({type}) is not valid nor supported"
+
+
+class ErrorRemovingResources(FunctionBaseError):
+    code = "functions.error_removing_resources"
+    msg_template = (
+        "Cannot remove resources for function '{name}' -> {path}. Error: {error}"
+    )
