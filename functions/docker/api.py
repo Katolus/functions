@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 import os
 import re
-from typing import List, Optional
+from typing import List
 
 import docker
 from docker.models.containers import Container
@@ -13,6 +13,7 @@ from docker.utils.json_stream import json_stream
 
 from functions import logs
 from functions import user
+from functions.config.models import FunctionConfig
 from functions.config.models import FunctionRecord
 from functions.decorators import handle_error
 from functions.docker.enums import DockerLabel
@@ -20,8 +21,10 @@ from functions.docker.helpers import get_function_name_from_labels
 from functions.docker.models import BuildVariables
 from functions.docker.types import DockerBuildAPIGenerator
 from functions.docker.types import DockerLabelsDict
-from functions.errors import FunctionBuildError, FunctionContainerNotFoundError
+from functions.errors import FunctionBuildError
+from functions.errors import FunctionContainerNotFoundError
 from functions.errors import FunctionImageNotFoundError
+from functions.types import DictStrAny
 
 # Handle fetching the docker client to handle errors from lack of docker connection
 client: docker.client.DockerClient = handle_error(docker.from_env)()
@@ -151,6 +154,7 @@ def run_container(
     image: Image,
     function_name: str,
     port: int,
+    env_variables: DictStrAny,
 ) -> Container:
     """
     Runs a container from an image
@@ -163,6 +167,7 @@ def run_container(
         remove=True,
         name=function_name,
         detach=True,
+        environment=env_variables,
     )
 
 
@@ -282,11 +287,15 @@ class DockerContainer:
             return False
 
     @classmethod
-    def run(cls, image: DockerImage, name: str, port: int) -> DockerContainer:
+    def run(
+        cls, image: DockerImage, name: str, config: FunctionConfig
+    ) -> DockerContainer:
         """
         Run the container.
         """
-        container = run_container(image._image, name, port)
+        port = config.run_variables.port
+        env_variables = config.env_variables
+        container = run_container(image._image, name, port, env_variables)
         return cls(container)
 
     @classmethod
