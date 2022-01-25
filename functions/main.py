@@ -73,13 +73,13 @@ def build(
         ...,
         autocompletion=autocomplete_registry_function_names,
     ),
-    show_logs: bool = typer.Option(False, "--show-logs", help="Show build logs"),
+    disable_logs: bool = typer.Option(True, "--show-logs", help="Show build logs"),
 ) -> None:
     """Builds an image of a given function"""
     # Get the absolute path
     function = Function(function_name)
 
-    function.build(show_logs=show_logs)
+    function.build(show_logs=disable_logs)
 
     user.inform(
         f"{styles.green('Successfully')} build a function's image."
@@ -187,7 +187,7 @@ def delete(
     function.delete_all()
 
     # Ask a user if they want to remove the underslying resources
-    if user.confirm(f"Do you want to remove the underlying resources?"):
+    if user.confirm("Do you want to remove the underlying resources?"):
         function.delete_resources()
 
     user.inform(f"Function {function.name} has been deleted.")
