@@ -78,6 +78,9 @@ class Default(Protocol):
         Generates a .dockerignore for a given function type.
         """
         content = """
+# Python
+.mypy_cache
+
 # Docker specific
 Dockerfile
 .dockerignore
