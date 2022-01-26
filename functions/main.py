@@ -17,12 +17,14 @@ from functions.callbacks import check_if_function_is_running
 from functions.callbacks import check_if_name_is_in_registry
 from functions.callbacks import print_out_the_version
 from functions.config.files import FunctionRegistry
+from functions.constants import DEFAULT_LOG_FILEPATH
 from functions.constants import LoggingLevel
 from functions.core import FunctionsCli
 from functions.gcp.cloud_function.errors import GCPCommandError
 from functions.logs import set_console_debug_level
 from functions.models import Function
 from functions.styles import green
+from functions.system import follow_file
 
 app = FunctionsCli()
 
@@ -213,3 +215,13 @@ def config() -> None:
 
     # Remove the config file if --reset flag is passed in
     raise NotImplementedError()
+
+
+@app.command("logs")
+def print_logs() -> None:
+    """Prints out function logs"""
+    log_path = DEFAULT_LOG_FILEPATH
+    # This might be improved if we display limited amount of lines
+    with open(log_path, "r") as file:
+        for line in follow_file(file):
+            print(line, end="")

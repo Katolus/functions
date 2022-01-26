@@ -4,8 +4,6 @@ from enum import Enum
 from enum import unique
 from typing import List
 
-DEFAULT_LOG_FILE = "functions.log"
-
 # Set system constants based on the current platform
 if sys.platform.startswith("win32"):
     DEFAULT_SYSTEM_CONFIG_PATH = os.path.join(os.environ["APPDATA"], "config")
@@ -22,6 +20,8 @@ PACKAGE_BASE_CONFIG_FOLDER = "ventress-functions"
 PACKAGE_CONFIG_DIR_PATH = os.path.join(
     DEFAULT_SYSTEM_CONFIG_PATH, PACKAGE_BASE_CONFIG_FOLDER
 )
+DEFAULT_LOG_FILENAME = "functions.log"
+DEFAULT_LOG_FILEPATH = os.path.join(PACKAGE_CONFIG_DIR_PATH, DEFAULT_LOG_FILENAME)
 
 
 class ConfigName(str, Enum):

@@ -15,7 +15,7 @@ from functions.constants import CloudProvider
 from functions.constants import CloudServiceType
 from functions.constants import CloudStatus
 from functions.constants import ConfigName
-from functions.constants import DEFAULT_LOG_FILE
+from functions.constants import DEFAULT_LOG_FILENAME
 from functions.constants import FunctionType
 from functions.constants import LocalStatus
 from functions.errors import InvalidFunctionTypeError
@@ -264,5 +264,5 @@ class FunctionRecord(BaseModel):
 class AppLogging(BaseModel):
     """Represents the logging settings of the application"""
 
-    LOG_FILENAME: ClassVar[str] = DEFAULT_LOG_FILE
+    LOG_FILENAME: ClassVar[str] = DEFAULT_LOG_FILENAME
     enabled: bool = False
