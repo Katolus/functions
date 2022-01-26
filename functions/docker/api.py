@@ -200,6 +200,10 @@ class DockerImage:
         return self._image.id
 
     @property
+    def config(self) -> str:
+        return self.labels[DockerLabel.CONFIG]
+
+    @property
     def name(self) -> str:
         return get_function_name_from_labels(self._image.labels)
 
