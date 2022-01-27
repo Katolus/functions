@@ -1,10 +1,10 @@
 """Main script for CLI entry point"""
-import os
 from pathlib import Path
 from typing import Optional
 
 import typer
 
+from functions import flows
 from functions import logs
 from functions import styles
 from functions import user
@@ -17,17 +17,12 @@ from functions.callbacks import check_if_function_is_running
 from functions.callbacks import check_if_name_is_in_registry
 from functions.callbacks import print_out_the_version
 from functions.config.files import FunctionRegistry
-from functions.config.models import FunctionConfig
-from functions.config.models import FunctionRecord
-from functions.constants import FunctionType
-from functions.constants import LocalStatus
 from functions.constants import LoggingLevel
 from functions.core import FunctionsCli
 from functions.gcp.cloud_function.errors import GCPCommandError
 from functions.logs import set_console_debug_level
 from functions.models import Function
 from functions.styles import green
-from functions.system import construct_abs_path
 
 app = FunctionsCli()
 
@@ -73,13 +68,13 @@ def build(
         ...,
         autocompletion=autocomplete_registry_function_names,
     ),
-    show_logs: bool = typer.Option(False, "--show-logs", help="Show build logs"),
+    disable_logs: bool = typer.Option(True, "--show-logs", help="Show build logs"),
 ) -> None:
     """Builds an image of a given function"""
     # Get the absolute path
     function = Function(function_name)
 
-    function.build(show_logs=show_logs)
+    function.build(show_logs=disable_logs)
 
     user.inform(
         f"{styles.green('Successfully')} build a function's image."
@@ -187,8 +182,11 @@ def delete(
     function.delete_all()
 
     # Ask a user if they want to remove the underslying resources
-    if user.confirm(f"Do you want to remove the underlying resources?"):
+    if user.confirm(
+        f"Do you want to remove the underlying resources -> {function.config.path}?"
+    ):
         function.delete_resources()
+        user.inform(f"Resources for {function.name} have been removed.")
 
     user.inform(f"Function {function.name} has been deleted.")
 
@@ -205,53 +203,7 @@ def add(
     ),
 ) -> None:
     """Adds a function to the registry"""
-    # Get the absolute path
-    abs_path = construct_abs_path(function_dir)
-    dir_name = os.path.basename(abs_path)
-
-    # Ask the user for a function name if not provided and present a default
-    function_name = user.ask(
-        "What should be the name of the function?",
-        default=dir_name,
-    )
-
-    # Check if the config file exists
-    if FunctionConfig.check_config_file_exists(abs_path):
-        # Load the config file
-        config = FunctionConfig.load(abs_path)
-    else:
-        # Ask what type of function it is
-        function_type = user.ask(
-            "What type of function is this?",
-            default=FunctionType.HTTP.value,
-            options=FunctionType.options(),
-        )
-        # Generate a config instance
-        config = FunctionConfig.generate(
-            function_name, FunctionType(function_type), abs_path
-        )
-
-    # Check if the function is already in the registry based on the name
-
-    if FunctionRegistry.check_if_function_name_in_registry(function_name):
-        user.warn(f"A function with the name {function_name} already exists")
-        user.confirm_abort(
-            f"Hala, it looks like a function with the name '{function_name}' already exists. Do you want to overwrite?"
-        )
-
-    function = FunctionRecord(name=function_name, config=config)
-    function.set_local_status(LocalStatus.ADDED)
-    function.update_registry()
-
-    # Ask if user wants to store the configuration file in the directory
-    user.prompt_to_save_config(config)
-
-    # Maybe: Check if the function is already in the registry based on the path
-
-    user.inform(
-        f"{styles.green('Successfully')} added a function to the registry."
-        f" The name of the functions is -> {function_name}"
-    )
+    flows.add_function(str(function_dir))
 
 
 @app.command(disable=True)

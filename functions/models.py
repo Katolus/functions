@@ -74,9 +74,7 @@ class Function:
         """
         Run the function locally
         """
-        self._container = DockerContainer.run(
-            self.image, self.name, self.config.run_variables.port
-        )
+        self._container = DockerContainer.run(self.image, self.name, self.config)
         # Set running status
         self._record.set_local_status(LocalStatus.RUNNING)
         self._record.update_registry()

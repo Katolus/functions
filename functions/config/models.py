@@ -72,7 +72,7 @@ class FunctionConfig(BaseModel):
 
         # Check if config at path still exists
         path: str = data.get("path")
-        if Path(path).exists():
+        if Path(path).exists() and Path(os.path.join(path, ConfigName.BASE)).is_file():
             # Load the config file data instead
             with open(os.path.join(path, ConfigName.BASE), "r") as config_file:
                 # Load file as JSON format
