@@ -1,5 +1,7 @@
 import os
+import time
 from pathlib import Path
+from typing import Iterable, TextIO
 
 from functions import logs
 from functions.constants import ConfigName
@@ -50,3 +52,19 @@ def check_if_file_exists(filepath: PathStr) -> bool:
 def construct_filepath_in_config_dir(filename: str) -> str:
     """Construct a config filepath based on the system's default config path."""
     return os.path.join(PACKAGE_CONFIG_DIR_PATH, filename)
+
+
+def follow_file(file: TextIO, sleep_sec: float = 0.1) -> Iterable[str]:
+    """Follows a file and returns content line by line."""
+
+    line: str = ""
+    while True:
+        tmp = file.readline()
+
+        if tmp is not None:
+            line += tmp
+            if line.endswith("\n"):
+                yield line
+                line = ""
+            else:
+                time.sleep(sleep_sec)

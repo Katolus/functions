@@ -37,7 +37,7 @@ def abort_if_function_exists(f_name: str) -> None:
         )
 
 
-def add_function(function_dir: str) -> None:
+def add_function(function_dir: str, ask_config_q: bool = True) -> None:
     """Add a function to the registry"""
     # Get the absolute path
     abs_path = construct_abs_path(function_dir)
@@ -55,7 +55,7 @@ def add_function(function_dir: str) -> None:
     function.set_local_status(LocalStatus.ADDED)
     function.update_registry()
 
-    if actions.ask_if_config_need_to_be_stored(f_config.path):
+    if ask_config_q and actions.ask_if_config_need_to_be_stored(f_config.path):
         f_config.save()
 
     user.inform(

@@ -1,3 +1,6 @@
+from typing import Dict
+
+from functions import flows
 from functions import logs
 from functions import user
 from functions.config.files import FunctionRegistry
@@ -14,15 +17,18 @@ def local() -> None:
     """Syncs the state of locally built functions"""
     logs.debug("Syncing local functions")
     # Get the list of functions built or running locally from the the DockerManager
-    images = DockerImage.get_all_names()
+    images: Dict[str, str] = {}
+    for image in DockerImage.get_all():
+        images[image.name] = image.id
+    image_names = images.keys()
 
     # Retrieve functions from the registry
     functions_names = FunctionRegistry.fetch_built_function_names()
 
     # Find the different names present in one list but not the other
-    not_in_registry = list(set(images) - set(functions_names))
+    not_in_registry = list(set(image_names) - set(functions_names))
     logs.debug(f"Functions not in registry: {not_in_registry}")
-    not_in_docker = list(set(functions_names) - set(images))
+    not_in_docker = list(set(functions_names) - set(image_names))
     logs.debug(f"Functions not in docker: {not_in_docker}")
 
     # Check functions in registry, but not in Docker
@@ -36,7 +42,8 @@ def local() -> None:
         )
 
         # Get the docker image
-        image = DockerImage.get(function_name)
+        image_id = images[function_name]
+        image = DockerImage.get(image_id)
 
         # Check if the source of the image is still valid
         if image.is_source_valid():
@@ -47,9 +54,7 @@ def local() -> None:
 
             if should_add:
                 # Add the image's source code to the registry
-                # TODO: We need to factor out the code responsible for validating
-                # and adding function to a registry.
-                raise NotImplementedError
+                flows.add_function(image.config.path, False)
                 continue
 
         else:
