@@ -1,5 +1,6 @@
 from typing import Dict
 
+from functions import flows
 from functions import logs
 from functions import user
 from functions.config.files import FunctionRegistry
@@ -53,9 +54,7 @@ def local() -> None:
 
             if should_add:
                 # Add the image's source code to the registry
-                # TODO: We need to factor out the code responsible for validating
-                # and adding function to a registry.
-                raise NotImplementedError
+                flows.add_function(image.config.path, False)
                 continue
 
         else:
