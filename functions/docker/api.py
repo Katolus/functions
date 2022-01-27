@@ -200,8 +200,11 @@ class DockerImage:
         return self._image.id
 
     @property
-    def config(self) -> str:
-        return self.labels[DockerLabel.CONFIG]
+    def config(self) -> FunctionConfig:
+        # Unwrap the config into a JSON format
+        # Investigate why is it double wrapped
+        config_json = json.loads(json.loads(self.labels[DockerLabel.CONFIG]))
+        return FunctionConfig(**config_json)
 
     @property
     def name(self) -> str:
