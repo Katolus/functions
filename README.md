@@ -92,7 +92,7 @@ in your terminal.
 
 Check out the [local development document](docs/local_development.md) for instructions on how get set up.
 
-## Usage
+## Using
 
 Regardless if you installed the package from the *pypi* repository or from source code, you should be able to invoke the `functions` tool from your command line. The tool has many different commands that should help you building your serverless functions (surprise, otherwise it would be useless...).
 
@@ -138,7 +138,7 @@ functions stop {name_of_the_function}
 
 should do the job.
 
-## Deployment it to the cloud
+## Deploying it to the cloud
 
 Since we build software to serve us something, we most likely want to deploy it to see it all working and get that full developer satisfaction and availability.
 
@@ -152,7 +152,7 @@ functions gcp deploy {path_to_the_function}
 
 With the correct setup and permissions this should allow you to the deploy a function to the GCP directly from the `functions` cli.
 
-## Remove a function
+## Removing a function
 
 This command will remove a function from the local storage, but will not remove the code from the disk.
 
