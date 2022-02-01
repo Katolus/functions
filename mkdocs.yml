@@ -101,7 +101,7 @@ nav:
   # - Examples: examples.md
   # - Configuration Guides:
   # - Contributing:
+  - Environment support: environment_support.md
   - Roadmap: roadmap.md
-  # - Environment support: environment_support.md
   # - Releases: releases.md
   # - Glossary: glossary.md
