@@ -15,7 +15,7 @@ packages = [
   {include = "functions"},
 ]
 readme = "README.md"
-version = "0.1.0a3"
+version = "0.1.0a4"
 
 [tool.poetry.scripts]
 functions = "functions.main:app"

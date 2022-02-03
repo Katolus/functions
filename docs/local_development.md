@@ -36,7 +36,7 @@ To operate the package from the source code.
 5. Run `functions --version` to validate that the package is available correctly. You should see something like this.
 
    ```console
-   You are using 0.1.0a3 version of the functions-cli package
+   You are using 0.1.0a4 version of the functions-cli package
    ```
 
 6. Execute or invoke the commands like you would normally, by running `functions [OPTIONS] COMMAND [ARGS] ...` in the invoked shell.
