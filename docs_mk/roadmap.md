@@ -24,19 +24,19 @@ Initial prototype bursting left chunks on inconsistent code. We want to bring co
 
 We want to add support for AWS lambda functions locally and deployment.
 
-**Status**: Idea
+**Status**: [Planning](https://github.com/users/Katolus/projects/5)
 
 ### Runtime support
 
 Currently, the support for runtimes is quite limited due to the narrow scope of the initial implementation. We want to ensure anyone can use whichever runtime they want, given that it is supported.
 
-**Status**: Planning
+**Status**: [Planning](https://github.com/users/Katolus/projects/3)
 
 ### Test coverage
 
 As with any idea that made sense (will see about that) in the prototyping phase, we want to make sure that is well tested moving forward.
 
-**Status**: Planning
+**Status**: [Planning](https://github.com/users/Katolus/projects/4/)
 
 ## Mid-term - What comes next
 
@@ -46,7 +46,7 @@ It is a shame how much documentation is missing.
 
 We want to make sure that there are **decision records**, **components descriptions**, **examples** and more, which users and developers can quickly reference at any time.
 
-**Status**: Development
+**Status**: Ongoing development
 
 ### Custom commands and scripts
 
