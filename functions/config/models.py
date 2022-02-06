@@ -10,6 +10,7 @@ from pydantic.error_wrappers import ValidationError
 
 from functions import logs
 from functions import styles
+from functions.config.enums import FunctionConfigVersion
 from functions.config.errors import ConfigValidationError
 from functions.constants import CloudProvider
 from functions.constants import CloudServiceType
@@ -59,6 +60,7 @@ class FunctionConfig(BaseModel):
     """Represents a configuration file of a specific function"""
 
     config_name: ConfigName = ConfigName.BASE
+    config_version: FunctionConfigVersion = FunctionConfigVersion.latest()
     deploy_variables: DeployVariables
     description: str
     env_variables: DictStrAny

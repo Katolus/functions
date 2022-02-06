@@ -15,7 +15,7 @@ packages = [
   {include = "functions"},
 ]
 readme = "README.md"
-version = "0.1.0a3"
+version = "0.1.0a4"
 
 [tool.poetry.scripts]
 functions = "functions.main:app"
@@ -47,6 +47,7 @@ mkdocs = "^1.2.3"
 mkdocs-material = "^8.1.4"
 mkdocs-include-markdown-plugin = "^3.2.3"
 mkdocs-material-extensions = "^1.0.3"
+mkdocs-git-revision-date-localized-plugin = "^0.11.1"
 
 [tool.poetry.extras]
 gcp = [

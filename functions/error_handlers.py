@@ -3,6 +3,7 @@ from typing import Dict, NoReturn
 
 import docker
 import typer
+from pydantic.error_wrappers import ValidationError as PydanticValidationError
 
 from functions import logs
 from functions import styles
@@ -69,3 +70,10 @@ def handle_not_implemented_errors(error: NotImplementedError) -> NoReturn:
     """Handles the base case for all the function errors"""
     logs.exception(error)
     raise UsageError("This feature is not yet implemented.")
+
+
+@error_handler(error=PydanticValidationError)
+def handle_pydantic_errors(error: PydanticValidationError) -> NoReturn:
+    """Handles the base case for all the function errors"""
+    logs.exception(error)
+    raise UsageError(f"Validation of objects failed: {error}")

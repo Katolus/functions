@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import date
 from typing import ClassVar, List, Sequence
 
 from pydantic import BaseModel
@@ -7,6 +8,8 @@ from pydantic import BaseModel
 from functions import logs
 from functions.components import ComponentType
 from functions.components import get_all_available_components
+from functions.config.constants import APP_CONFIG_VERSION
+from functions.config.errors import AppConfigVersionError
 from functions.config.interfaces import File
 from functions.config.interfaces import TOML
 from functions.config.models import AppLogging
@@ -24,8 +27,10 @@ class AppConfig(BaseModel, File, TOML):
 
     DEFAULT_FILENAME: ClassVar[str] = "config.toml"
 
+    version: date = APP_CONFIG_VERSION
     components: Sequence[ComponentType] = []
     default_region: str = ""
+
     logging: AppLogging = AppLogging()
 
     @classmethod
@@ -51,6 +56,9 @@ class AppConfig(BaseModel, File, TOML):
 
         config = cls.parse_obj(cls.from_toml(filepath))
 
+        # It would be best to migrate if not matching
+        config.check_version_compatibility()
+
         # If componenets are not present (to not load them every time)
         if not config.components:
             # Load component availability
@@ -58,6 +66,13 @@ class AppConfig(BaseModel, File, TOML):
             cls.write_to_file(config)
 
         return config
+
+    def check_version_compatibility(self) -> None:
+        """Checks the version compatibility"""
+        if str(self.version) != APP_CONFIG_VERSION:
+            raise AppConfigVersionError(
+                current_version=APP_CONFIG_VERSION, version=self.version
+            )
 
 
 class FunctionRegistry(BaseModel, File):

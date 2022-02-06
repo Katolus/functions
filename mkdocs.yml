@@ -10,6 +10,7 @@ docs_dir: docs_mk
 # Repository
 repo_url: https://github.com/Katolus/functions
 repo_name: Katolus/functions
+edit_uri: ""
 
 # Copyright
 copyright: Copyright &copy; 2021 - 2022 Piotr Katolik
@@ -68,14 +69,20 @@ plugins:
   - include-markdown
   - search:
       lang: en
+  - git-revision-date-localized
   # - minify:
   #     minify_html: true
 
 # Customization
 extra:
-  # analytics:
-  #   provider: google
-  #   property: !ENV GOOGLE_ANALYTICS_KEY
+  consent:
+    cookies:
+      analytics:
+        name: Google Analytics
+        checked: false
+  analytics:
+    provider: google
+    property: !ENV GOOGLE_ANALYTICS_KEY
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/Katolus
