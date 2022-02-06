@@ -11,3 +11,7 @@ No permissions to run `docker`, so the solution is to make it available
 ```bash
 sudo chmod 666 /var/run/docker.sock
 ```
+
+## Error while fetching server API version: ('Connection aborted.', PermissionError(61, 'Connection refused'))
+
+- Make sure you are running docker.
