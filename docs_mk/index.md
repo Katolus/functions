@@ -8,7 +8,7 @@ Welcome to the `functions` project, an open source, curiosity-driven tool for op
 
 * GitHub: <https://github.com/Katolus/functions>
 * PyPI: <https://pypi.org/project/functions-cli/>
-* Free software: MIT
+* License: [MIT](https://github.com/Katolus/functions/blob/development/LICENSE)
 
 ## Features
 

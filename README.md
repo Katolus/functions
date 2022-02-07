@@ -2,7 +2,7 @@
 
 > This package that will get you working with FaaS.
 
-[![DeepSource](https://deepsource.io/gh/Katolus/functions.svg/?label=active+issues&show_trend=true&token=NaMzVnONrQ-lLiofAWpYLilG)](https://deepsource.io/gh/Katolus/functions/?ref=repository-badge)
+[![DeepSource](https://deepsource.io/gh/Katolus/functions.svg/?label=active+issues&show_trend=true&token=NaMzVnONrQ-lLiofAWpYLilG)](https://deepsource.io/gh/Katolus/functions/?ref=repository-badge) [![wakatime](https://wakatime.com/badge/user/cd96c43c-7bc3-4dd9-bc18-9fc894fa15aa/project/99319134-337b-4b51-903b-4c0c3b15084e.svg)](https://wakatime.com/badge/user/cd96c43c-7bc3-4dd9-bc18-9fc894fa15aa/project/99319134-337b-4b51-903b-4c0c3b15084e)
 
 |   !   | This package is not ready for `production` use. The API is unstabble as it hasn't been released in any major or minor versions of it yet and is constant development. Use it at your own risk and pleasure. <br><br> **Please read the documentation carefully so there are not surprises to state of this project.** |
 | :---: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -14,7 +14,7 @@
 <!-- * Documentation: <https://Katolus.github.io/functions> -->
 * GitHub: <https://github.com/Katolus/functions>
 * PyPI: <https://pypi.org/project/functions-cli/>
-* Free software: MIT
+* License: [MIT](https://github.com/Katolus/functions/blob/development/LICENSE)
 
 `functions` is a utility package written in Python. It is built to help the developer run, test and deploy FaaS (Function as a Service) resources. Our goal is to combine and simplify efforts required for local and cloud development.
 
@@ -29,7 +29,7 @@ Nonetheless, we believe there is value in using it as it is if it fits your need
 
 Feedback, issues and request are more than welcome. See how you can [contribute](CONTRIBUTING.md).
 
-See the road map [document](./docs/roadmap.md) to see how our vision might need your future interest.
+See the [roadmap](https://katolus.github.io/functions/roadmap/) to see how our vision might need your future interest.
 
 Here is a list of functionalities that the package is capable of.
 
@@ -92,7 +92,7 @@ in your terminal.
 
 Check out the [local development document](docs/local_development.md) for instructions on how get set up.
 
-## Usage
+## Using
 
 Regardless if you installed the package from the *pypi* repository or from source code, you should be able to invoke the `functions` tool from your command line. The tool has many different commands that should help you building your serverless functions (surprise, otherwise it would be useless...).
 
@@ -138,7 +138,7 @@ functions stop {name_of_the_function}
 
 should do the job.
 
-## Deployment it to the cloud
+## Deploying it to the cloud
 
 Since we build software to serve us something, we most likely want to deploy it to see it all working and get that full developer satisfaction and availability.
 
@@ -152,7 +152,7 @@ functions gcp deploy {path_to_the_function}
 
 With the correct setup and permissions this should allow you to the deploy a function to the GCP directly from the `functions` cli.
 
-## Remove a function
+## Removing a function
 
 This command will remove a function from the local storage, but will not remove the code from the disk.
 
