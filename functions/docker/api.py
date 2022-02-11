@@ -161,6 +161,7 @@ def run_container(
     """
     logs.debug(f"Running container for {function_name}")
 
+    # Maybe add a hostname of "functions"?
     return client.containers.run(
         image,
         ports={"8080": port},
