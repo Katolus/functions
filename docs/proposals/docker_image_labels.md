@@ -43,7 +43,7 @@ package.functions.organisation
 We propose labels having follow structure.
 
 ```text
-<!-- org.{org-name}.{project-name}.image.{label} -->
+org.{org-name}.{project-name}.image.{label}
 ```
 
 Examples.
