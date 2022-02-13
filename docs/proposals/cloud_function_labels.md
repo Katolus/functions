@@ -72,10 +72,10 @@ For that purpose we will use a two labels.
 
 * `mark` - label for having a consistent way of filtering resources. Takes on a constant value - `ventress`.
 * `name` - function name used for identifying a specific function resource.
+* `version` - version of the function deployed (if we had a version stored locally).
 
 In testing scope consideration for now.
 
-* `version` - version of the function deployed (if we had a version stored locally).
 * `id` - indefinable string in case a name of a function was not enough or duplicated.
 
 `Key=Value` examples.
@@ -83,6 +83,7 @@ In testing scope consideration for now.
 ```text
 org-ventress-functions-name="http-label"
 org-ventress-functions-mark="ventress"
+org-ventress-functions-version="http-label-1"
 ```
 
 ## Resources

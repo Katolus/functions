@@ -1,7 +1,6 @@
 from enum import Enum
 from typing import Any, Dict
 
-PROJECT_FUNCTION_MARK = "ventress"
 DEFAULT_GCP_REGION: str = "australia-southeast1"
 
 # Do not use "GOOGLE_*" property names
