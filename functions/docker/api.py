@@ -15,6 +15,8 @@ from functions import logs
 from functions import user
 from functions.config.models import FunctionConfig
 from functions.config.models import FunctionRecord
+from functions.constants import PROJECT_MARK
+from functions.constants import PROJECT_VENDOR
 from functions.decorators import handle_error
 from functions.docker.enums import DockerLabel
 from functions.docker.helpers import get_function_name_from_labels
@@ -46,11 +48,13 @@ def _construct_build_variables(function: FunctionRecord) -> BuildVariables:
                 "SIGNATURE_TYPE": config.run_variables.signature_type,
             },
             "labels": {
-                DockerLabel.FUNCTION_NAME: function.name,
-                DockerLabel.FUNCTION_PATH: config.path,
+                DockerLabel.CONFIG_CONTENT: json.dumps(config.json()),
                 DockerLabel.CONFIG_PATH: config.config_path,
-                DockerLabel.CONFIG: json.dumps(config.json()),
-                DockerLabel.ORGANISATION: "Ventress",
+                DockerLabel.DESCRIPTION: config.description,
+                DockerLabel.FUNCTION_NAME: function.name,
+                DockerLabel.FUNCTION_SOURCE: config.path,
+                DockerLabel.MARK: PROJECT_MARK,
+                DockerLabel.VENDOR: PROJECT_VENDOR,
             },
         }
     )
@@ -183,7 +187,9 @@ def stop_container(name: str) -> None:
 
 def get_all_images() -> List[Image]:
     """Returns all functions created by this package"""
-    return client.images.list(filters={"label": f"{DockerLabel.ORGANISATION}=Ventress"})
+    return client.images.list(
+        filters={"label": f"{DockerLabel.VENDOR}={PROJECT_VENDOR}"}
+    )
 
 
 class DockerImage:
@@ -204,7 +210,7 @@ class DockerImage:
     def config(self) -> FunctionConfig:
         # Unwrap the config into a JSON format
         # Investigate why is it double wrapped
-        config_json = json.loads(json.loads(self.labels[DockerLabel.CONFIG]))
+        config_json = json.loads(json.loads(self.labels[DockerLabel.CONFIG_CONTENT]))
         return FunctionConfig(**config_json)
 
     @property
@@ -218,7 +224,7 @@ class DockerImage:
     @property
     def source_path(self) -> str:
         """Path to the source code"""
-        return self.get_label(DockerLabel.FUNCTION_PATH)
+        return self.get_label(DockerLabel.FUNCTION_SOURCE)
 
     def get_label(self, label: DockerLabel) -> str:
         return self.labels.get(label)
