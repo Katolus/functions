@@ -1,6 +1,6 @@
 # How do we define docker image labels?
 
-* Status: Proposed
+* Status: Accepted
 * Deciders: [Piotr] <!-- optional -->
 * Date: 11-02-2022
 
