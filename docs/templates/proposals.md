@@ -2,7 +2,7 @@
 
 * Status: Proposed
 * Deciders: [Piotr] <!-- optional -->
-* Date: 2022-01-08
+* Date: 08-01-2022
 
 ## Context
 
@@ -21,6 +21,10 @@ To be done...
 To be done...
 
 ## Proposal
+
+To be updated...
+
+## Resources
 
 To be updated...
 
