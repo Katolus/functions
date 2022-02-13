@@ -1,9 +1,9 @@
+from functions import logs
+from functions import styles
 from functions import user
-from functions.components.errors import (
-    ComponentVersionError,
-    ComponentMissingError,
-)
 from functions.components import Component
+from functions.components.errors import ComponentMissingError
+from functions.components.errors import ComponentVersionError
 from functions.processes import check_output
 
 # Add a constant that pins a docker's version to a minimum one
@@ -34,6 +34,7 @@ class DockerComponent(Component):
         """
         try:
             docker_version = get_docker_version()
+            logs.debug(f"Docker version: {styles.green(docker_version)}")
         except FileNotFoundError as error:
             raise ComponentMissingError(component=cls.TYPE, error=error)
 

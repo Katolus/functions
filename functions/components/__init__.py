@@ -2,6 +2,8 @@ from abc import ABC
 from enum import Enum
 from typing import List, Literal, Type
 
+from functions import logs
+
 
 class ComponentEnum(str, Enum):
     """
@@ -58,4 +60,5 @@ def get_all_available_components() -> List[Type[Component]]:
     Returns a list of all available components.
     """
     components = Component.__subclasses__()
+    logs.debug(f"Available components: {components}")
     return [component for component in components if component.is_available()]

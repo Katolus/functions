@@ -1,3 +1,5 @@
+from functions import logs
+from functions import styles
 from functions import user
 from functions.components import Component
 from functions.components.errors import ComponentMissingError
@@ -30,6 +32,7 @@ class GCPComponent(Component):
         """
         try:
             gcloud_version = get_gcloud_version()
+            logs.debug(f"gcloud version: {styles.green(gcloud_version)}")
         except FileNotFoundError as error:
             raise ComponentMissingError(component=cls.TYPE, error=error)
 

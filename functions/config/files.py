@@ -36,6 +36,12 @@ class AppConfig(BaseModel, File, TOML):
     @classmethod
     def check_components(cls) -> Sequence[ComponentType]:
         """Checks the components and returns a list of the components"""
+        # TODO: Find a better way to do this
+        # Loads GCP and Docker components so that they can be seen by the subclass method
+        # Doing this defeats the purpose of using the subclass command
+        from functions.components.docker import DockerComponent
+        from functions.components.gcp import GCPComponent
+
         return [component.NAME for component in get_all_available_components()]
 
     @classmethod
@@ -63,6 +69,7 @@ class AppConfig(BaseModel, File, TOML):
         if not config.components:
             # Load component availability
             config.components = cls.check_components()
+            logs.debug(f"Components loaded: {config.components}")
             cls.write_to_file(config)
 
         return config
