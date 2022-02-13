@@ -1,6 +1,6 @@
 # How do we define cloud function labels?
 
-* Status: Proposed
+* Status: Accepted
 * Deciders: [Piotr] <!-- optional -->
 * Date: 13-02-2022
 
