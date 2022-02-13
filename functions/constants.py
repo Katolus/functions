@@ -16,12 +16,17 @@ elif sys.platform.startswith("darwin"):
 else:
     DEFAULT_SYSTEM_CONFIG_PATH = os.path.join(os.environ["HOME"], "config")
 
+# System configuration
 PACKAGE_BASE_CONFIG_FOLDER = "ventress-functions"
 PACKAGE_CONFIG_DIR_PATH = os.path.join(
     DEFAULT_SYSTEM_CONFIG_PATH, PACKAGE_BASE_CONFIG_FOLDER
 )
 DEFAULT_LOG_FILENAME = "functions.log"
 DEFAULT_LOG_FILEPATH = os.path.join(PACKAGE_CONFIG_DIR_PATH, DEFAULT_LOG_FILENAME)
+
+# Project constants
+PROJECT_VENDOR = "ventress"
+PROJECT_MARK = "ventress-functions"
 
 
 class ConfigName(str, Enum):
