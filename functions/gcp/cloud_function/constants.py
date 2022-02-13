@@ -68,9 +68,9 @@ class CloudFunctionLabel(str, Enum):
     Cloud Function label constants.
     """
 
-    FUNCTION_MARK = "functions-cli_function-mark"
-    FUNCTION_NAME = "functions-cli_function-name"
-    FUNCTION_VERSION = "functions-cli_function-version"
+    MARK = "org-ventress-functions-mark"
+    NAME = "org-ventress-functions-name"
+    VERSION = "org-ventress-functions-version"
 
 
 class SignatureType(str, Enum):
