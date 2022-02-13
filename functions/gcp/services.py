@@ -62,7 +62,7 @@ def list_functions(service: CloudServiceType) -> None:
         # Iterate over the functions and print the basic information about each
         for function in functions:
             # Update this once there are proper models for cloud functions
-            name = function["labels"][CloudFunctionLabel.FUNCTION_NAME]
+            name = function["labels"][CloudFunctionLabel.NAME]
             user.inform(
                 f"Function ({name}) is deployed in a {function['runtime']} and was last update at {function['updateTime']}"
             )

@@ -13,12 +13,12 @@ from functions import logs
 from functions.config.managers import FunctionRegistry
 from functions.config.models import FunctionRecord
 from functions.constants import CloudStatus
+from functions.constants import PROJECT_MARK
 from functions.gcp.cloud_function.constants import CloudFunctionLabel
 from functions.gcp.cloud_function.constants import Runtime
 from functions.gcp.cloud_function.constants import TriggerType
 from functions.gcp.constants import DEFAULT_GCP_REGION
 from functions.gcp.constants import GCP_RESERVED_VARIABLES
-from functions.gcp.constants import PROJECT_FUNCTION_MARK
 from functions.processes import check_output
 from functions.processes import run_cmd
 from functions.types import DictStrAny
@@ -95,9 +95,9 @@ def add_update_labels_arguments(function: FunctionRecord) -> List[str]:
         str, str
     ] = {}  # Temp until we can get the labels from the config
     default_labels = {
-        CloudFunctionLabel.FUNCTION_MARK: PROJECT_FUNCTION_MARK,
-        CloudFunctionLabel.FUNCTION_NAME: function.name,
-        CloudFunctionLabel.FUNCTION_VERSION: 1,
+        CloudFunctionLabel.MARK: PROJECT_MARK,
+        CloudFunctionLabel.NAME: function.name,
+        # Consider adding versioning
     }
     # Zip function labels with default labels
     labels = {**default_labels, **(function_labels or {})}
@@ -116,7 +116,7 @@ def add_region_argument(region: str = DEFAULT_GCP_REGION) -> List[str]:
 def add_filter_argument(filter_labels: List[str] = None) -> List[str]:
     """Adds a filter argument to the gcloud command"""
     # https://cloud.google.com/sdk/gcloud/reference/functions/logs/read#--filter
-    core_label = f"labels.{CloudFunctionLabel.FUNCTION_MARK}:{PROJECT_FUNCTION_MARK}"
+    core_label = f"labels.{CloudFunctionLabel.MARK}:{PROJECT_MARK}"
     all_labels = " AND ".join([core_label] + (filter_labels or []))
     return [
         f"--filter='{all_labels}'",
@@ -225,7 +225,7 @@ def fetch_deployed_function_names() -> List[str]:
             "functions",
             "list",
             "--format",
-            f"get(labels.{CloudFunctionLabel.FUNCTION_NAME.value})",
+            f"get(labels.{CloudFunctionLabel.NAME.value})",
         ]
     )
     # Split the result into a list of strings
