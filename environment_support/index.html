@@ -75,6 +75,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#operating-systems" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -83,9 +88,7 @@
     
       
 
-  
-
-<header class="md-header md-header--lifted" data-md-component="header">
+<header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href=".." title="functions" class="md-header__button md-logo" aria-label="functions" data-md-component="logo">
       
@@ -185,13 +188,13 @@
     
   </nav>
   
-    
-  
 </header>
     
     <div class="md-container" data-md-component="container">
       
       
+        
+          
         
       
       <main class="md-main" data-md-component="main">
@@ -266,6 +269,149 @@
 
   
   
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Environment support
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Environment support
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#operating-systems" class="md-nav__link">
+    Operating systems
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#programming-languages-and-runtime-versions" class="md-nav__link">
+    Programming languages and runtime versions
+  </a>
+  
+    <nav class="md-nav" aria-label="Programming languages and runtime versions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#locally" class="md-nav__link">
+    Locally
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcp" class="md-nav__link">
+    GCP
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+        
+          
+            
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../administration/">Administration</a>
+          
+            <label for="__nav_4">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Administration" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Administration
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../administration/decisions/" class="md-nav__link">
+        Decisions
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
   
     <li class="md-nav__item">
       <a href="../roadmap/" class="md-nav__link">
@@ -282,6 +428,64 @@
               </div>
             
             
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#operating-systems" class="md-nav__link">
+    Operating systems
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#programming-languages-and-runtime-versions" class="md-nav__link">
+    Programming languages and runtime versions
+  </a>
+  
+    <nav class="md-nav" aria-label="Programming languages and runtime versions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#locally" class="md-nav__link">
+    Locally
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcp" class="md-nav__link">
+    GCP
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content" data-md-component="content">
             <article class="md-content__inner md-typeset">
@@ -290,14 +494,154 @@
 
   <h1>Environment support</h1>
 
-
+<p>Due to limited amount of resources and a narrow development scope, <code>functions</code> are available/working on a limited subset of environments (OS + runtime).</p>
+<h3 id="operating-systems">Operating systems<a class="headerlink" href="#operating-systems" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>OS name</th>
+<th>Status</th>
+<th>Was tested?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ubuntu(Linux)</td>
+<td>Available</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>macOS</td>
+<td>Available</td>
+<td>Yes - Mildly</td>
+</tr>
+<tr>
+<td>Windows</td>
+<td>Unknown</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<h3 id="programming-languages-and-runtime-versions">Programming languages and runtime versions<a class="headerlink" href="#programming-languages-and-runtime-versions" title="Permanent link">&para;</a></h3>
+<p>There are several places where a language limitation might be enforced by our code.</p>
+<h4 id="locally">Locally<a class="headerlink" href="#locally" title="Permanent link">&para;</a></h4>
+<p>"Functions" managed by the <code>functions</code> package are run by <code>docker</code> and therefore require correct execution scope. Because of execution scope for various languages requires separate implementations, the current support is limited.</p>
+<p>At the moment this is limited to <code>Python</code>.</p>
+<p>That said, since the scope is defined in the generated <code>Dockerfile</code>, there is nothing stopping you from writing your own <code>Dockerfile</code> and support your own execution scope.</p>
+<h4 id="gcp">GCP<a class="headerlink" href="#gcp" title="Permanent link">&para;</a></h4>
+<p>Because cloud functions have a limited runtime <a href="https://cloud.google.com/functions/docs/concepts/exec#runtimes">set</a>, we need to limit these versions as well.</p>
+<p>Here is an estimate of what runtimes are available.</p>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th>Version</th>
+<th>Value</th>
+<th>Was tested?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python</td>
+<td>3.7</td>
+<td>python37</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Python</td>
+<td>3.8</td>
+<td>python38</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Python</td>
+<td>3.9</td>
+<td>python39</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Node</td>
+<td>10</td>
+<td>nodejs10</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Node</td>
+<td>12</td>
+<td>nodejs12</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Node</td>
+<td>14</td>
+<td>nodejs14</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Node</td>
+<td>16</td>
+<td>nodejs16</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Java</td>
+<td>11</td>
+<td>java11</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Go</td>
+<td>1.11</td>
+<td>go111</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Go</td>
+<td>1.13</td>
+<td>go113</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Go</td>
+<td>1.16</td>
+<td>go116</td>
+<td>No</td>
+</tr>
+<tr>
+<td>.NET Core</td>
+<td>3.1</td>
+<td>dotnet3</td>
+<td>No</td>
+</tr>
+<tr>
+<td>PHP</td>
+<td>7.4</td>
+<td>php74</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Ruby</td>
+<td>2.6</td>
+<td>ruby26</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Ruby</td>
+<td>2.7</td>
+<td>ruby27</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<p>Our goal is to find a solution to get this information from an underlying tool, but it is not always possible so we need to bottleneck it at our package level.</p>
+<p>We are completely aware that it is not a perfect solution, but are trying to be as transparent as possible.</p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 13, 2022</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 7, 2022</span>
       
     
   </small>
@@ -316,6 +660,41 @@
       </main>
       
         <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../idea/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Idea" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Idea
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../administration/" class="md-footer__link md-footer__link--next" aria-label="Next: Administration" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Administration
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -366,7 +745,7 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "..", "features": ["content.code.annotate", "navigation.indexes", "navigation.instant", "navigation.tabs.sticky", "navigation.top", "navigation.tracking"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.361d90f1.min.js"}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["content.code.annotate", "navigation.indexes", "navigation.instant", "navigation.top", "navigation.tracking"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.361d90f1.min.js"}</script>
     
     
       <script src="../assets/javascripts/bundle.289a2a4b.min.js"></script>
