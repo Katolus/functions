@@ -37,7 +37,8 @@ theme:
     - content.code.annotate
     - navigation.indexes
     - navigation.instant
-    - navigation.tabs.sticky
+    # - navigation.sections
+    # - navigation.tabs
     - navigation.top
     - navigation.tracking
 
@@ -109,6 +110,9 @@ nav:
   # - Configuration Guides:
   # - Contributing:
   - Environment support: environment_support.md
+  - Administration:
+    - administration/index.md
+    - Decisions: administration/decisions.md
   - Roadmap: roadmap.md
   # - Releases: releases.md
   # - Glossary: glossary.md
