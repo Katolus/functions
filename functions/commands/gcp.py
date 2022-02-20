@@ -14,6 +14,7 @@ from functions.core import FTyper
 from functions.gcp.autocomplete import autocomplete_deployed_function
 from functions.gcp.autocomplete import gcp_delete_autocomplete
 from functions.gcp.autocomplete import gcp_deploy_autocomplete
+from functions.gcp.callbacks import check_if_function_can_be_deployed
 from functions.gcp.callbacks import check_if_function_name_in_registry
 from functions.gcp.cloud_function.cli import delete_function
 
@@ -38,6 +39,7 @@ def deploy(
         ...,
         help="Name of the function you want to deploy",
         autocompletion=gcp_deploy_autocomplete,
+        callback=check_if_function_can_be_deployed,
     ),
     service: Optional[CloudServiceType] = typer.Option(
         None,
