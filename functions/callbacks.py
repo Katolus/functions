@@ -58,15 +58,20 @@ def check_if_name_is_in_registry(
 
 
 @resilient_parsing
-def check_if_function_is_built(
+def check_if_function_can_be_run(
     ctx: typer.Context, param: typer.CallbackParam, value: str
 ) -> Optional[str]:
-
-    build_functions = FunctionRegistry.fetch_built_function_names()
-    if build_functions and value not in build_functions:
+    """Callback that validates if a function can be run"""
+    if not is_function_built(value):
         raise typer.BadParameter(
             f"Function - '{value}' is not a built function."
             " Use autocomplete the pass a valid name."
+        )
+
+    if is_function_running(value):
+        raise typer.BadParameter(
+            f"Function - '{value}' is already running."
+            " Use stop to stop the function."
         )
 
     return value

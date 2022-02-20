@@ -13,8 +13,8 @@ from functions.autocomplete import autocomplete_registry_function_names
 from functions.autocomplete import autocomplete_running_function_names
 from functions.callbacks import check_if_dir_is_a_valid_function_path
 from functions.callbacks import check_if_function_can_be_removed
+from functions.callbacks import check_if_function_can_be_run
 from functions.callbacks import check_if_function_can_be_stopped
-from functions.callbacks import check_if_function_is_built
 from functions.callbacks import check_if_name_is_in_registry
 from functions.callbacks import print_out_the_version
 from functions.config.files import FunctionRegistry
@@ -91,7 +91,7 @@ def run(
         ...,
         help="Name of the function you want to run",
         autocompletion=autocomplete_built_names,
-        callback=check_if_function_is_built,
+        callback=check_if_function_can_be_run,
     ),
 ) -> None:
     """Start a container for a given function"""
