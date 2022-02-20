@@ -1,7 +1,7 @@
-# `functions` high level flow
+# `functions` - architecture overview
 
 * Status: Proposed
-* Deciders: [Piotr] <!-- optional -->
+* Deciders: [Piotr]
 * Date: 2021-12-23
 
 ## Context and Problem Statement
@@ -10,7 +10,7 @@ We need to document the technical assumptions around the way this software can b
 
 The project has been based on iterations of improvement to the base concept, however at this point there is a need of formalizing the decisions makings to add a shape and form the way the project is developed.
 
-## Details <!-- optional -->
+## Details
 
 We want to define the design of the app from different points of perspective and propose a plan of how different components will interact with each other.
 
@@ -52,15 +52,15 @@ Some of the questions we need to answer with the solution:
 
 * How and when do we query and store the current state of the `Docker` component? Is a function running, stopped, built?
 
-### Assumptions <!-- optional -->
+### Assumptions
 
 Our users are technically skilled individuals or organisation that have necessary skills to operate a CLI tool.
 
-### Constraints <!-- optional -->
+### Constraints
 
 No constrains at the moment.
 
-## Decision Drivers <!-- optional -->
+## Decision Drivers
 
 * implementation complexity
 * simplicity of use
@@ -82,21 +82,23 @@ Chosen option: "[option 1]", because [justification. e.g., only option, which me
 
 *Insert a diagram representing different interactions between components.*
 
-### Positive Consequences <!-- optional -->
+![](../media/functional_layout.png)
+
+### Positive Consequences
 
 * [e.g., improvement of quality attribute satisfaction, follow-up decisions required, …]
 * …
 
-### Negative Consequences <!-- optional -->
+### Negative Consequences
 
 * [e.g., compromising quality attribute, follow-up decisions required, …]
 * …
 
-## Pros and Cons of the Options <!-- optional -->
+## Pros and Cons of the Options
 
 ### [option 1]
 
-[example | description | pointer to more information | …] <!-- optional -->
+[example | description | pointer to more information | …]
 
 * Good, because [argument a]
 * Good, because [argument b]
@@ -105,7 +107,7 @@ Chosen option: "[option 1]", because [justification. e.g., only option, which me
 
 ### [option 2]
 
-[example | description | pointer to more information | …] <!-- optional -->
+[example | description | pointer to more information | …]
 
 * Good, because [argument a]
 * Good, because [argument b]
@@ -114,7 +116,7 @@ Chosen option: "[option 1]", because [justification. e.g., only option, which me
 
 ### [option 3]
 
-[example | description | pointer to more information | …] <!-- optional -->
+[example | description | pointer to more information | …]
 
 * Good, because [argument a]
 * Good, because [argument b]
@@ -133,7 +135,7 @@ Chosen option: "[option 1]", because [justification. e.g., only option, which me
 
 It is bound to the first release.
 
-## Links <!-- optional -->
+## Links
 
 * [Link type] [Link to ADR] <!-- example: Refined by [ADR-0005](0005-example.md) -->
 * … <!-- numbers of links can vary -->
