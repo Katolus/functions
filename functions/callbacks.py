@@ -10,6 +10,8 @@ from functions.config.files import FunctionRegistry
 from functions.constants import LocalStatus
 from functions.decorators import handle_error
 from functions.decorators import resilient_parsing
+from functions.helpers import is_function_built
+from functions.helpers import is_function_running
 from functions.user import confirm_abort
 from functions.validators import validate_name
 
@@ -63,7 +65,7 @@ def check_if_function_is_built(
     build_functions = FunctionRegistry.fetch_built_function_names()
     if build_functions and value not in build_functions:
         raise typer.BadParameter(
-            f"You can only run build functions {build_functions}."
+            f"Function - '{value}' is not a built function."
             " Use autocomplete the pass a valid name."
         )
 
@@ -71,18 +73,41 @@ def check_if_function_is_built(
 
 
 @resilient_parsing
-def check_if_function_is_running(
+def check_if_function_can_be_stopped(
     ctx: typer.Context, param: typer.CallbackParam, value: str
 ) -> Optional[str]:
     running_functions = FunctionRegistry.fetch_local_function_names(
         status=LocalStatus.RUNNING
     )
     if running_functions and value not in running_functions:
+        command: str = ctx.command.name
         raise typer.BadParameter(
-            f"You can only stop already running functions {running_functions}."
+            f"You cannot {command} {value}. "
+            f"Function '{value}' is currently not running. "
+            f"Please run the function before trying to {command} it."
+        )
+
+    return value
+
+
+@resilient_parsing
+def check_if_function_can_be_removed(
+    ctx: typer.Context, param: typer.CallbackParam, value: str
+) -> str:
+    """Callback that validates if a function can be removed"""
+    if not is_function_built(value):
+        raise typer.BadParameter(
+            f"Function - '{value}' is not a built function."
             " Use autocomplete the pass a valid name."
         )
 
+    if is_function_running(value):
+        command: str = ctx.command.name
+        raise typer.BadParameter(
+            f"You cannot {command} {value}. "
+            f"Function '{value}' is currently running. "
+            f"Please stop the function before trying to {command} it."
+        )
     return value
 
 
