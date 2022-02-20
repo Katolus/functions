@@ -106,7 +106,7 @@ nav:
   # - Developing functions:
   # - Local Development: local_development.md
   # - Releases:
-  # - Examples: examples.md
+  - Examples: examples.md
   # - Configuration Guides:
   # - Contributing:
   - Environment support: environment_support.md
