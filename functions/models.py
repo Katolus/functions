@@ -60,6 +60,12 @@ class Function:
                 logs.debug(f"Container for function {self.name} not found")
         return self._container
 
+    def is_source_valid(self) -> bool:
+        """
+        Checks if the function's source is valid
+        """
+        return self.config.validate_source()
+
     def build(self, show_logs: bool = False) -> None:
         """
         Builds the function's image.

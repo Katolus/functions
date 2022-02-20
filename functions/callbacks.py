@@ -11,7 +11,9 @@ from functions.constants import LocalStatus
 from functions.decorators import handle_error
 from functions.decorators import resilient_parsing
 from functions.helpers import is_function_built
+from functions.helpers import is_function_in_registry
 from functions.helpers import is_function_running
+from functions.helpers import is_function_source_valid
 from functions.user import confirm_abort
 from functions.validators import validate_name
 
@@ -54,6 +56,26 @@ def check_if_name_is_in_registry(
             "Please use one of the following: "
             f"{', '.join(FunctionRegistry.fetch_function_names())}"
         )
+    return value
+
+
+@resilient_parsing
+def check_if_function_can_be_built(
+    ctx: typer.Context, param: typer.CallbackParam, value: str
+) -> str:
+    """Callback that validates if a function can be built"""
+    if not is_function_in_registry(value):
+        raise typer.BadParameter(
+            f"'{value}' is not a registered function name. "
+            "Please use autocomplete to find a function name."
+        )
+
+    if not is_function_source_valid(value):
+        raise typer.BadParameter(
+            f"The source code for {value} is not valid. "
+            "Please check the source code and try again."
+        )
+
     return value
 
 

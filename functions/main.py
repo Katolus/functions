@@ -12,6 +12,7 @@ from functions.autocomplete import autocomplete_built_names
 from functions.autocomplete import autocomplete_registry_function_names
 from functions.autocomplete import autocomplete_running_function_names
 from functions.callbacks import check_if_dir_is_a_valid_function_path
+from functions.callbacks import check_if_function_can_be_built
 from functions.callbacks import check_if_function_can_be_removed
 from functions.callbacks import check_if_function_can_be_run
 from functions.callbacks import check_if_function_can_be_stopped
@@ -70,6 +71,7 @@ def build(
     function_name: str = typer.Argument(
         ...,
         autocompletion=autocomplete_registry_function_names,
+        callback=check_if_function_can_be_built,
     ),
     disable_logs: bool = typer.Option(True, "--show-logs", help="Show build logs"),
 ) -> None:
