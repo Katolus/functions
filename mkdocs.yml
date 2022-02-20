@@ -98,7 +98,7 @@ extra:
 nav:
   - Introduction: index.md
   - Idea: idea.md
-  # - How it works: how_it_works.md
+  - How it works: how_it_works.md
   # - Usage (CLI): usage.md
     # - Working locally:
     # - Working with GCP:
