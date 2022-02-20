@@ -12,6 +12,7 @@ from functions import logs
 from functions import styles
 from functions.config.enums import FunctionConfigVersion
 from functions.config.errors import ConfigValidationError
+from functions.config.errors import InvalidFunctionSource
 from functions.constants import CloudProvider
 from functions.constants import CloudServiceType
 from functions.constants import CloudStatus
@@ -94,6 +95,30 @@ class FunctionConfig(BaseModel):
     @property
     def config_path(self) -> str:
         return str(os.path.join(self.path, self.config_name))
+
+    def is_source_valid(self) -> bool:
+        """
+        Checks if the function's source is valid
+        """
+        # Check if the source is valid
+        if not self.path:
+            return False
+
+        # Check if the source exists
+        if not Path(self.path).exists():
+            return False
+
+        return True
+
+    def validate_source(self) -> None:
+        """
+        Validate the function's source.
+        """
+        # Check if the source is valid
+        if not self.is_source_valid():
+            raise InvalidFunctionSource(
+                f_name=self.run_variables.name, source=self.path
+            )
 
     def save(self) -> None:
         """
