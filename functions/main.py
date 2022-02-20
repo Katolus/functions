@@ -12,8 +12,9 @@ from functions.autocomplete import autocomplete_built_names
 from functions.autocomplete import autocomplete_registry_function_names
 from functions.autocomplete import autocomplete_running_function_names
 from functions.callbacks import check_if_dir_is_a_valid_function_path
+from functions.callbacks import check_if_function_can_be_removed
+from functions.callbacks import check_if_function_can_be_stopped
 from functions.callbacks import check_if_function_is_built
-from functions.callbacks import check_if_function_is_running
 from functions.callbacks import check_if_name_is_in_registry
 from functions.callbacks import print_out_the_version
 from functions.config.files import FunctionRegistry
@@ -111,7 +112,7 @@ def stop(
         ...,
         help="Name of the function you want to stop",
         autocompletion=autocomplete_running_function_names,
-        callback=check_if_function_is_running,
+        callback=check_if_function_can_be_stopped,
     ),
 ) -> None:
     """Stops a running function"""
@@ -147,7 +148,7 @@ def remove(
         ...,
         help="Name of the function you want to remove",
         autocompletion=autocomplete_built_names,
-        callback=check_if_function_is_built,
+        callback=check_if_function_can_be_removed,
     )
 ) -> None:
     """Removes a local image of a functions"""
