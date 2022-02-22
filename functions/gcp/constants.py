@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Any, Dict
 
-DEFAULT_GCP_REGION: str = "australia-southeast1"
+DEFAULT_GCP_REGION: str = "us-west1"
 
 # Do not use "GOOGLE_*" property names
 GCP_RESERVED_VARIABLES: Dict[str, Any] = {
