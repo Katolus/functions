@@ -2,4 +2,4 @@
 
 set -e
 
-poetry run typer functions/main.py utils docs --name functions --output docs/cli.md
+typer functions/main.py utils docs --name functions --output docs_mk/cli.md
