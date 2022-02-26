@@ -11,14 +11,14 @@ from functions.constants import LocalStatus
 from functions.core import FTyper
 from functions.defaults import Defaults
 
-app = FTyper(help="Factory method for creating new functions")
+app = FTyper(help="Create new templated functions.")
 
 
 @app.command()
 def pubsub(
     function_name: str = typer.Argument(
         ...,
-        help="Name of the function",
+        help="The name of the function to create",
         callback=check_if_name_is_a_valid_string,
     ),
     function_dir: Path = typer.Option(
@@ -28,10 +28,12 @@ def pubsub(
         file_okay=False,
         resolve_path=True,
         callback=confirm_current_directory_as_target,
-        help="Directory that will be used as a root of the new function",
+        help="Path that will be used as a root path for the new function's files",
     ),
 ) -> None:
-    """Generates a directory with a pubsub template for a cloud function"""
+    """
+    Create a new function that uses Google Cloud Pub/Sub as a trigger.
+    """
     full_function_path = os.path.join(function_dir, function_name)
 
     # Get the default class for this type of function
@@ -60,7 +62,7 @@ def pubsub(
 def http(
     function_name: str = typer.Argument(
         ...,
-        help="Name of the function",
+        help="The name of the function to create",
         callback=check_if_name_is_a_valid_string,
     ),
     function_dir: Path = typer.Option(
@@ -70,10 +72,12 @@ def http(
         file_okay=False,
         resolve_path=True,
         callback=confirm_current_directory_as_target,
-        help="Directory that will be used as a root of the new function",
+        help="Path that will be used as a root path for the new function's files",
     ),
 ) -> None:
-    """Generates a directory with a http template for a cloud function"""
+    """
+    Create a new function that uses HTTP as a trigger.
+    """
     full_function_path = os.path.join(function_dir, function_name)
 
     # Get the default class for this type of function
