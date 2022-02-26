@@ -106,7 +106,7 @@ class FunctionsCli(FTyper):
     def __init__(self, **kwargs: Any) -> None:
         super().__init__(
             name="functions",
-            help="Run script to executing, testing and deploying included functions.",
+            help="CLI tool that helps you manage your (FaaS) components.",
             **kwargs,
         )
         self.is_active = True
