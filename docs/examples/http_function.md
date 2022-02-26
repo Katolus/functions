@@ -1,9 +1,8 @@
 # Http function (locally)
 
-### Create a new http function directory.
+### Create a new http function directory
 
-
-```
+```console
 functions new http http-function --dir ~/test/
 ```
 
@@ -52,7 +51,7 @@ You should be able to view the newly created functions running by going to  `htt
 
 ![Hello world on localhost](https://user-images.githubusercontent.com/20417569/139000266-f596a100-c018-4591-83c5-d131b778a24e.png)
 
-### Cleaning up.
+### Cleaning up
 
 Once you done with the function, it is a practice to remove unused.
 

@@ -6,7 +6,7 @@
 
 ## Proposal
 
-We propose to set up the main branch that the majority work from PRs and contributions are commited to be the `development` branch.
+We propose to set up the main branch that the majority work from PRs and contributions are committed to be the `development` branch.
 
 The idea behind this decision is a attempt to create a more accessible development stream.
 

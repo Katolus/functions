@@ -15,3 +15,9 @@ Resolves #
 ## Testing Instructions
 
 <!-- List all the steps and information needed to comprehensively test the proposed solution. -->
+
+
+## Checklist
+
+- [ ] Did you include necessary logging?
+- [ ] Check if the `cli.md` needs to be updated.

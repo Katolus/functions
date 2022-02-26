@@ -2,19 +2,19 @@
 
 * Status: Proposed
 * Deciders: [Piotr]
-* Date: 2021-12-23
+* Date: 2022-02-23
 
 ## Context and Problem Statement
 
-We need to document the technical assumptions around the way this software can be used. Describe user stories through the app flow and how different components fall into full composition.
+This document describes all the architectural components used in the layout of the app.
 
-The project has been based on iterations of improvement to the base concept, however at this point there is a need of formalizing the decisions makings to add a shape and form the way the project is developed.
+It describe the assumed flow of the app under certain user stories and how different components fall into a full composition.
 
-## Details
+The architecture of the project has been developed in iterative process of improvement to the base concept (ADR-0001) and this document will formalize the decisions and provide shape and form context.
 
-We want to define the design of the app from different points of perspective and propose a plan of how different components will interact with each other.
+## Users
 
-Decisions made to the flow should take into the account a user stories of:
+We are taking into the account following user stories:
 
 * user has never worked with function as a service
 * user has existing functions and wants to use the tool for unification and easy of use
@@ -26,7 +26,9 @@ Decisions made to the flow should take into the account a user stories of:
 
 ### Seamless installation
 
-TBU
+**Problem**: We want our users to have a single line and minimal complexity installation journey.
+
+In the driver of *simplicity* the installation should be a quick and easy process. This should include all the ways of managing functions.
 
 ### Hight modularity
 
@@ -62,83 +64,30 @@ No constrains at the moment.
 
 ## Decision Drivers
 
-* implementation complexity
-* simplicity of use
-* configurability
-
-## Considered Options
-
-[Can be either a list of options or in complicated scenarios, a reference to sub documents]
-
-* subcommand components
-* sync subcommand
-* `init` command
-
-## Decision Outcome
-
-Chosen option: "[option 1]", because [justification. e.g., only option, which meets k.o. criterion decision driver | which resolves force force | … | comes out best (see below)].
+* Implementation complexity
+* Simplicity of use
+* Configurability
 
 ### App Diagram
 
 *Insert a diagram representing different interactions between components.*
 
-![](../media/functional_layout.png)
+![Functions app diagram](../assets/diagrams/functional_layout.png)
 
-### Positive Consequences
-
-* [e.g., improvement of quality attribute satisfaction, follow-up decisions required, …]
-* …
-
-### Negative Consequences
-
-* [e.g., compromising quality attribute, follow-up decisions required, …]
-* …
-
-## Pros and Cons of the Options
-
-### [option 1]
-
-[example | description | pointer to more information | …]
-
-* Good, because [argument a]
-* Good, because [argument b]
-* Bad, because [argument c]
-* … <!-- numbers of pros and cons can vary -->
-
-### [option 2]
-
-[example | description | pointer to more information | …]
-
-* Good, because [argument a]
-* Good, because [argument b]
-* Bad, because [argument c]
-* … <!-- numbers of pros and cons can vary -->
-
-### [option 3]
-
-[example | description | pointer to more information | …]
-
-* Good, because [argument a]
-* Good, because [argument b]
-* Bad, because [argument c]
-* … <!-- numbers of pros and cons can vary -->
 
 ## Decision Impact
 
-[Who may be impacted by this decision]
-
 | Interested Parties/Groups | Informed |
 | ------------------------- | -------- |
-|           N/A             |    N/A   |
+| All Users                 | N/A      |
 
 ### How will this decision be communicated to the public
 
-It is bound to the first release.
+There is no need to communicate it to any channels as it is a documentation written prior to any releases. It is bound to the first release.
 
 ## Links
 
-* [Link type] [Link to ADR] <!-- example: Refined by [ADR-0005](0005-example.md) -->
-* … <!-- numbers of links can vary -->
+* [ADR-0001](0001_initial_setup.md)
 
 <!-- Identifiers, in alphabetical order -->
 
