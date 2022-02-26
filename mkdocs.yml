@@ -102,7 +102,7 @@ nav:
   # - Usage (CLI): usage.md
     # - Working locally:
     # - Working with GCP:
-  # - CLI docs: cli.md
+  - CLI docs: cli.md
   # - Developing functions:
   # - Local Development: local_development.md
   # - Releases:

@@ -3,17 +3,21 @@ from functions import user
 from functions.components.docker import DockerComponent
 from functions.core import FTyper
 
-app = FTyper(help="Manage `docker` component")
+app = FTyper(help="Manage the docker component.")
 
 
 @app.command()
 def check() -> None:
-    """Check the state of the `docker` component"""
+    """
+    Check if the docker component is available.
+    """
     DockerComponent.is_available()
     user.inform(f"The `docker` component is {styles.green('available')}.")
 
 
 @app.command()
 def instructions() -> None:
-    """Print instructions for the `docker` component"""
+    """
+    Show instructions for the docker component.
+    """
     DockerComponent.show_instruction()
