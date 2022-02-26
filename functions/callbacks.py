@@ -10,6 +10,10 @@ from functions.config.files import FunctionRegistry
 from functions.constants import LocalStatus
 from functions.decorators import handle_error
 from functions.decorators import resilient_parsing
+from functions.helpers import is_function_built
+from functions.helpers import is_function_in_registry
+from functions.helpers import is_function_running
+from functions.helpers import is_function_source_valid
 from functions.user import confirm_abort
 from functions.validators import validate_name
 
@@ -56,33 +60,81 @@ def check_if_name_is_in_registry(
 
 
 @resilient_parsing
-def check_if_function_is_built(
+def check_if_function_can_be_built(
     ctx: typer.Context, param: typer.CallbackParam, value: str
-) -> Optional[str]:
-
-    build_functions = FunctionRegistry.fetch_built_function_names()
-    if build_functions and value not in build_functions:
+) -> str:
+    """Callback that validates if a function can be built"""
+    if not is_function_in_registry(value):
         raise typer.BadParameter(
-            f"You can only run build functions {build_functions}."
-            " Use autocomplete the pass a valid name."
+            f"'{value}' is not a registered function name. "
+            "Please use autocomplete to find a function name."
+        )
+
+    if not is_function_source_valid(value):
+        raise typer.BadParameter(
+            f"The source code for {value} is not valid. "
+            "Please check the source code and try again."
         )
 
     return value
 
 
 @resilient_parsing
-def check_if_function_is_running(
+def check_if_function_can_be_run(
+    ctx: typer.Context, param: typer.CallbackParam, value: str
+) -> Optional[str]:
+    """Callback that validates if a function can be run"""
+    if not is_function_built(value):
+        raise typer.BadParameter(
+            f"Function - '{value}' is not a built function."
+            " Use autocomplete the pass a valid name."
+        )
+
+    if is_function_running(value):
+        raise typer.BadParameter(
+            f"Function - '{value}' is already running."
+            " Use stop to stop the function."
+        )
+
+    return value
+
+
+@resilient_parsing
+def check_if_function_can_be_stopped(
     ctx: typer.Context, param: typer.CallbackParam, value: str
 ) -> Optional[str]:
     running_functions = FunctionRegistry.fetch_local_function_names(
         status=LocalStatus.RUNNING
     )
     if running_functions and value not in running_functions:
+        command: str = ctx.command.name
         raise typer.BadParameter(
-            f"You can only stop already running functions {running_functions}."
+            f"You cannot {command} {value}. "
+            f"Function '{value}' is currently not running. "
+            f"Please run the function before trying to {command} it."
+        )
+
+    return value
+
+
+@resilient_parsing
+def check_if_function_can_be_removed(
+    ctx: typer.Context, param: typer.CallbackParam, value: str
+) -> str:
+    """Callback that validates if a function can be removed"""
+    if not is_function_built(value):
+        raise typer.BadParameter(
+            f"Function - '{value}' is not a built function."
             " Use autocomplete the pass a valid name."
         )
 
+    if is_function_running(value):
+        command: str = ctx.command.name
+        raise typer.BadParameter(
+            f"You cannot {command} {value}. "
+            f"Function '{value}' is currently running. "
+            f"Please stop the function before trying to {command} it."
+        )
     return value
 
 

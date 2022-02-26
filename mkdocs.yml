@@ -98,15 +98,15 @@ extra:
 nav:
   - Introduction: index.md
   - Idea: idea.md
-  # - How it works: how_it_works.md
+  - How it works: how_it_works.md
   # - Usage (CLI): usage.md
     # - Working locally:
     # - Working with GCP:
-  # - CLI docs: cli.md
+  - CLI docs: cli.md
   # - Developing functions:
   # - Local Development: local_development.md
   # - Releases:
-  # - Examples: examples.md
+  - Examples: examples.md
   # - Configuration Guides:
   # - Contributing:
   - Environment support: environment_support.md

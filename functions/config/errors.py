@@ -11,6 +11,11 @@ class FunctionNotInRegistryError(FunctionBaseError):
     msg_template = "Function '{function}' not found in registry. Validate your setup."
 
 
+class InvalidFunctionSource(FunctionBaseError):
+    code = "config.invalid_function_source"
+    msg_template = "Function ({f_name}) source -> '{source}' is invalid."
+
+
 class AppConfigVersionError(FunctionBaseError):
     code = "config.app_config_version_missmatch"
     msg_template = (

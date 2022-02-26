@@ -12,8 +12,10 @@ from functions.autocomplete import autocomplete_built_names
 from functions.autocomplete import autocomplete_registry_function_names
 from functions.autocomplete import autocomplete_running_function_names
 from functions.callbacks import check_if_dir_is_a_valid_function_path
-from functions.callbacks import check_if_function_is_built
-from functions.callbacks import check_if_function_is_running
+from functions.callbacks import check_if_function_can_be_built
+from functions.callbacks import check_if_function_can_be_removed
+from functions.callbacks import check_if_function_can_be_run
+from functions.callbacks import check_if_function_can_be_stopped
 from functions.callbacks import check_if_name_is_in_registry
 from functions.callbacks import print_out_the_version
 from functions.config.files import FunctionRegistry
@@ -34,18 +36,20 @@ def main(
     verbose: bool = typer.Option(
         False,
         "--verbose",
-        help="Sets the conext of the command to be verbose",
+        help="Enable verbose logging",
     ),
     version: Optional[bool] = typer.Option(
         None,
         "--version",
-        help="Prints out the version of the package",
+        help="Print the version and exit",
         callback=print_out_the_version,
         is_eager=True,
     ),
 ) -> None:
     """
-    Manage users in the awesome CLI app.
+    CLI entry point for functions.
+
+    This code will run when you run `functions` from the command line.
     """
     # Set logging level
     log_level = LoggingLevel.INFO
@@ -65,14 +69,37 @@ def error() -> None:
 
 
 @app.command()
+def add(
+    function_dir: Path = typer.Argument(
+        ...,
+        help="The directory of the function to add",
+        exists=True,
+        file_okay=False,
+        resolve_path=True,
+        callback=check_if_dir_is_a_valid_function_path,
+    ),
+) -> None:
+    """
+    Add a function to the function registry.
+    """
+    flows.add_function(str(function_dir))
+
+
+@app.command()
 def build(
     function_name: str = typer.Argument(
         ...,
+        help="The name of the function to build",
         autocompletion=autocomplete_registry_function_names,
+        callback=check_if_function_can_be_built,
     ),
-    disable_logs: bool = typer.Option(True, "--show-logs", help="Show build logs"),
+    disable_logs: bool = typer.Option(
+        False, "--disable-logs", help="Disable build output"
+    ),
 ) -> None:
-    """Builds an image of a given function"""
+    """
+    Build a function.
+    """
     # Get the absolute path
     function = Function(function_name)
 
@@ -84,49 +111,11 @@ def build(
     )
 
 
-@app.command()
-def run(
-    function_name: str = typer.Argument(
-        ...,
-        help="Name of the function you want to run",
-        autocompletion=autocomplete_built_names,
-        callback=check_if_function_is_built,
-    ),
-) -> None:
-    """Start a container for a given function"""
-    # Guaranteed to exist because of the autocomplete + callback
-    function = Function(function_name)
-
-    function.run()
-
-    user.inform(
-        f"Function ({function.name}) has {green('started')}."
-        f" Visit -> http://localhost:{function.config.run_variables.port}"
-    )
-
-
-@app.command()
-def stop(
-    function_name: str = typer.Argument(
-        ...,
-        help="Name of the function you want to stop",
-        autocompletion=autocomplete_running_function_names,
-        callback=check_if_function_is_running,
-    ),
-) -> None:
-    """Stops a running function"""
-    function = Function(function_name)
-
-    function.stop()
-
-    user.inform(f"Function ({function_name}) has been stopped.")
-
-
 @app.command("list")
 def list_functions() -> None:
-    """List existing functions"""
-    # TODO: Merge docker images and registry functions together
-    # functions = all_functions()
+    """
+    List all functions in the registry.
+    """
     functions = FunctionRegistry.fetch_all_functions()
 
     # Check if a function is running at the moment
@@ -142,15 +131,59 @@ def list_functions() -> None:
 
 
 @app.command()
+def run(
+    function_name: str = typer.Argument(
+        ...,
+        help="The name of the function to run",
+        autocompletion=autocomplete_built_names,
+        callback=check_if_function_can_be_run,
+    ),
+) -> None:
+    """
+    Run a function locally using the built image.
+    """
+    # Guaranteed to exist because of the autocomplete + callback
+    function = Function(function_name)
+
+    function.run()
+
+    user.inform(
+        f"Function ({function.name}) has {green('started')}."
+        f" Visit -> http://localhost:{function.config.run_variables.port}"
+    )
+
+
+@app.command()
+def stop(
+    function_name: str = typer.Argument(
+        ...,
+        help="The name of the function to stop",
+        autocompletion=autocomplete_running_function_names,
+        callback=check_if_function_can_be_stopped,
+    ),
+) -> None:
+    """
+    Stop a function running locally.
+    """
+    function = Function(function_name)
+
+    function.stop()
+
+    user.inform(f"Function ({function_name}) has been stopped.")
+
+
+@app.command()
 def remove(
     function_name: str = typer.Argument(
         ...,
-        help="Name of the function you want to remove",
+        help="The name of the function to remove",
         autocompletion=autocomplete_built_names,
-        callback=check_if_function_is_built,
+        callback=check_if_function_can_be_removed,
     )
 ) -> None:
-    """Removes a local image of a functions"""
+    """
+    Remove a function from the registry.
+    """
     function = Function(function_name)
 
     user.confirm_abort(f"Are you sure you want to remove the function {function.name}?")
@@ -164,19 +197,21 @@ def remove(
 def delete(
     function_name: str = typer.Argument(
         ...,
-        help="Name of the function you want to remove",
+        help="The name of the function to delete",
         autocompletion=autocomplete_registry_function_names,
         callback=check_if_name_is_in_registry,
     ),
 ) -> None:
-    """Delete a function from the registry"""
+    """
+    Delete a function with all its data from the registry.
+    """
     function = Function(function_name)
 
     user.confirm_abort(
         " ".join(
             [
                 f"Are you sure you want to delete the function {function.name}?.",
-                "This means that all attributes associated with this function will be removed.",
+                "This means that all information associated with this function will be removed.",
             ]
         )
     )
@@ -193,21 +228,6 @@ def delete(
     user.inform(f"Function {function.name} has been deleted.")
 
 
-@app.command()
-def add(
-    function_dir: Path = typer.Argument(
-        ...,
-        help="Path to a function's directory you want to add",
-        exists=True,
-        file_okay=False,
-        resolve_path=True,
-        callback=check_if_dir_is_a_valid_function_path,
-    ),
-) -> None:
-    """Adds a function to the registry"""
-    flows.add_function(str(function_dir))
-
-
 @app.command(disable=True)
 def config() -> None:
     """Renders function's configuration file into the command line"""
@@ -219,7 +239,9 @@ def config() -> None:
 
 @app.command("logs")
 def print_logs() -> None:
-    """Prints out function logs"""
+    """
+    Print the logs of functions CLI.
+    """
     log_path = DEFAULT_LOG_FILEPATH
     # This might be improved if we display limited amount of lines
     with open(log_path, "r") as file:

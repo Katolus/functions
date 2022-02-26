@@ -9,12 +9,14 @@ from functions.core import FTyper
 from functions.docker.api import DockerImage
 from functions.gcp.cloud_function.cli import fetch_deployed_function_names
 
-app = FTyper(help="Sync components with the registry")
+app = FTyper(help="Sync registry functions.")
 
 
 @app.command()
 def local() -> None:
-    """Syncs the state of locally built functions"""
+    """
+    Sync registry functions with Docker.
+    """
     logs.debug("Syncing local functions")
     # Get the list of functions built or running locally from the the DockerManager
     images: Dict[str, str] = {}
@@ -74,7 +76,9 @@ def local() -> None:
 
 @app.command()
 def gcp() -> None:
-    """Syncs the state of GCP functions"""
+    """
+    Sync registry functions with GCP.
+    """
     logs.debug("Syncing GCP functions")
     # Get the list of functions deployed to GCP
     # ### Note ###
