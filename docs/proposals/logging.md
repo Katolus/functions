@@ -1,8 +1,8 @@
 # Logging in `functions`
 
-* Status: Accepted
+* Status: Proposal
 * Deciders: [Piotr] <!-- optional -->
-* Date: 2021-11-23
+* Date: 2022-02-23
 
 ## Work context
 
@@ -14,17 +14,31 @@ We suggest creating a storing a simple file based log using that Python's standa
 
 The files should take a lot of space and should ensure that the information is properly rotated.
 
-The file is to be stored in the `config` module's directory path.
+The file is named - `functions.log` by default and is stored in the `config` module's directory path.
 
-### Levels of logging
+### Default level
 
-* Debug: Use this level for anything that happens in the program.
+The default level for command execution is `INFO`. It means that none of the debug statements will be visible in the a command's output.
 
-* Info: Use this level to record all actions that are user driven or system specific, such as regularly scheduled operations.
+### Format
 
-* Warning: Use this level to record all irregular or undesired actions.
+A log format takes a form of three parts:
 
-* Error: Use this level to record any error that occurs.
+```console
+{time} - {level} - {message}
+
+2022-02-27 01:08:33,367 - DEBUG - Running application in info logging level.
+```
+
+### Command - logs
+
+The file can be used by any regular means, like reading the file, output in terminal or terminal tailing.
+
+In order to make this more straightforward, we added a `functions logs` command that would output and tail the log file so that you don't need to do anything else.
+
+### Access
+
+You can get access to the debug logging output on command execution by passing the `--verbose` flag as an option to the root `functions` command.
 
 <!-- Identifiers, in alphabetical order -->
 

@@ -30,7 +30,7 @@ The code wasn't necessarily clearly contained within a container like the `confi
 
 Here is a view from the command line at this time.
 
-![23_12_2021_CLI_view](../assets/23_12_2021_CLI_view.png)
+![23_12_2021_CLI_view](../assets/screenshots/23_12_2021_CLI_view.png)
 
 Here is some additional context on these root commands:
 
@@ -57,5 +57,6 @@ The initial concept has been designed as a single scenario concept (due to a pro
 * creating the correct structure in config for components like local, gcp and any future ones
 * various components in the code were not prepared to be modularized in a way to easily accept extensions from new components (like AWS extensions)
 
-<!-- Shortcuts for links -->
-* [Piotr](https://github.com/Katolus)
+<!-- Identifiers, in alphabetical order -->
+
+[Piotr]: https://github.com/Katolus
