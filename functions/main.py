@@ -93,9 +93,7 @@ def build(
         autocompletion=autocomplete_registry_function_names,
         callback=check_if_function_can_be_built,
     ),
-    disable_logs: bool = typer.Option(
-        False, "--disable-logs", help="Disable build output"
-    ),
+    show_logs: bool = typer.Option(False, "--show-logs", help="Show build output"),
 ) -> None:
     """
     Build a function.
@@ -103,7 +101,7 @@ def build(
     # Get the absolute path
     function = Function(function_name)
 
-    function.build(show_logs=disable_logs)
+    function.build(show_logs=show_logs)
 
     user.inform(
         f"{styles.green('Successfully')} build a function's image."
