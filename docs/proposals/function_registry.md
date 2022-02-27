@@ -1,8 +1,8 @@
 # How do we store information about the managed functions?
 
-* Status: Accepted
-* Deciders: [Piotr] <!-- optional -->
-* Date: 2021-11-23
+* Status: Proposed
+* Deciders: [Piotr]
+* Date: 2021-02-24
 
 ## Problem statement
 
@@ -23,11 +23,27 @@ Things to consider:
 
 Each time a CLI is triggered a file will be read and loaded into the memory so that the data about interacted functions is available in the scope of the program. The marshalling and un-marshalling will be performed in a JSON format.
 
+## Implementation
+
+The core functionality of this feature is defined by the `FunctionRegistry` class.
+
+This class should be used to interact with `registry.json` file. This file holds information about the all the functions in the scope of the tool.
+
+Details of each of the `functions` are defined by an instance of the `FunctionRecord` class and a stored in a JSON format. This class is capable of loading, saving and displaying info about the function in a terminal. It's purpose is to store information about the `name`, `config` and `status`.
+
+### Function vs FunctionRecord
+
+`Function` and `FunctionRecord` can easily be confused so it is important to clearly define their purpose.
+
+`Function` is class that defines variables methods of a instantiated `function` in run time. Use this method to manipulate the function on runtime.
+
+`FunctionRecord` is a class that describes configuration and metadata about the state of the function; as far as registry information is capable. Use this class to handle, pass, update and use function's metadata.
+
 ## Outcomes
 
 The truth is that is not the most stable solution, but it offers transparency in viewing the saved information in a file as well as direct modification as needed.
 
-In a `user` scenario this file should be accessed and edited.
+In a `user` scenario this file should not be accessed nor edited.
 
 <!-- Identifiers, in alphabetical order -->
 
