@@ -100,6 +100,8 @@ Example interaction for basic case of CLI command.
 TBU
 
 - Internal state saved in a function registry
+  - Config read order
+  -
 - Component management
 - Functions Config
 - Logging
