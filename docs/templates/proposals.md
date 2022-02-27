@@ -1,8 +1,16 @@
 # Title
 
-* Status: Proposed
+* Status: [
+    Proposed
+    | Accepted
+    | Implemented
+    | Experimental
+    | Rejected
+    | Retired
+    | Superseded
+]
 * Deciders: [Piotr] <!-- optional -->
-* Date: 08-01-2022
+* Date: 2022-02-01
 
 ## Context
 
