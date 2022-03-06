@@ -4,7 +4,6 @@
 
 [![DeepSource](https://deepsource.io/gh/Katolus/functions.svg/?label=active+issues&show_trend=true&token=NaMzVnONrQ-lLiofAWpYLilG)](https://deepsource.io/gh/Katolus/functions/?ref=repository-badge) [![wakatime](https://wakatime.com/badge/user/cd96c43c-7bc3-4dd9-bc18-9fc894fa15aa/project/99319134-337b-4b51-903b-4c0c3b15084e.svg)](https://wakatime.com/badge/user/cd96c43c-7bc3-4dd9-bc18-9fc894fa15aa/project/99319134-337b-4b51-903b-4c0c3b15084e)
 
-
 <!-- ![Logo]() -->
 
 * Documentation: <https://katolus.github.io/functions/>
@@ -30,13 +29,13 @@ Here is a list of functionalities that the package is capable of.
 
 ### Locally
 
-* Generate a new template function directories for starting new functions. Two types GCP `http`/`pubsub` - [tutorial](docs/examples/new_gcp_functions.md).
-* Add an existing function to the function registry to be run and deployed as functions native to the package - [tutorial](docs/examples/add_existing_function.md).
-* Build pre-generated, validated and **locally** existing functions using Docker **link to api document**.
-* Operate (`deploy`/`remove`) Google Cloud Platform functions from a local machine - [tutorial](docs/examples/http_function.md).
-* Store information about the built, run and deployed functions locally for reference and configuration - [proposal](docs/fdrs/function_registry.md).
-* Print out information about functions and their statuses (Build/Deployed/Running) using the [list](**link to api document**) command.
-* Log function history using a log file stored on your local device - [proposal](docs/fdrs/logging.md).
+* Generate a new template function directories for starting new functions. Two types GCP `http`/`pubsub`.
+* Add an existing function to the function registry to be run and deployed as functions native to the package.
+* Build pre-generated, validated and **locally** existing functions using Docker.
+* Operate (`deploy`/`remove`) Google Cloud Platform functions from a local machine.
+* Store information about the built, run and deployed functions locally for reference and configuration.
+* Print out information about functions and their statuses (Build/Deployed/Running) using the `list` command.
+* Log function history using a log file stored on your local device.
 
 ### GCP
 
@@ -86,7 +85,7 @@ Check out the [local development document](docs/local_development.md) for instru
 
 Regardless if you installed the package from the *pypi* repository or from source code, you should be able to invoke the `functions` tool from your command line. The tool has many different commands that should help you building your serverless functions (surprise, otherwise it would be useless...).
 
-Here are a few core ones to get you started. For a full and a comprehensive description of the `CLI` please refer to our [cli documentation]([docs/cli.md](https://katolus.github.io/functions/cli/)).
+Here are a few core ones to get you started. For a full and a comprehensive description of the `CLI` please refer to our [cli documentation](https://katolus.github.io/functions/cli/).
 
 Keep in mind that the package is evolving and all of its structure is a subject to change.
 
