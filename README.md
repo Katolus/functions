@@ -39,9 +39,9 @@ Here is a list of functionalities that the package is capable of.
 * Add an existing function to the function registry to be run and deployed as functions native to the package - [tutorial](docs/examples/add_existing_function.md).
 * Build pre-generated, validated and **locally** existing functions using Docker **link to api document**.
 * Operate (`deploy`/`remove`) Google Cloud Platform functions from a local machine - [tutorial](docs/examples/http_function.md).
-* Store information about the built, run and deployed functions locally for reference and configuration - [proposal](docs/proposals/function_registry.md).
+* Store information about the built, run and deployed functions locally for reference and configuration - [proposal](docs/fdrs/function_registry.md).
 * Print out information about functions and their statuses (Build/Deployed/Running) using the [list](**link to api document**) command.
-* Log function history using a log file stored on your local device - [proposal](docs/proposals/logging.md).
+* Log function history using a log file stored on your local device - [proposal](docs/fdrs/logging.md).
 
 ### GCP
 

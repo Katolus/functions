@@ -22,7 +22,7 @@ The code wasn't necessarily clearly contained within a container like the `confi
 
 ## List of components
 
-* [`function registry`](../proposals/function_registry.md)
+* [`function registry`](../fdrs/function_registry.md)
 * `docker`
 * `cloud` (GCP, AWS, ...)
 
