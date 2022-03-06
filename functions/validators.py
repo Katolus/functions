@@ -1,51 +1,37 @@
 import os
 import re
-from pathlib import _windows_flavour, _posix_flavour
 from pathlib import Path
 from typing import Any
 
-from pydantic.errors import PathNotADirectoryError
-from pydantic.validators import path_exists_validator
-from pydantic.validators import path_validator
-
+from functions.constants import ConfigName
 from functions.errors import ConfigNotFoundError
-from functions.types import CallableGenerator
+from functions.errors import PathNotADirectoryError
+from functions.types import PathStr
 
 
-def path_dir_validator(v: Path) -> Path:
-    if not v.is_dir():
+def path_dir_validator(v: PathStr) -> PathStr:
+    if not Path(v).is_dir():
         raise PathNotADirectoryError(path=v)
 
     return v
 
 
-def path_has_config_validator(v: Any) -> Path:
-    if not Path(os.path.join(v, "config.json")).exists():
+def path_includes_config_validator(v: Any) -> Path:
+    if not Path(os.path.join(v, ConfigName.BASE)).exists():
         raise ConfigNotFoundError(path=v)
 
     return v
 
 
-def name_validator(v: str) -> str:
-    if not re.match("^[a-zA-Z0-9_-]*$", v):
+def validate_name(name: str) -> str:
+    """Validate a name string against a set of rules"""
+    if not re.match("^[a-zA-Z0-9_-]*$", name):
         raise ValueError("Value does not match name requirements")
-    return v
+    return name
 
 
-class LocalFunctionPath(Path):
-    """Validates if a past in directory adhere to the rules"""
-
-    # Questionable
-    _flavour = _windows_flavour if os.name == "nt" else _posix_flavour
-
-    @classmethod
-    def __get_validators__(cls) -> CallableGenerator:
-        yield path_validator
-        yield path_exists_validator
-        yield path_dir_validator
-        yield path_has_config_validator
-        yield cls.validate
-
-    @classmethod
-    def validate(cls, value: Path) -> Path:
-        return value
+def validate_path(v: PathStr) -> Path:
+    """Validates if a path is a valid directory"""
+    path_dir_validator(v)
+    path_includes_config_validator(v)
+    return Path(v)

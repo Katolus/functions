@@ -1,87 +1,129 @@
-from pathlib import Path
 from typing import Optional
 
 import typer
 
+from functions import cloud
+from functions import logs
+from functions import styles
 from functions import user
-from functions.autocomplete import autocomplete_deploy_functions
+from functions.cloud import deploy_function
+from functions.config.files import FunctionRegistry
+from functions.constants import CloudProvider
 from functions.constants import CloudServiceType
-from functions.gcp import delete_function, read_logs
-from functions.gcp import deploy_function
-from functions.services import describe_function
-from functions.system import load_config
+from functions.core import FTyper
+from functions.gcp.autocomplete import autocomplete_deployed_function
+from functions.gcp.autocomplete import gcp_delete_autocomplete
+from functions.gcp.autocomplete import gcp_deploy_autocomplete
+from functions.gcp.callbacks import check_if_function_can_be_deployed
+from functions.gcp.callbacks import check_if_function_name_in_registry
+from functions.gcp.cloud_function.cli import delete_function
+
+app = FTyper(help="Interact with GCP functions.")
 
 
-app = typer.Typer(help="Deploy functions in GCP")
-
-
-@app.command()
+@app.command(disable=True)
 def install() -> None:
     """Install required libraries"""
     raise NotImplementedError()
 
 
-@app.command()
-def update() -> None:
-    """Update required libraries"""
+@app.command(disable=True)
+def login() -> None:
+    """Install required libraries"""
     raise NotImplementedError()
 
 
 @app.command()
 def deploy(
-    function_dir: Path = typer.Argument(
+    function_name: str = typer.Argument(
         ...,
-        # It would be great if it supported both image name and path
-        autocompletion=autocomplete_deploy_functions,
-        exists=True,
-        file_okay=False,
-        help="Path to the functions you want to deploy",
-        resolve_path=True,
-    ),
-    service: Optional[CloudServiceType] = typer.Option(
-        None,
-        help="Type of service you want this resource to be deploy to",
-        autocompletion=CloudServiceType.all,
+        help="The name of the function to deploy",
+        autocompletion=gcp_deploy_autocomplete,
+        callback=check_if_function_can_be_deployed,
     ),
 ) -> None:
-    """Deploy a functions to GCP"""
-    config = load_config(function_dir)
-    service_type = service or config.deploy_variables.service
+    """
+    Deploy a function in GCP.
+    """
+    function = FunctionRegistry.fetch_function(function_name)
 
-    deploy_function(config, CloudServiceType(service_type))
+    if function.status.GCP.is_deployed:
+        user.confirm_abort(
+            f"Function '{function_name}' is already deployed. Do you want to continue?"
+        )
 
-    user.inform(f"{config.run_variables.name} functions has been deployed to GCP!")
+    deploy_function(function, provider=CloudProvider.GCP)
+
+    user.inform(f"'{function_name}' functions has been deployed to GCP!")
 
 
 @app.command()
 def delete(
     function_name: str = typer.Argument(
         ...,
-        help="Name of the function you want to remove",
+        help="The name of the function to delete",
+        autocompletion=gcp_delete_autocomplete,
+        callback=check_if_function_name_in_registry,
     ),
 ) -> None:
-    """Deletes a functions deployed to GCP"""
-    user.confirm_abort(f"Are you sure you want to remove '{function_name}'?")
+    """
+    Deletes resources associated with a function in GCP.
+    """
+    provider = CloudProvider.GCP.upper()
+
+    user.confirm_abort(
+        f"Are you sure you want to remove '{function_name}' from {provider}?"
+    )
     delete_function(function_name)
+    user.inform(f"'{styles.green(function_name)}' has been removed from {provider}!")
 
 
 @app.command()
 def describe(
     function_name: str = typer.Argument(
         ...,
-        help="Name of the function you want to describe",
+        help="Name of the function in registry",
+        autocompletion=autocomplete_deployed_function,
+        callback=check_if_function_name_in_registry,
     ),
 ) -> None:
-    """Returns information about a deployed function"""
-    describe_function(function_name)
+    """
+    Shows information about a function deployed in GCP.
+    """
+    logs.debug(f"Fetching information about '{function_name}'")
+    function = FunctionRegistry.fetch_function(function_name)
+    cloud.describe_function(function, provider=CloudProvider.GCP)
+    logs.debug(f"Describe command for '{function_name}' has executed")
+
+
+@app.command("logs")
+def fetch_logs(
+    function_name: str = typer.Argument(
+        ...,
+        help="Name of the function in registry",
+        autocompletion=autocomplete_deployed_function,
+        callback=check_if_function_name_in_registry,
+    ),
+) -> None:
+    """
+    Show logs of a function deployed to GCP.
+    """
+    logs.debug(f"Fetching logs for '{function_name}'")
+    cloud.read_logs(function_name, provider=CloudProvider.GCP)
+    logs.debug(f"Logs command for '{function_name}' has executed")
 
 
 @app.command()
-def logs(
-    function_name: str = typer.Argument(
-        ...,
-        help="Name of the function you want to read logs from",
+def list(
+    service: Optional[CloudServiceType] = typer.Option(
+        CloudServiceType.CLOUD_FUNCTION,
+        help="Type of service to list",
+        autocompletion=CloudServiceType.all,
     ),
 ) -> None:
-    """Reads log from a deployed function"""
-    read_logs(function_name)
+    """
+    List functions deployed to a service in GCP
+    """
+    logs.debug(f"Fetching list of functions from {service}")
+    cloud.list_functions(service=service, provider=CloudProvider.GCP)
+    logs.debug(f"List command for {service} has been executed")

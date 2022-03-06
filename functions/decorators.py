@@ -1,20 +1,22 @@
 import functools
-from typing import Any, Callable, Optional, Tuple
+from typing import Any, Callable, Optional, Tuple, Type
 
 import typer
 from pydantic import validate_arguments
 
-from functions.errors import FunctionBaseError
 from functions.error_handlers import ERROR_REGISTRY
+from functions.error_handlers import handle_function_all_errors
+from functions.errors import FunctionBaseError
+from functions.types import AnyCallableT
 
-AnyCallableT = Callable[..., Any]
+FunctionBaseErrorC = Type[FunctionBaseError]
 
 
 @validate_arguments
 def handle_error(
     func: Optional["AnyCallableT"] = None,
     *,
-    error_class: Optional[Tuple[FunctionBaseError, ...]] = None,
+    error_class: Optional[Tuple[FunctionBaseErrorC, ...]] = None,
     message_tmp: str = "Something has happened. Error {error}",
 ):
     """
@@ -27,17 +29,22 @@ def handle_error(
             try:
                 return _func(*args, **kwargs)
             except Exception as err:
-                # Check initial params for handlers
+
+                # Check for cases defined as error_classes
                 if error_class and isinstance(err, error_class):
                     message = message_tmp.format(error=err, **kwargs)
                     raise typer.BadParameter(message)
 
-                # Check registry for handlers
+                # Check for cases handled in the registry
                 if handler := ERROR_REGISTRY.get(err.__class__):
-                    handler(err)
-                else:
-                    # If nothing matches reraise exception
-                    raise err
+                    return handler(err)
+
+                # Handle if it is a functions error
+                if isinstance(err, FunctionBaseError):
+                    return handle_function_all_errors(err)
+
+                # If no handler is found, raise the error
+                raise err
 
         return command
 

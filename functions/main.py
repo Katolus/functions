@@ -1,38 +1,34 @@
+"""Main script for CLI entry point"""
 from pathlib import Path
 from typing import Optional
 
 import typer
 
-from functions import styles
-from functions.autocomplete import autocomplete_function_names
-from functions.autocomplete import autocomplete_running_function_names
-from functions.callbacks import (
-    build_function_callack,
-    function_name_autocomplete_callback,
-    version_callback,
-)
-from functions.callbacks import remove_function_name_callback
-from functions.callbacks import running_functions_autocomplete_callback
-from functions.commands import gcp
-from functions.commands import new
-from functions.constants import LoggingLevel
-from functions.core import Functions
-from functions.docker.helpers import all_functions, get_config_from_image
-from functions.docker.tools import (
-    build_image,
-    get_image,
-    remove_image,
-    run_container,
-    stop_container,
-)
-from functions.styles import blue, green, red
-from functions.system import get_full_path
-from functions.system import load_config
+from functions import flows
 from functions import logs
+from functions import styles
 from functions import user
-from functions.logs import set_logger_level
+from functions.autocomplete import autocomplete_built_names
+from functions.autocomplete import autocomplete_registry_function_names
+from functions.autocomplete import autocomplete_running_function_names
+from functions.callbacks import check_if_dir_is_a_valid_function_path
+from functions.callbacks import check_if_function_can_be_built
+from functions.callbacks import check_if_function_can_be_removed
+from functions.callbacks import check_if_function_can_be_run
+from functions.callbacks import check_if_function_can_be_stopped
+from functions.callbacks import check_if_name_is_in_registry
+from functions.callbacks import print_out_the_version
+from functions.config.files import FunctionRegistry
+from functions.constants import DEFAULT_LOG_FILEPATH
+from functions.constants import LoggingLevel
+from functions.core import FunctionsCli
+from functions.gcp.cloud_function.errors import GCPCommandError
+from functions.logs import set_console_debug_level
+from functions.models import Function
+from functions.styles import green
+from functions.system import follow_file
 
-app = Functions(subcommands=[(new.app, "new"), (gcp.app, "gcp")])
+app = FunctionsCli()
 
 
 @app.callback()
@@ -40,75 +36,118 @@ def main(
     verbose: bool = typer.Option(
         False,
         "--verbose",
-        help="Sets the conext of the command to be verbose",
+        help="Enable verbose logging",
     ),
     version: Optional[bool] = typer.Option(
         None,
         "--version",
-        help="Prints out the version of the package",
-        callback=version_callback,
+        help="Print the version and exit",
+        callback=print_out_the_version,
         is_eager=True,
     ),
 ) -> None:
     """
-    Manage users in the awesome CLI app.
+    CLI entry point for functions.
+
+    This code will run when you run `functions` from the command line.
     """
+    # Set logging level
     log_level = LoggingLevel.INFO
     if verbose:
         app.state.verbose = True
         log_level = LoggingLevel.DEBUG
+        set_console_debug_level()
 
-    set_logger_level(log_level)
-    logs.debug(f"Running application in {log_level} log mode.")
+    logs.debug(f"Running application in {log_level} logging level.")
+
+
+@app.command(disable=True)
+def error() -> None:
+    """A command for testing error messages"""
+    user.inform("Message before the error")
+    raise GCPCommandError(error_msg="Throwing an error in a test command")
 
 
 @app.command()
-def test() -> None:
-    """Test command not to be dispayed"""
-    user.inform("Running a test command")
-    raise ValueError("Throwing an error in a test command")
+def add(
+    function_dir: Path = typer.Argument(
+        ...,
+        help="The directory of the function to add",
+        exists=True,
+        file_okay=False,
+        resolve_path=True,
+        callback=check_if_dir_is_a_valid_function_path,
+    ),
+) -> None:
+    """
+    Add a function to the function registry.
+    """
+    flows.add_function(str(function_dir))
 
 
 @app.command()
 def build(
-    function_path: Path = typer.Argument(
+    function_name: str = typer.Argument(
         ...,
-        help="Path to the functions you want to build",
-        callback=build_function_callack,
+        help="The name of the function to build",
+        autocompletion=autocomplete_registry_function_names,
+        callback=check_if_function_can_be_built,
     ),
-    show_logs: bool = typer.Option(False, "--show-logs", help="Show build logs"),
+    show_logs: bool = typer.Option(False, "--show-logs", help="Show build output"),
 ) -> None:
-    """Builds an image of a given function"""
+    """
+    Build a function.
+    """
     # Get the absolute path
-    full_path = get_full_path(function_path)
+    function = Function(function_name)
 
-    # Load configuration
-    config = load_config(full_path)
-
-    _ = build_image(config, show_logs)
+    function.build(show_logs=show_logs)
 
     user.inform(
-        f"{styles.green('Successfully')} build a function's image. The name of the functions is -> {config.run_variables.name}"
+        f"{styles.green('Successfully')} build a function's image."
+        f" The name of the functions is -> {function_name}"
     )
+
+
+@app.command("list")
+def list_functions() -> None:
+    """
+    List all functions in the registry.
+    """
+    functions = FunctionRegistry.fetch_all_functions()
+
+    # Check if a function is running at the moment
+    if functions:
+        # Pluralize the word functions based on the number of functions
+        plural_function = "functions" if len(functions) > 1 else "function"
+
+        user.inform(f"We found {len(functions)} {plural_function}\n")
+        for function in functions:
+            user.inform(str(function))
+    else:
+        user.inform("No functions found")
 
 
 @app.command()
 def run(
     function_name: str = typer.Argument(
         ...,
-        help="Name of the function you want to run",
-        autocompletion=autocomplete_function_names,
-        callback=function_name_autocomplete_callback,
+        help="The name of the function to run",
+        autocompletion=autocomplete_built_names,
+        callback=check_if_function_can_be_run,
     ),
 ) -> None:
-    """Start a container for a given function"""
+    """
+    Run a function locally using the built image.
+    """
+    # Guaranteed to exist because of the autocomplete + callback
+    function = Function(function_name)
 
-    function_image = get_image(function_name)
-    config = get_config_from_image(function_image)
-    container = run_container(function_image, config)
+    function.run()
 
     user.inform(
-        f"Function ({container.name}) has {green('started')}. Visit -> http://localhost:{config.run_variables.port}"
+        f"Function ({function.name}) has {green('started')}."
+        f" Visit -> http://localhost:{function.config.run_variables.port}"
     )
 
 
@@ -116,66 +155,93 @@ def run(
 def stop(
     function_name: str = typer.Argument(
         ...,
-        help="Name of the function you want to stop",
+        help="The name of the function to stop",
         autocompletion=autocomplete_running_function_names,
-        callback=running_functions_autocomplete_callback,
+        callback=check_if_function_can_be_stopped,
     ),
 ) -> None:
-    """Stops a running function"""
-    stop_container(function_name)
+    """
+    Stop a function running locally.
+    """
+    function = Function(function_name)
+
+    function.stop()
+
     user.inform(f"Function ({function_name}) has been stopped.")
-
-
-@app.command("list")
-def list_functions() -> None:
-    """List existing functions"""
-    functions = all_functions()
-    # Check if a function is running at the moment
-    if functions:
-        user.inform(f"There are {len(functions)} build and available.\n")
-        for function in functions:
-            user.inform(
-                f"Function - {red(function.name)} | Status - {blue(function.status)}"
-            )
-    else:
-        user.inform("No functions found")
 
 
 @app.command()
 def remove(
     function_name: str = typer.Argument(
         ...,
-        help="Name of the function you want to remove",
-        autocompletion=autocomplete_function_names,
-        callback=remove_function_name_callback,
+        help="The name of the function to remove",
+        autocompletion=autocomplete_built_names,
+        callback=check_if_function_can_be_removed,
     )
 ) -> None:
-    """Removes an image of a functions from the local registry"""
-    remove_image(function_name)
-    user.inform(f"Function ({function_name}) has been removed")
+    """
+    Remove a function from the registry.
+    """
+    function = Function(function_name)
+
+    user.confirm_abort(f"Are you sure you want to remove the function {function.name}?")
+
+    function.remove()
+
+    user.inform(f"Function {function_name} has been removed.")
 
 
 @app.command()
+def delete(
+    function_name: str = typer.Argument(
+        ...,
+        help="The name of the function to delete",
+        autocompletion=autocomplete_registry_function_names,
+        callback=check_if_name_is_in_registry,
+    ),
+) -> None:
+    """
+    Delete a function with all its data from the registry.
+    """
+    function = Function(function_name)
+
+    user.confirm_abort(
+        " ".join(
+            [
+                f"Are you sure you want to delete the function {function.name}?.",
+                "This means that all information associated with this function will be removed.",
+            ]
+        )
+    )
+
+    function.delete_all()
+
+    # Ask a user if they want to remove the underslying resources
+    if user.confirm(
+        f"Do you want to remove the underlying resources -> {function.config.path}?"
+    ):
+        function.delete_resources()
+        user.inform(f"Resources for {function.name} have been removed.")
+
+    user.inform(f"Function {function.name} has been deleted.")
+
+
+@app.command(disable=True)
 def config() -> None:
     """Renders function's configuration file into the command line"""
+    # Print the config if no arguments are provided
+
+    # Remove the config file if --reset flag is passed in
     raise NotImplementedError()
 
 
-@app.command()
-def rebuild(
-    function_name: str = typer.Argument(
-        ...,
-        help="Name of the function you want to rebuild",
-        autocompletion=autocomplete_function_names,
-    ),
-    show_logs: bool = typer.Option(False, "--show-logs", help="Show build logs"),
-) -> None:
-    """Rebuild a function if it is possible"""
-    functions = all_functions()
-
-    for function in functions:
-        if function.name == function_name:
-            build_image(function.config, show_logs)
-            raise typer.Exit()
-
-    user.inform("No functions found")
+@app.command("logs")
+def print_logs() -> None:
+    """
+    Print the logs of functions CLI.
+    """
+    log_path = DEFAULT_LOG_FILEPATH
+    # This might be improved if we display limited amount of lines
+    with open(log_path, "r") as file:
+        for line in follow_file(file):
+            print(line, end="")

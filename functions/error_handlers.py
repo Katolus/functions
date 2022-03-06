@@ -1,20 +1,24 @@
-from typing import Callable
-from typing import Dict
-from typing import NoReturn
+import sys
+from typing import Dict, NoReturn
 
+import docker
 import typer
+from pydantic.error_wrappers import ValidationError as PydanticValidationError
 
-from functions import user
-from functions.types import AnyCallable, ExceptionClass
-from functions.errors import ConfigValidationError, FunctionNameTaken
+from functions import logs
+from functions import styles
+from functions.errors import FunctionBaseError
+from functions.errors import FunctionBuildError
+from functions.errors import UsageError
+from functions.types import AnyCallableT
+from functions.types import ExceptionClass
 
-
-ERROR_REGISTRY_TYPE = Dict[ExceptionClass, Callable]
+ERROR_REGISTRY_TYPE = Dict[ExceptionClass, AnyCallableT]
 
 ERROR_REGISTRY: ERROR_REGISTRY_TYPE = {}
 
 
-def error_handler(*, error: ExceptionClass) -> AnyCallable:
+def error_handler(*, error: ExceptionClass) -> AnyCallableT:
     """
     Registers a callable function as a way handling a given error class
 
@@ -23,7 +27,7 @@ def error_handler(*, error: ExceptionClass) -> AnyCallable:
         ...
     """
 
-    def handle(_func) -> AnyCallable:
+    def handle(_func) -> AnyCallableT:
         if ERROR_REGISTRY.get(error):
             raise ValueError(f"This error - {error} is already registered")
 
@@ -34,22 +38,42 @@ def error_handler(*, error: ExceptionClass) -> AnyCallable:
     return handle
 
 
-@error_handler(error=ValueError)
-def print_basic_output_and_exit(error: ExceptionClass) -> NoReturn:
-    user.inform(f"Handling no image error - {error}")
-    raise typer.BadParameter(str(error))
+@error_handler(error=FunctionBaseError)
+def handle_function_all_errors(error: FunctionBaseError) -> NoReturn:
+    """Handles the base case for all the function errors"""
+    logs.exception(error)
+    raise UsageError(error.message)
 
 
-@error_handler(error=ConfigValidationError)
-def check_config_in_path(error: ExceptionClass) -> NoReturn:
-    # Print a path where this is saved
-    raise typer.BadParameter(str(error))
+@error_handler(error=FunctionBuildError)
+def handle_function_build_errors(error: FunctionBuildError) -> NoReturn:
+    """Handles the base case for all the function errors"""
+    # Log the build logs
+    logs.debug(error.build_log)  # TODO: Figure out the correct types for this
+    logs.exception(error)
+    raise UsageError(f"{error.message}. Reason: {error.reason}")
 
 
-@error_handler(error=FunctionNameTaken)
-def handle_function_name_with_suggestion(error: ExceptionClass) -> NoReturn:
-    error_msg = str(error)
-    user.inform(f"Error: {error_msg}")
-    user.inform("Unable to continue. See the errors")
-    # Verbose - Consider renaming the function or removing the old one
-    raise typer.Exit()
+@error_handler(error=docker.errors.DockerException)
+def handle_docker_exception(error: docker.errors.DockerException) -> NoReturn:
+    """Handles the base case for all the function errors"""
+    logs.exception(error)
+    # A temporary solution of handling docker exceptions until we figure out
+    # how to handle them in the CLI with different cases.
+    typer.echo(f"{styles.red('Unexpected docker error occurred')}: {error}.\n")
+    typer.echo("Please make sure your `docker` is correctly installed.")
+    sys.exit(1)
+
+
+@error_handler(error=NotImplementedError)
+def handle_not_implemented_errors(error: NotImplementedError) -> NoReturn:
+    """Handles the base case for all the function errors"""
+    logs.exception(error)
+    raise UsageError("This feature is not yet implemented.")
+
+
+@error_handler(error=PydanticValidationError)
+def handle_pydantic_errors(error: PydanticValidationError) -> NoReturn:
+    """Handles the base case for all the function errors"""
+    logs.exception(error)
+    raise UsageError(f"Validation of objects failed: {error}")

@@ -5,47 +5,14 @@ https://docs.python.org/3/howto/logging.html#when-to-use-logging
 https://docs.python.org/3/howto/logging-cookbook.html#logging-cookbook
 
 """
-
 import logging
-import os
-import warnings
-from typing import List
 from logging.handlers import RotatingFileHandler
 
-from functions.constants import APP_CONFIG_PATH
+from functions.constants import DEFAULT_LOG_FILEPATH
 from functions.constants import LoggingLevel
 
 logger = logging.getLogger(__name__)
-
-
-# File logger
-log_name = "functions.log"
-log_path = os.path.join(APP_CONFIG_PATH, log_name)
-
-f_handler = RotatingFileHandler(
-    log_path,
-    backupCount=3,
-    maxBytes=1000000,
-    mode="a",
-)
-f_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-f_handler.setLevel(logging.INFO)
-f_handler.setFormatter(f_formatter)
-
-# Console logger
-c_handler = logging.StreamHandler()
-c_formatter = logging.Formatter("%(message)s")
-c_handler.setLevel(logging.INFO)
-c_handler.setFormatter(c_formatter)
-
-
-handlers: List[logging.Handler] = [f_handler, c_handler]
-
-
-# Add handlers to the logger
-for handler in handlers:
-    logger.addHandler(handler)
-
+logger.setLevel(logging.DEBUG)
 
 LOGGING_LEVELS = {
     LoggingLevel.INFO: logging.INFO,
@@ -55,13 +22,44 @@ LOGGING_LEVELS = {
 }
 
 
-def set_logger_level(level: LoggingLevel = LoggingLevel.INFO) -> None:
-    """Set logging level for the application."""
-    log_level = LOGGING_LEVELS[level]
+class ConsoleFilter(logging.Filter):
+    """Filter that only allows messages with a specific level to be printed to the console."""
 
-    logger.setLevel(log_level)
-    for handler in handlers:
-        handler.setLevel(log_level)
+    def __init__(self, level: LoggingLevel):
+        super().__init__()
+        self.level = LOGGING_LEVELS[level]
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        """Return True if the record is at the level of the filter."""
+        return record.levelno == self.level
+
+
+# Set up the console handler
+c_handler = logging.StreamHandler()
+c_handler.setLevel(logging.INFO)
+c_handler.setFormatter(logging.Formatter("%(message)s"))
+
+c_filter = ConsoleFilter(LoggingLevel.INFO)
+c_handler.addFilter(c_filter)
+logger.addHandler(c_handler)
+
+# Set up the file handler
+f_handler = RotatingFileHandler(
+    filename=DEFAULT_LOG_FILEPATH,
+    backupCount=3,
+    maxBytes=1000000,
+    mode="a",
+    delay=True,
+)
+f_handler.setLevel(logging.DEBUG)
+f_handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
+logger.addHandler(f_handler)
+
+
+def set_console_debug_level() -> None:
+    """Set console logging level for the application."""
+    c_handler.removeFilter(c_filter)
+    c_handler.setLevel(logging.DEBUG)
 
 
 def debug(msg: str) -> None:
@@ -79,16 +77,16 @@ def warning(msg: str) -> None:
     logger.warning(msg)
 
 
-def warn(msg: str, **kwargs) -> None:
-    """Warn a user instead of"""
-    warnings.warn(msg, **kwargs)
-
-
-def error(msg: str) -> None:
+def error(error: object) -> None:
     """Use this level to record any error that occurs."""
-    logger.error(msg)
+    logger.error(error)
 
 
-def exception(msg: str) -> None:
+def exception(error: object) -> None:
     """Use this when you want to report an error with a stacktrace."""
-    logger.exception(msg)
+    logger.exception(error)
+
+
+def remove_empty_lines_from_string(string: str) -> str:
+    """Remove empty lines from a string."""
+    return "".join(string.splitlines()).strip()

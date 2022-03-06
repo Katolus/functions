@@ -1,32 +1,34 @@
 from typing import Iterator
 
-from functions import user
-from functions.docker.helpers import all_functions
-from functions.docker.helpers import all_running_functions
+from functions.config.files import FunctionRegistry
+from functions.constants import LocalStatus
 
 
-def complete_services():
-    return ["cloud_function", "cloud_run"]
+def autocomplete_registry_function_names(incomplete: str) -> Iterator[str]:
+    """Autocompletes a list of matching functions within registry"""
+    for function_name in FunctionRegistry.fetch_function_names():
+        if function_name.startswith(incomplete):
+            yield function_name
 
 
-def autocomplete_function_names(incomplete: str) -> Iterator[str]:
+def autocomplete_built_names(incomplete: str) -> Iterator[str]:
     """Autocompletes a list of matching functions"""
-    for function in all_functions():
-        if function.name.startswith(incomplete):
-            yield function.name
+    for function_name in FunctionRegistry.fetch_built_function_names():
+        if function_name.startswith(incomplete):
+            yield function_name
 
 
 def autocomplete_running_function_names(incomplete: str) -> Iterator[str]:
     """Autocompletes a list of matching functions within running"""
-    functions = all_running_functions()
-    if not functions:
-        user.inform("No running functions")
-    for function in functions:
-        if function.name.startswith(incomplete):
-            yield function.name
+    for function_name in FunctionRegistry.fetch_local_function_names(
+        LocalStatus.RUNNING
+    ):
+        if function_name.startswith(incomplete):
+            yield function_name
 
 
-def autocomplete_deploy_functions():
+def autocomplete_gcp_deployed_functions(incomplete: str) -> Iterator[str]:
     """Specify the functions that are to be deployed"""
-    deployable_functions = []
-    return deployable_functions
+    for function_name in FunctionRegistry.fetch_gcp_function_names():
+        if function_name.startswith(incomplete):
+            yield function_name

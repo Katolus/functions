@@ -1,0 +1,118 @@
+# Project information
+site_name: functions
+site_description: >-
+  CLI tool which drastically improves standards of work for serverless functions.
+site_author: Piotr Katolik
+
+# Structure
+docs_dir: docs_mk
+
+# Repository
+repo_url: https://github.com/Katolus/functions
+repo_name: Katolus/functions
+edit_uri: ""
+
+# Copyright
+copyright: Copyright &copy; 2021 - 2022 Piotr Katolik
+
+# Configuration
+theme:
+  name: material
+  language: en
+  #logo: assets/logo.png
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: green
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: red
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to light mode
+  features:
+    - content.code.annotate
+    - navigation.indexes
+    - navigation.instant
+    # - navigation.sections
+    # - navigation.tabs
+    - navigation.top
+    - navigation.tracking
+
+# Extensions
+markdown_extensions:
+  - abbr
+  - admonition
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.details
+  - pymdownx.highlight:
+      linenums: true
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+      - name: mermaid
+        class: mermaid
+        format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - toc:
+      baselevel: 2
+      permalink: true
+      slugify: !!python/name:pymdownx.slugs.uslugify
+
+# Plugins
+plugins:
+  - include-markdown
+  - search:
+      lang: en
+  - git-revision-date-localized
+  # - minify:
+  #     minify_html: true
+
+# Customization
+extra:
+  consent:
+    cookies:
+      analytics:
+        name: Google Analytics
+        checked: false
+  analytics:
+    provider: google
+    property: !ENV GOOGLE_ANALYTICS_KEY
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/Katolus
+      name: Github
+    - icon: fontawesome/brands/linkedin
+      link: https://linkedin.com/in/piotr-katolik/
+    - icon: material/email
+      link: "mailto:katolus@ventress.com"
+
+
+# Page tree
+nav:
+  - Introduction: index.md
+  - Idea: idea.md
+  - How it works: how_it_works.md
+  # - Usage (CLI): usage.md
+    # - Working locally:
+    # - Working with GCP:
+  - CLI docs: cli.md
+  # - Developing functions:
+  # - Local Development: local_development.md
+  # - Releases:
+  - Examples: examples.md
+  # - Configuration Guides:
+  # - Contributing:
+  - Environment support: environment_support.md
+  - Administration:
+    - administration/index.md
+    - Decisions: administration/decisions.md
+  - Roadmap: roadmap.md
+  # - Releases: releases.md
+  # - Glossary: glossary.md

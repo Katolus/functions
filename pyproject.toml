@@ -1,33 +1,159 @@
 [tool.poetry]
-authors = ["Katolus <katolus.work@gmail.com>"]
-description = "CLI tool for managing your FaaS resources"
-name = "functions-cli"
-license = "MIT"
-readme = "README.md"
-version = "0.1.0a3"
-packages = [
-    { include = "functions" },
+# Metadata
+authors = ["Piotr Katolik <katolus@ventress.org>"]
+classifiers = [
+    'Development Status :: 3 - Alpha',
+    'Environment :: Console',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: MIT License',
+    'Natural Language :: English',
+    'Operating System :: Microsoft',
+    'Operating System :: MacOS',
+    'Operating System :: OS Independent',
+    'Operating System :: POSIX :: Linux',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Topic :: System :: Distributed Computing',
+    'Topic :: Terminals',
+    'Topic :: Utilities',
 ]
+description = "CLI tool for managing local and cross-cloud FaaS serverless resources"
+keywords = ["serverless", "cloud function", "functions", "faas", "faas-cli"]
+license = "MIT"
+name = "functions-cli"
 
+# Package configuration
+packages = [
+  {include = "functions"},
+]
+readme = "README.md"
+version = "0.1.0"
+
+# Web configuration
+homepage = "https://katolus.github.io/functions/"
+repository = "https://github.com/Katolus/functions"
+documentation = "https://katolus.github.io/functions/"
 
 [tool.poetry.scripts]
 functions = "functions.main:app"
 
 [tool.poetry.dependencies]
-python = "^3.9"
-typer = "^0.4.0"
-pydantic = "^1.8.2"
 docker = "^5.0.2"
+pydantic = "^1.8.2"
+python = "^3.7"
 toml = "^0.10.2"
+typer = "^0.3.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
-mypy = "^0.910"
-black = {version = "^21.8b0", allow-prereleases = true}
+black = {version = "^21.8b0"}
 bpython = "^0.21"
+bump2version = "^1.0.1"
+commitizen = "^2.21.2"
+flake8 = "^4.0.1"
+flake8-typing-imports = "^1.11.0"
+isort = "^5.9.3"
+mypy = "^0.910"
+pre-commit = "^2.15.0"
+pytest = "^5.2"
+pytest-cov = "^3.0.0"
+tox = "^3.24.4"
+types-toml = "^0.10.1"
+mkdocs = "^1.2.3"
+mkdocs-material = "^8.1.4"
+mkdocs-include-markdown-plugin = "^3.2.3"
+mkdocs-material-extensions = "^1.0.3"
+mkdocs-git-revision-date-localized-plugin = "^0.11.1"
+typer-cli = "^0.0.12"
 
 [tool.mypy]
-mypy_path = "~/stubs/"
+check_untyped_defs = true
+ignore_missing_imports = true
+show_error_codes = true
+warn_redundant_casts = true
+warn_unused_configs = true
+warn_unused_ignores = true
+files = "src"
+
+# The following whitelist is used to allow for incremental adoption
+# of Mypy. Modules should be removed from this whitelist as and when
+# their respective type errors have been addressed. No new modules
+# should be added to this whitelist.
+# see https://github.com/python-poetry/poetry/pull/4510.
+
+[[tool.mypy.overrides]]
+module = []
+ignore_errors = true
+
+[tool.black]
+line-length = 88
+# skip-string-normalization = true
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+include = '\.pyi?$'
+target-version = ['py38', 'py39']
+
+[tool.isort]
+# https://pycqa.github.io/isort/docs/configuration/profiles.html
+profile = "black"
+# Adjust profile
+# https://pycqa.github.io/isort/docs/configuration/options.html
+force_single_line = true
+group_by_package = true
+order_by_type = false
+single_line_exclusions = ['typing']
+wrap_length = 80
+
+skip_gitignore = true
+# you can skip files as below
+#skip_glob = docs/conf.py
+
+[tool.pyright]
+# This is for pylance/pyright extension of vscode. Remove me if you're not intented to use vscode.
+# include = ["src"]
+exclude = [
+  ".git",
+  ".eggs",
+  ".github",
+  ".history",
+  ".idea",
+  ".tox",
+  ".vscode",
+  "docs",
+  ".venv",
+  "**/__pycache__",
+] # Commented out due to its influence on performance
+# # ignore = ["src/oldstuff"]
+# stubPath = "~/stubs/"
+venv = ".venv"
+
+reportGeneralTypeIssues = false
+reportMissingImports = true
+reportMissingTypeStubs = false
+
+pythonPlatform = "Linux"
+pythonVersion = "3.9"
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.1.0"
+tag_format = "v$version"
+bump_message = "Release: $current_version → $new_version [skip-ci]"
+changelog_incremental = true
+unreleased_version="v1.0.0"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"

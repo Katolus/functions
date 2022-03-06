@@ -1,0 +1,50 @@
+name: 🖨 Documentation
+description: Suggest an update for missing or invalid documentation.
+title: "[Documentation]: "
+labels: ["documentation", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Thanks for taking the time to fill out this documentation update request.
+  - type: input
+    id: doc-link
+    attributes:
+      label: Link to the documentation
+      description: Please link the documentation that needs to be updated.
+      placeholder: ex. [tutorial](https://example.tutorial.link)
+    validations:
+      required: true
+  - type: textarea
+    id: is-wrong
+    attributes:
+      label: Relevant sections
+      description: Please copy and paste any of the relevant documentation that need to be updated.
+      render: markdown
+    validations:
+      required: true
+  - type: textarea
+    id: is-right
+    attributes:
+      label: Suggested change
+      description: Please suggest the correct state if you have the capacity.
+      render: markdown
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+        label: Anything else?
+        description: |
+            Links? References? Anything that will be helpful in understanding your request best!
+
+            Tip: You can attach images or log files by clicking this area to highlight it and then dragging files in.
+    validations:
+        required: false
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://example.com)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
