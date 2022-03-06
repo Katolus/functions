@@ -127,7 +127,7 @@ name = "cz_conventional_commits"
 version = "0.1.0a4"
 tag_format = "v$version"
 bump_message = "Release: $current_version → $new_version [skip-ci]"
-# changelog_incremental = true
+changelog_incremental = true
 unreleased_version="v1.0.0"
 
 [build-system]
