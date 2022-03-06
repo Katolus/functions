@@ -34,6 +34,7 @@ typer = "^0.3.0"
 black = {version = "^21.8b0"}
 bpython = "^0.21"
 bump2version = "^1.0.1"
+commitizen = "^2.21.2"
 flake8 = "^4.0.1"
 flake8-typing-imports = "^1.11.0"
 isort = "^5.9.3"
@@ -120,6 +121,13 @@ reportMissingTypeStubs = false
 
 pythonPlatform = "Linux"
 pythonVersion = "3.9"
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.1.0a4"
+tag_format = "$version"
+bump_message = "Release: $current_version → $new_version [skip-ci]"
+
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
