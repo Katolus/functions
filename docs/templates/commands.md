@@ -12,29 +12,21 @@
 * Deciders: [Piotr] <!-- optional -->
 * Date: 2022-02-01
 
-## Context
+## Context and Problem Statement
 
-To be done...
+TBU...
 
-## Problem
+## Proposed Solution
 
-To be done...
+TBU...
 
-## Criteria
+## Implementation Details
 
-To be done...
+TBU...
 
-## Research
+## Benefits
 
-To be done...
-
-## Proposal
-
-To be updated...
-
-## Resources
-
-To be updated...
+TBU...
 
 <!-- Identifiers, in alphabetical order -->
 
