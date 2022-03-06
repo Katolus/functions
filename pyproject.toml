@@ -104,7 +104,7 @@ exclude = '''
 )/
 '''
 include = '\.pyi?$'
-target-version = ['py38', 'py39', 'py310']
+target-version = ['py38', 'py39']
 
 [tool.isort]
 # https://pycqa.github.io/isort/docs/configuration/profiles.html
