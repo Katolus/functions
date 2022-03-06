@@ -36,7 +36,7 @@ To operate the package from the source code.
 5. Run `functions --version` to validate that the package is available correctly. You should see something like this.
 
    ```console
-   You are using 0.1.0a4 version of the functions-cli package
+   You are using 0.1.0 version of the functions-cli package
    ```
 
 6. Execute or invoke the commands like you would normally, by running `functions [OPTIONS] COMMAND [ARGS] ...` in the invoked shell.
@@ -54,9 +54,6 @@ Handy tutorial in the scope of the `typer` package, that could help with this ->
 
 Alternatively there run the [`install_locally.sh`](/scripts/install_locally.sh) script.
 
-## Preparing for a new version release
-
-TBU
 
 ## Setting up local environment in VSCode
 
@@ -69,5 +66,3 @@ poetry config virtualenvs.in-project true
 to set the virtual env folder to be created in the current directory.
 
 This is mainly to enable working with the context in VSCode.
-
-TBU...

@@ -29,7 +29,7 @@ packages = [
   {include = "functions"},
 ]
 readme = "README.md"
-version = "0.1.0a4"
+version = "0.1.0"
 
 # Web configuration
 homepage = "https://katolus.github.io/functions/"
@@ -50,6 +50,7 @@ typer = "^0.3.0"
 black = {version = "^21.8b0"}
 bpython = "^0.21"
 bump2version = "^1.0.1"
+commitizen = "^2.21.2"
 flake8 = "^4.0.1"
 flake8-typing-imports = "^1.11.0"
 isort = "^5.9.3"
@@ -103,7 +104,7 @@ exclude = '''
 )/
 '''
 include = '\.pyi?$'
-target-version = ['py38', 'py39', 'py310']
+target-version = ['py38', 'py39']
 
 [tool.isort]
 # https://pycqa.github.io/isort/docs/configuration/profiles.html
@@ -145,6 +146,14 @@ reportMissingTypeStubs = false
 
 pythonPlatform = "Linux"
 pythonVersion = "3.9"
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.1.0"
+tag_format = "v$version"
+bump_message = "Release: $current_version → $new_version [skip-ci]"
+changelog_incremental = true
+unreleased_version="v1.0.0"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"

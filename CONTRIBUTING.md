@@ -22,6 +22,26 @@ where
 
 Example - `159-gracefully-handle-not-implemented-errors`
 
+## Commits
+
+We are trailing the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/#specification), so please adhear to these rules so we can automated our release and changelog processes.
+
+Summary of the rules:
+
+- fix: A bug fix. Correlates with PATCH in SemVer
+- feat: A new feature. Correlates with MINOR in SemVer
+- docs: Documentation only changes
+- style: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+- refactor: A code change that neither fixes a bug nor adds a feature
+- perf: A code change that improves performance
+- test: Adding missing or correcting existing tests
+- build: Changes that affect the build system or external dependencies (example - scopes: pip, docker, npm)
+- ci: Changes to our CI configuration files and scripts (example scopes: GitLabCI)
+
+## Main branch
+
+Please keep track that we use `development` as our main branch and therefore all contribution should be done towards that branch.
+
 ## Pull Request Process
 
 Once you are ready to contribute your changes to the main stream, follow GitHub's [instructions](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork) and created a pull request.

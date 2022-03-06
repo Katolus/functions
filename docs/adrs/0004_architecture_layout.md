@@ -132,14 +132,14 @@ It is a tool built using the [typer] library. `functions` wrap existing API and 
 
 ### Config
 
-We store some additional files on disk in the `config` module for configuration purposes. See related [fdr](../proposals/config.md).
+We store some additional files on disk in the `config` module for configuration purposes. See related [fdr](../fdrs/config.md).
 
 ### Internal state
 
 Withing the config module, we store:
 
 * configuration for the current use of `functions`.
-* [function registry](../proposals/function_registry.md) data.
+* [function registry](../fdrs/function_registry.md) data.
 * log files.
 
 ### Function configuration
@@ -159,7 +159,7 @@ A source directory for a function is stored in an image built, so if the files a
 
 ### Component management
 
-As a modularity attempt, we introduced a concept of [components](../proposals/components_subcommands.md).
+As a modularity attempt, we introduced a concept of [components](../fdrs/components_subcommands.md).
 
 There are 2 main components for now
 
@@ -170,11 +170,11 @@ Both of them can be accessed via the available `components` command.
 
 ### Logging
 
-`functions` produce simple logs for you to view if needed. More info in a related [fdr](../proposals/logging.md) document.
+`functions` produce simple logs for you to view if needed. More info in a related [fdr](../fdrs/logging.md) document.
 
 ### Exceptions
 
-We created a custom error pattern to manage critical execution cases and handle them unified and funnelled. More info in the exceptions [fdr](../proposals/exceptions.md).
+We created a custom error pattern to manage critical execution cases and handle them unified and funnelled. More info in the exceptions [fdr](../fdrs/exceptions.md).
 
 ### Docker items
 
@@ -216,7 +216,7 @@ We support autocompletion of resources for all the cool users, so they can doubl
 
 ### Flows and Actions
 
-In the spirit of avoiding repetition and context focus, we added the concepts of [flows and actions](../proposals/flows_and_actions.md). A pattern for grouping user interactions and unique flows into separate scripts, so other parts of the code use it more easily.
+In the spirit of avoiding repetition and context focus, we added the concepts of [flows and actions](../fdrs/flows_and_actions.md). A pattern for grouping user interactions and unique flows into separate scripts, so other parts of the code use it more easily.
 
 This should enhance uniformity and provide a stable interaction experience to a user.
 
