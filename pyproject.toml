@@ -29,7 +29,7 @@ packages = [
   {include = "functions"},
 ]
 readme = "README.md"
-version = "0.1.0a4"
+version = "0.1.0"
 
 # Web configuration
 homepage = "https://katolus.github.io/functions/"
