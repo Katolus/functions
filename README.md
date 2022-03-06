@@ -4,19 +4,15 @@
 
 [![DeepSource](https://deepsource.io/gh/Katolus/functions.svg/?label=active+issues&show_trend=true&token=NaMzVnONrQ-lLiofAWpYLilG)](https://deepsource.io/gh/Katolus/functions/?ref=repository-badge) [![wakatime](https://wakatime.com/badge/user/cd96c43c-7bc3-4dd9-bc18-9fc894fa15aa/project/99319134-337b-4b51-903b-4c0c3b15084e.svg)](https://wakatime.com/badge/user/cd96c43c-7bc3-4dd9-bc18-9fc894fa15aa/project/99319134-337b-4b51-903b-4c0c3b15084e)
 
-|   !   | This package is not ready for `production` use. The API is unstabble as it hasn't been released in any major or minor versions of it yet and is constant development. Use it at your own risk and pleasure. <br><br> **Please read the documentation carefully so there are not surprises to state of this project.** |
-| :---: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
 <!-- ![Logo]() -->
 
-**Outstanding items before the first release can be viewed under [this](https://github.com/users/Katolus/projects/1) project.**
-
-<!-- * Documentation: <https://Katolus.github.io/functions> -->
+* Documentation: <https://katolus.github.io/functions/>
 * GitHub: <https://github.com/Katolus/functions>
 * PyPI: <https://pypi.org/project/functions-cli/>
 * License: [MIT](https://github.com/Katolus/functions/blob/development/LICENSE)
 
-`functions` is a utility package written in Python. It is built to help the developer run, test and deploy FaaS (Function as a Service) resources. Our goal is to combine and simplify efforts required for local and cloud development.
+`functions` is a utility package written in Python. It is built to help a developer run, test and deploy FaaS (Function as a Service) resources. Our goal is to combine and simplify efforts required for local and cloud development of serverless resources.
 
 We are using `docker` as a primary technology to build and orchestrate the functions locally.
 
@@ -24,8 +20,7 @@ To deploy them to a cloud provider you need to have relevant software pre-instal
 
 ## Features
 
-The project is still under deep development, and there is still a lot of work to be done even to reach the base quality.
-Nonetheless, we believe there is value in using it as it is if it fits your needs and requirements (Python + Linux).
+The project is still under deep development, and there is still a lot of work to be done. Nonetheless this project will provide value to people looking to help out or use it while knowing associate risks.
 
 Feedback, issues and request are more than welcome. See how you can [contribute](CONTRIBUTING.md).
 
@@ -58,13 +53,8 @@ The package is a utility one and it requires underlying software for specific fu
 
 Minimum:
 
-* Python >= `3.8` - for the functioning of the package.
+* Python >= `3.9` - as a minimum Python version.
 * `docker` - for running any of the functions locally, you will need to [install docker](https://docs.docker.com/engine/install/).
-
-    ```bash
-    sudo chmod 666 /var/run/docker.sock
-    ```
-
 * [`poetry`](https://python-poetry.org/docs/#installation) - for running the source code locally and code development you need to have this package in the scope.
 
 For GCP:
@@ -82,7 +72,7 @@ If you plan of developing or adjust the code or underlying structures make sure 
 
 Since it is a regular Python package, available in the main `pypi` repository you can start using it simply by installing the package in your Python environment by running
 
-```bash
+```console
 pip install functions-cli
 ```
 
@@ -96,16 +86,16 @@ Check out the [local development document](docs/local_development.md) for instru
 
 Regardless if you installed the package from the *pypi* repository or from source code, you should be able to invoke the `functions` tool from your command line. The tool has many different commands that should help you building your serverless functions (surprise, otherwise it would be useless...).
 
-Here are a few core ones to get you started. For a full and a comprehensive description of the `CLI` please refer to the [cli document](docs/cli.md).
+Here are a few core ones to get you started. For a full and a comprehensive description of the `CLI` please refer to our [cli documentation]([docs/cli.md](https://katolus.github.io/functions/cli/)).
 
-Keep in mind that the package is in development and all of its structure is a subject to change.
+Keep in mind that the package is evolving and all of its structure is a subject to change.
 
 ## Creating a new FaaS
 
 The tool allows you to quickly generate a template of a function that you can the modify to quicken your efforts in producing code.
 
-```bash
-functions new http {name_of_the_function}
+```console
+> functions new http {name_of_the_function}
 ```
 
 will generate you a new `http` like template for your FaaS function in your current directory.
@@ -114,16 +104,16 @@ will generate you a new `http` like template for your FaaS function in your curr
 
 Before you start working with a function you need make sure it is built and available as a docker image. To do so, run
 
-```bash
-functions build {name_of_the_function}
+```console
+> functions build {name_of_the_function}
 ```
 
 ## Running a function locally
 
 It is great to see what we have created before deploying it to the world. Running...
 
-```bash
-functions run {name_of_the_function}
+```console
+> functions run {name_of_the_function}
 ```
 
 will start a docker container and expose the function to your locally network on a available port.
@@ -132,8 +122,8 @@ will start a docker container and expose the function to your locally network on
 
 Please remember that the container will run as long as you leave it for, so make sure to take it down once you have done all your testing. Running...
 
-```bash
-functions stop {name_of_the_function}
+```console
+> functions stop {name_of_the_function}
 ```
 
 should do the job.
@@ -146,8 +136,8 @@ Depending what configuration you had set up, you will be able to deploy your pro
 
 For example to deploy a function quickly to GCP as a cloud function you want to run...
 
-```bash
-functions gcp deploy {path_to_the_function}
+```console
+> functions gcp deploy {path_to_the_function}
 ```
 
 With the correct setup and permissions this should allow you to the deploy a function to the GCP directly from the `functions` cli.
@@ -156,16 +146,16 @@ With the correct setup and permissions this should allow you to the deploy a fun
 
 This command will remove a function from the local storage, but will not remove the code from the disk.
 
-```bash
-functions remove {name_of_the_function}
+```console
+> functions remove {name_of_the_function}
 ```
 
 ## Installing autocompletion
 
 Core CLI functionality is built on top of [`Typer`](https://github.com/tiangolo/typer) which means that if you want autocompletion in your scripts follow the instructions derived from there.
 
-```bash
-functions --install-completion bash
+```console
+> functions --install-completion bash
 ```
 
 With respect to the version of shell you are using.
@@ -174,8 +164,8 @@ With respect to the version of shell you are using.
 
 The tool is built on brilliant software of others. One of them being `typer`. Thanks to the work of others, you can query the CLI for any useful information by adding `--help` to any of your commands.
 
-```bash
-functions run --help
+```console
+> functions run --help
 ```
 
 If you stumble in to any major issue that is not described in the documentation, send a message or create an issue. We will try to help you as soon as it is possible.
