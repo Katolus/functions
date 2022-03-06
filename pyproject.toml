@@ -1,30 +1,46 @@
 [tool.poetry]
+# Metadata
 authors = ["Piotr Katolik <katolus@ventress.org>"]
 classifiers = [
-  'Development Status :: 2 - Pre-Alpha',
-  'Intended Audience :: Developers',
-  'License :: OSI Approved :: MIT License',
-  'Natural Language :: English',
-  'Programming Language :: Python :: 3',
-  'Programming Language :: Python :: 3.9',
+    'Development Status :: 3 - Alpha',
+    'Environment :: Console',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: MIT License',
+    'Natural Language :: English',
+    'Operating System :: Microsoft',
+    'Operating System :: MacOS',
+    'Operating System :: OS Independent',
+    'Operating System :: POSIX :: Linux',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Topic :: System :: Distributed Computing',
+    'Topic :: Terminals',
+    'Topic :: Utilities',
 ]
-description = "CLI tool for managing your FaaS resources"
+description = "CLI tool for managing local and cross-cloud FaaS serverless resources"
+keywords = ["serverless", "cloud function", "functions", "faas", "faas-cli"]
 license = "MIT"
 name = "functions-cli"
+
+# Package configuration
 packages = [
   {include = "functions"},
 ]
 readme = "README.md"
 version = "0.1.0a4"
 
+# Web configuration
+homepage = "https://katolus.github.io/functions/"
+repository = "https://github.com/Katolus/functions"
+documentation = "https://katolus.github.io/functions/"
+
 [tool.poetry.scripts]
 functions = "functions.main:app"
 
 [tool.poetry.dependencies]
 docker = "^5.0.2"
-google-api-python-client = {version = "^2.28.0", optional = true}
-google-auth = {version = "^2.3.3", optional = true}
-google-cloud-pubsub = {version = "^2.8.0", optional = true}
 pydantic = "^1.8.2"
 python = "^3.7"
 toml = "^0.10.2"
@@ -51,15 +67,24 @@ mkdocs-material-extensions = "^1.0.3"
 mkdocs-git-revision-date-localized-plugin = "^0.11.1"
 typer-cli = "^0.0.12"
 
-[tool.poetry.extras]
-gcp = [
-  "google-api-python-client",
-  "google-auth",
-  "google-cloud-pubsub",
-]
-
 [tool.mypy]
-mypy_path = "~/stubs/"
+check_untyped_defs = true
+ignore_missing_imports = true
+show_error_codes = true
+warn_redundant_casts = true
+warn_unused_configs = true
+warn_unused_ignores = true
+files = "src"
+
+# The following whitelist is used to allow for incremental adoption
+# of Mypy. Modules should be removed from this whitelist as and when
+# their respective type errors have been addressed. No new modules
+# should be added to this whitelist.
+# see https://github.com/python-poetry/poetry/pull/4510.
+
+[[tool.mypy.overrides]]
+module = []
+ignore_errors = true
 
 [tool.black]
 line-length = 88
@@ -79,7 +104,7 @@ exclude = '''
 )/
 '''
 include = '\.pyi?$'
-target-version = ['py36', 'py37', 'py38', 'py39']
+target-version = ['py38', 'py39', 'py310']
 
 [tool.isort]
 # https://pycqa.github.io/isort/docs/configuration/profiles.html
@@ -111,8 +136,8 @@ exclude = [
   ".venv",
   "**/__pycache__",
 ] # Commented out due to its influence on performance
-# ignore = ["src/oldstuff"]
-stubPath = "/home/katolus/stubs/"
+# # ignore = ["src/oldstuff"]
+# stubPath = "~/stubs/"
 venv = ".venv"
 
 reportGeneralTypeIssues = false
