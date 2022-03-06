@@ -1,6 +1,6 @@
 # `functions` - architecture overview
 
-* Status: Proposed
+* Status: Accepted
 * Deciders: [Piotr]
 * Date: 2022-02-23
 

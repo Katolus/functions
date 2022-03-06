@@ -1,6 +1,6 @@
 # Where do we store configuration files?
 
-* Status: Proposed
+* Status: Accepted
 * Deciders: [Piotr]
 * Date: 2022-01-08
 

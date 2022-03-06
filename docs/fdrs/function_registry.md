@@ -1,6 +1,6 @@
 # How do we store information about the managed functions?
 
-* Status: Proposed
+* Status: Accepted
 * Deciders: [Piotr]
 * Date: 2021-02-24
 

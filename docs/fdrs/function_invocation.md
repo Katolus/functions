@@ -1,6 +1,6 @@
 # How do we invoke a function?
 
-* Status: Proposed
+* Status: Accepted
 * Deciders: [Piotr]
 * Date: 2021-02-26
 

@@ -1,6 +1,6 @@
 # How do we handle exceptions?
 
-* Status: Proposed
+* Status: Accepted
 * Deciders: [Piotr]
 * Date: 2021-02-23
 

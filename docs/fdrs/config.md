@@ -1,6 +1,6 @@
 # Cam we have a persistent state for functions?
 
-* Status: Proposed
+* Status: Accepted
 * Deciders: [Piotr]
 * Date: 2021-11-23
 

@@ -2,7 +2,7 @@
 
 * Status: Proposed
 * Deciders: [Piotr]
-* Date: [2021-12-28]
+* Date: 2021-12-28
 
 ## Context and Problem Statement
 

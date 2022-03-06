@@ -1,6 +1,6 @@
 # Initial `functions` setup
 
-* Status: Proposed
+* Status: Accepted
 * Deciders: [Piotr] <!-- optional -->
 * Date: 2021-12-23
 

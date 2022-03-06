@@ -1,6 +1,6 @@
 # Logging in `functions`
 
-* Status: Proposal
+* Status: Accepted
 * Deciders: [Piotr] <!-- optional -->
 * Date: 2022-02-23
 

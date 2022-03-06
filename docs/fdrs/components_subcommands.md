@@ -1,6 +1,6 @@
 # `components` subcommands
 
-* Status: Work In Progress
+* Status: Accepted
 * Deciders: [Piotr] <!-- optional -->
 * Date: 2021-12-23
 
