@@ -1,9 +1,9 @@
 # Change checklist
 
-Is a document that holds a list of questions that need to be answered before implementing a given functionality. We use them to gauge if a given change is inline with project's [values](./project_proposal.md#values).
+This document holds a list of topics that need to be considered before implementing a given functionality. We use them to estimate user impact.
 
 ## Checklist
 
-- [] Is the complexity (amount of steps/time) increased after that this change?
-- [] Does this change require any actions from the user?
+- Is the complexity (amount of steps/time) increased after that this change will be introduced?
+- Does this change require any actions from the user?
 - How does this change influence local and distributed systems (single and more than one machine scope)?
